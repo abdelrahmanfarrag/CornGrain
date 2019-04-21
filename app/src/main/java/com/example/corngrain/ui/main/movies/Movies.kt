@@ -6,14 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
 
 import com.example.corngrain.R
+import com.example.corngrain.ui.base.ScopedFragment
+import kotlinx.android.synthetic.main.movies_fragment.*
+import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class Movies : Fragment() {
+class Movies : ScopedFragment(),KodeinAware {
+    override val kodein: Kodein by closestKodein()
 
-    companion object {
-        fun newInstance() = Movies()
-    }
+    private val factory by instance<MovieViewModelFactory>()
+
 
     private lateinit var viewModel: MoviesViewModel
 
@@ -26,8 +35,13 @@ class Movies : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel = ViewModelProviders.of(this,factory).get(MoviesViewModel::class.java)
+        buildUI()
+
+    }
+    private fun buildUI()=launch{
+        val job = viewModel.fetchLatestMovies.await()
+        sample.text=job.toString()
     }
 
 }
