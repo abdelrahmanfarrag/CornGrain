@@ -7,6 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
+
+/* ScopedFragment is used to create a local coroutine scope
+ * this is useful to stop listening to data after fragment is destroyed so , we can not get a crash
+ * from coroutine :D*
+ */
 abstract class ScopedFragment : Fragment(), CoroutineScope {
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext

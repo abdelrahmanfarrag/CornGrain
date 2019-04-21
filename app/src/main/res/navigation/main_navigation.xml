@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/movies_tab">
+
+    <fragment
+        android:id="@+id/movies_tab"
+        android:name="com.example.corngrain.ui.main.movies.Movies"
+        android:label="Movies"
+        tools:layout="@layout/movies_fragment" />
+    <fragment
+        android:id="@+id/series_tab"
+        android:name="com.example.corngrain.ui.main.series.Series"
+        android:label="series_fragment"
+        tools:layout="@layout/series_fragment" />
+    <fragment
+        android:id="@+id/people_tab"
+        android:name="com.example.corngrain.ui.main.people.People"
+        android:label="people_fragment"
+        tools:layout="@layout/people_fragment" />
+</navigation>
