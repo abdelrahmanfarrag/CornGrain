@@ -2,7 +2,7 @@ package com.example.corngrain.data.network.api
 
 import com.example.corngrain.data.network.di.LogginInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
-import com.example.corngrain.data.network.response.LatestMovies
+import com.example.corngrain.data.network.response.Popular
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -20,14 +20,15 @@ const val LANGUAGE = "language"
 
 //ENDPOINTS
 const val LATEST_MOVIES = "movie/latest"
+const val POPULAR_MOVIES = "movie/popular"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
 interface TmdbApi {
 
-    @GET(LATEST_MOVIES)
-    fun getLatestMovies(@Query(LANGUAGE) language: String = "en-Us")
-            : Deferred<LatestMovies>
+    @GET(POPULAR_MOVIES)
+    fun getLatestMoviesAsync(@Query(LANGUAGE) language: String = "en-Us")
+            : Deferred<Popular>
 
 
     companion object {

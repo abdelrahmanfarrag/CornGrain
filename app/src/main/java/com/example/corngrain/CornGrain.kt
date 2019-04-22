@@ -2,6 +2,7 @@ package com.example.corngrain
 
 import android.app.Application
 import android.content.Context
+import com.example.corngrain.data.db.TmdbLocalDb
 import com.example.corngrain.data.network.api.TmdbApi
 import com.example.corngrain.data.network.di.LogginInterceptor
 import com.example.corngrain.data.network.di.LogginInterceptorImpl
@@ -18,6 +19,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 //Adding all dependencies here through Kodein block
@@ -26,8 +28,8 @@ import org.kodein.di.generic.singleton
 class CornGrain : Application(), KodeinAware {
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@CornGrain))
-
-        //1ST => ADDING RETROFIT DEPENDENCIES
+        bind() from singleton { TmdbLocalDb(instance<Context>()) }
+        bind() from singleton { instance<TmdbLocalDb>().accessToPopularDatabase() }
         bind<NoConnectionInterceptor>() with singleton {
             NoConnectionInterceptorImpl(
                 instance<Context>()
@@ -41,9 +43,15 @@ class CornGrain : Application(), KodeinAware {
             )
         }
 
+
         bind<TmdbNetworkLayer>() with singleton { TmdbNetworkLayerImpl(instance<TmdbApi>()) }
-        bind<TmdbRepository>() with singleton { TmdbRepositoryImpl(instance<TmdbNetworkLayer>()) }
-        bind() from singleton { MovieViewModelFactory(instance<TmdbRepository>()) }
+        bind<TmdbRepository>() with singleton {
+            TmdbRepositoryImpl(
+                instance<TmdbNetworkLayer>(),
+                instance()
+            )
+        }
+        bind() from provider { MovieViewModelFactory(instance<TmdbRepository>()) }
     }
 
 }

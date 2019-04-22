@@ -1,9 +1,9 @@
 package com.example.corngrain.data.repository.di
 
 import androidx.lifecycle.LiveData
-import com.example.corngrain.data.network.response.LatestMovies
+import com.example.corngrain.data.db.entity.PopularEntity
 
 interface TmdbRepository {
-    //Current Movies
-    suspend fun getLatestMovies()
+
+    suspend fun getPopularMovies(): List<PopularEntity>
 }

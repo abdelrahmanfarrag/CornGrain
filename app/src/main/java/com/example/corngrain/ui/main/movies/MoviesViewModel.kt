@@ -6,6 +6,7 @@ import com.example.corngrain.utilities.lazyDeferred
 
 class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
     val fetchLatestMovies by lazyDeferred {
-        repository.getLatestMovies()
+        repository.getPopularMovies()
     }
+
 }
