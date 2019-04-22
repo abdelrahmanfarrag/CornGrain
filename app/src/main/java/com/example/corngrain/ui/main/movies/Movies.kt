@@ -8,11 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.PopularEntity
 import com.example.corngrain.ui.base.ScopedFragment
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -46,7 +51,28 @@ class Movies : ScopedFragment(), KodeinAware {
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
         val job = viewModel.fetchLatestMovies.await()
-        sample.text = job.get(0).originalTitle
+        initRecycler(job.toMoviesItems())
     }
+
+    private fun List<PopularEntity>.toMoviesItems(): List<MoviesAdapter> {
+
+        return this.map { itemEntity ->
+            MoviesAdapter(itemEntity)
+        }
+    }
+
+
+    private fun initRecycler(entries: List<MoviesAdapter>) {
+        val groupie_adapter = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        movies_list.apply {
+            layoutManager =
+                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupie_adapter
+
+        }
+    }
+
 
 }
