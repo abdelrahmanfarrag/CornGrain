@@ -130,11 +130,13 @@ class Movies : ScopedFragment(), KodeinAware {
         @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        movies_list.apply {
-            layoutManager =
-                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = groupie_adapter
+        if (movies_list != null) {
+            movies_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupie_adapter
 
+            }
         }
     }
 
@@ -143,11 +145,13 @@ class Movies : ScopedFragment(), KodeinAware {
         @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        movies_list.apply {
-            layoutManager =
-                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = groupie_adapter
+        if (movies_list != null) {
+            movies_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupie_adapter
 
+            }
         }
     }
 
@@ -155,11 +159,13 @@ class Movies : ScopedFragment(), KodeinAware {
         val groupieAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        movies_list.apply {
-            layoutManager =
-                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = groupieAdapter
+        if (movies_list != null) {
+            movies_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupieAdapter
 
+            }
         }
     }
 
@@ -167,11 +173,13 @@ class Movies : ScopedFragment(), KodeinAware {
         val groupie = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        movies_list.apply {
-            layoutManager =
-                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = groupie
+        if (movies_list != null) {
+            movies_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupie
 
+            }
         }
     }
 
