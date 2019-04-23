@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
-const val POPULAR_PRIMARY_KEY: Int = 0
 
 @Entity(tableName = "popular",indices =[Index(value = ["movieId"],unique = true)])
 data class PopularEntity(

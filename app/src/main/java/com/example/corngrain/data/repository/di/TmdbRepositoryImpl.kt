@@ -1,7 +1,5 @@
 package com.example.corngrain.data.repository.di
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.corngrain.data.db.dao.PlayingDao
 import com.example.corngrain.data.db.dao.PopularDao
 import com.example.corngrain.data.db.dao.TopRatedDao

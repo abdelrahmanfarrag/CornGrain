@@ -2,7 +2,6 @@ package com.example.corngrain.ui.main.movies
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -128,7 +127,7 @@ class Movies : ScopedFragment(), KodeinAware {
 
 
     private fun initRecycler(entries: List<MoviesAdapter>) {
-        val groupie_adapter = GroupAdapter<ViewHolder>().apply {
+        @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
         movies_list.apply {
@@ -141,7 +140,7 @@ class Movies : ScopedFragment(), KodeinAware {
 
 
     private fun initUpcomingRecycler(entries: List<UpcomingAdapter>) {
-        val groupie_adapter = GroupAdapter<ViewHolder>().apply {
+        @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
         movies_list.apply {

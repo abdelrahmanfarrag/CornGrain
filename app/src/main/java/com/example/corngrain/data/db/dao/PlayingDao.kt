@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.corngrain.data.db.entity.PlayingEntity
-import com.example.corngrain.data.db.entity.PopularEntity
 
 @Dao
 interface PlayingDao {

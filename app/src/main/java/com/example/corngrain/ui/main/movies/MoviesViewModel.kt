@@ -1,6 +1,6 @@
 package com.example.corngrain.ui.main.movies
 
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel
 import com.example.corngrain.data.repository.di.TmdbRepository
 import com.example.corngrain.utilities.lazyDeferred
 

@@ -1,6 +1,5 @@
 package com.example.corngrain.data.repository.di
 
-import androidx.lifecycle.LiveData
 import com.example.corngrain.data.db.entity.PlayingEntity
 import com.example.corngrain.data.db.entity.PopularEntity
 import com.example.corngrain.data.db.entity.TopRatedEntity

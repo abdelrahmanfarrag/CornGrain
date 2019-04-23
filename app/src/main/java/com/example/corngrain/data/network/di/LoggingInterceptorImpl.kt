@@ -2,7 +2,7 @@ package com.example.corngrain.data.network.di
 
 import okhttp3.logging.HttpLoggingInterceptor
 
-class LogginInterceptorImpl : LogginInterceptor {
+class LoggingInterceptorImpl : LoggingInterceptor {
 
 
     override fun loggingInterceptor(): HttpLoggingInterceptor {

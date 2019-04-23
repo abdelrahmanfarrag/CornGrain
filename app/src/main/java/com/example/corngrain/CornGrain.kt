@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import com.example.corngrain.data.db.TmdbLocalDb
 import com.example.corngrain.data.network.api.TmdbApi
-import com.example.corngrain.data.network.di.LogginInterceptor
-import com.example.corngrain.data.network.di.LogginInterceptorImpl
+import com.example.corngrain.data.network.di.LoggingInterceptor
+import com.example.corngrain.data.network.di.LoggingInterceptorImpl
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptorImpl
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
@@ -24,6 +24,7 @@ import org.kodein.di.generic.singleton
 //Adding all dependencies here through Kodein block
 //make app class implement KodeinAware to make the entire app know that u r using DI to provide dependencies
 
+@Suppress("unused", "RemoveExplicitTypeArguments")
 class CornGrain : Application(), KodeinAware {
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@CornGrain))
@@ -37,11 +38,11 @@ class CornGrain : Application(), KodeinAware {
                 instance<Context>()
             )
         }
-        bind<LogginInterceptor>() with singleton { LogginInterceptorImpl() }
+        bind<LoggingInterceptor>() with singleton { LoggingInterceptorImpl() }
         bind() from singleton {
             TmdbApi(
                 instance<NoConnectionInterceptor>(),
-                instance<LogginInterceptor>()
+                instance<LoggingInterceptor>()
             )
         }
 

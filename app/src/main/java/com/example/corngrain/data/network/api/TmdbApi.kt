@@ -1,6 +1,6 @@
 package com.example.corngrain.data.network.api
 
-import com.example.corngrain.data.network.di.LogginInterceptor
+import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.Playing
 import com.example.corngrain.data.network.response.Popular
@@ -60,7 +60,7 @@ interface TmdbApi {
 
         operator fun invoke(
             noConnectionInterceptor: NoConnectionInterceptor,
-            loggingInterceptor: LogginInterceptor
+            loggingInterceptor: LoggingInterceptor
         ): TmdbApi {
             val interceptedUrl = Interceptor { chain ->
                 val interceptedUrl = chain
