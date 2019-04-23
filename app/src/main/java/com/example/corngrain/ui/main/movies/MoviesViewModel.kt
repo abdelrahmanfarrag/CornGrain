@@ -8,5 +8,8 @@ class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
     val fetchLatestMovies by lazyDeferred {
         repository.getPopularMovies()
     }
+    val fetchUpcomingMovies by lazyDeferred {
+        repository.getUpcomingMovies()
+    }
 
 }

@@ -30,6 +30,7 @@ class CornGrain : Application(), KodeinAware {
         import(androidXModule(this@CornGrain))
         bind() from singleton { TmdbLocalDb(instance<Context>()) }
         bind() from singleton { instance<TmdbLocalDb>().accessToPopularDatabase() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToUpcomingDatabase() }
         bind<NoConnectionInterceptor>() with singleton {
             NoConnectionInterceptorImpl(
                 instance<Context>()
@@ -48,6 +49,7 @@ class CornGrain : Application(), KodeinAware {
         bind<TmdbRepository>() with singleton {
             TmdbRepositoryImpl(
                 instance<TmdbNetworkLayer>(),
+                instance(),
                 instance()
             )
         }
