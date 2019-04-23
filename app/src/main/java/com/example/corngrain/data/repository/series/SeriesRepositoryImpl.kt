@@ -35,7 +35,7 @@ class SeriesRepositoryImpl(
         }
     }
 
-    override suspend fun getPopularSeries(): List<PopularSeriesEntity> {
+    override suspend fun getPopularSeries(): MutableList<PopularSeriesEntity> {
         return withContext(Dispatchers.IO) {
             loadPopularSeriesFromNetworkCall()
             return@withContext popularSerieDao.getTvPopularSeries()

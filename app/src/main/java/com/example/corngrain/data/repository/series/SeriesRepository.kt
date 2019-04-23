@@ -5,5 +5,5 @@ import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 
 interface SeriesRepository {
     suspend fun getOnAirTodaySeries(): List<OnAirTodayEntity>
-    suspend fun getPopularSeries():List<PopularSeriesEntity>
+    suspend fun getPopularSeries():MutableList<PopularSeriesEntity>
 }

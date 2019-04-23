@@ -8,12 +8,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 
 import com.example.corngrain.R
+import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.OnAirTodayAdapter
+import com.example.corngrain.ui.main.series.adapter.PopularSerieAdapter
+import com.example.corngrain.utilities.GlideApp
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.on_airtoday.*
+import kotlinx.android.synthetic.main.popular_series.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -49,9 +58,32 @@ class Series : ScopedFragment(), KodeinAware {
         dots_layout.count = job.size
         pagerToAutoNext(pagerAdapter.count)
         val popularSeries = viewModel.fetchPopularSeries.await()
-        Log.d("series", popularSeries.size.toString())
+        GlideApp.with(context!!)
+            .load(BASE_IMG_URL + popularSeries.get(0).posterPath)
+            .into(first_item_img)
+        popularSeries.removeAt(0)
+        initPopularRecycler(popularSeries.toAdapterItems())
 
     }
+
+    private fun List<PopularSeriesEntity>.toAdapterItems(): List<PopularSerieAdapter> {
+        return this.map { item ->
+            PopularSerieAdapter(item)
+        }
+    }
+
+    private fun initPopularRecycler(entries: List<PopularSerieAdapter>) {
+        val groupie = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        popular_serie_list.apply {
+            layoutManager =
+                GridLayoutManager(context, 2,GridLayoutManager.HORIZONTAL,false)
+
+            adapter = groupie
+        }
+    }
+
 
     private fun pagerToAutoNext(items: Int) {
         today_series_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

@@ -12,5 +12,5 @@ interface PopularSerieDao {
     fun insertPopularSeries(entries: List<PopularSeriesEntity>)
 
     @Query("select * from tv_popular")
-    fun getTvPopularSeries(): List<PopularSeriesEntity>
+    fun getTvPopularSeries(): MutableList<PopularSeriesEntity>
 }
