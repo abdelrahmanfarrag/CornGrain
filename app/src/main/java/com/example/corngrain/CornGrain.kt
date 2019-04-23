@@ -12,7 +12,6 @@ import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayerImpl
 import com.example.corngrain.data.repository.di.TmdbRepository
 import com.example.corngrain.data.repository.di.TmdbRepositoryImpl
-import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.movies.MovieViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -29,8 +28,9 @@ class CornGrain : Application(), KodeinAware {
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@CornGrain))
         bind() from singleton { TmdbLocalDb(instance<Context>()) }
-        bind() from singleton { instance<TmdbLocalDb>().accessToPopularDatabase() }
-        bind() from singleton { instance<TmdbLocalDb>().accessToUpcomingDatabase() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToPopularTable() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToUpcomingTable() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToTopRatedTable() }
         bind<NoConnectionInterceptor>() with singleton {
             NoConnectionInterceptorImpl(
                 instance<Context>()
@@ -49,6 +49,7 @@ class CornGrain : Application(), KodeinAware {
         bind<TmdbRepository>() with singleton {
             TmdbRepositoryImpl(
                 instance<TmdbNetworkLayer>(),
+                instance(),
                 instance(),
                 instance()
             )

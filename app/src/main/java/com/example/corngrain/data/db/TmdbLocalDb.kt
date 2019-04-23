@@ -5,11 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.corngrain.data.db.dao.PopularDao
+import com.example.corngrain.data.db.dao.TopRatedDao
 import com.example.corngrain.data.db.dao.UpcomingDao
 import com.example.corngrain.data.db.entity.PopularEntity
+import com.example.corngrain.data.db.entity.TopRatedEntity
 import com.example.corngrain.data.db.entity.UpcomingEntity
 
-@Database(entities = [PopularEntity::class, UpcomingEntity::class], version = 1)
+@Database(
+    entities = [PopularEntity::class, UpcomingEntity::class, TopRatedEntity::class],
+    version = 1
+)
 abstract class TmdbLocalDb : RoomDatabase() {
 
     companion object {
@@ -29,6 +34,7 @@ abstract class TmdbLocalDb : RoomDatabase() {
 
     }
 
-    abstract fun accessToPopularDatabase(): PopularDao
-    abstract fun accessToUpcomingDatabase():UpcomingDao
+    abstract fun accessToPopularTable(): PopularDao
+    abstract fun accessToUpcomingTable(): UpcomingDao
+    abstract fun accessToTopRatedTable(): TopRatedDao
 }

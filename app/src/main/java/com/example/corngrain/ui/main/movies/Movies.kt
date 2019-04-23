@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.PopularEntity
+import com.example.corngrain.data.db.entity.TopRatedEntity
 import com.example.corngrain.data.db.entity.UpcomingEntity
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.MoviesAdapter
+import com.example.corngrain.ui.main.movies.adapters.TopRatedAdapter
 import com.example.corngrain.ui.main.movies.adapters.UpcomingAdapter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -54,6 +56,9 @@ class Movies : ScopedFragment(), KodeinAware {
         movie_popular_btn.setOnClickListener {
             settingPopularClick()
         }
+        toprated_movies_btn.setOnClickListener {
+            settingTopRatedClick()
+        }
     }
 
     private fun settingUpcomingClick() {
@@ -73,6 +78,15 @@ class Movies : ScopedFragment(), KodeinAware {
         }
     }
 
+    private fun settingTopRatedClick() {
+        movies_list.adapter = null
+        launch {
+            val topRatedJob = viewModel.fetchTopRatedMovies.await()
+            Log.d("items",topRatedJob.size.toString())
+            initTopRatedRecycler(topRatedJob.toTopRatedItems())
+        }
+    }
+
     private fun List<PopularEntity>.toMoviesItems(): List<MoviesAdapter> {
 
         return this.map { itemEntity ->
@@ -83,6 +97,12 @@ class Movies : ScopedFragment(), KodeinAware {
     private fun List<UpcomingEntity>.toUpcomingItems(): List<UpcomingAdapter> {
         return this.map { itemUpcoming ->
             UpcomingAdapter(itemUpcoming)
+        }
+    }
+
+    private fun List<TopRatedEntity>.toTopRatedItems(): List<TopRatedAdapter> {
+        return this.map { topRatedItem ->
+            TopRatedAdapter(topRatedItem)
         }
     }
 
@@ -110,6 +130,19 @@ class Movies : ScopedFragment(), KodeinAware {
             adapter = groupie_adapter
 
         }
+    }
+
+    private fun initTopRatedRecycler(entries: List<TopRatedAdapter>) {
+        val groupieAdapter = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        movies_list.apply {
+            layoutManager =
+                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupieAdapter
+
+        }
+
     }
 
 

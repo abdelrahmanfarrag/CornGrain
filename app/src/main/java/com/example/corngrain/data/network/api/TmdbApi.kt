@@ -3,6 +3,7 @@ package com.example.corngrain.data.network.api
 import com.example.corngrain.data.network.di.LogginInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.Popular
+import com.example.corngrain.data.network.response.TopRated
 import com.example.corngrain.data.network.response.Upcoming
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -23,6 +24,7 @@ const val PAGE = "page"
 //ENDPOINTS
 const val POPULAR_MOVIES = "movie/popular"
 const val UPCOMING_MOVIES = "movie/upcoming"
+const val TOPRATED_MOVIES = "movie/top_rated"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -32,15 +34,19 @@ interface TmdbApi {
     fun getLatestMoviesAsync(
         @Query(LANGUAGE) language: String = "en-Us",
         @Query(PAGE) page: Int = 1
-    )
-            : Deferred<Popular>
+    ): Deferred<Popular>
 
     @GET(UPCOMING_MOVIES)
     fun getUpcomingMoviesAsync(
         @Query(LANGUAGE) language: String = "en-US"
         , @Query(PAGE) page: Int = 1
-    )
-            : Deferred<Upcoming>
+    ): Deferred<Upcoming>
+
+    @GET(TOPRATED_MOVIES)
+    fun getTopRatedMoviesAsync(
+        @Query(LANGUAGE) language: String = "en-US"
+        , @Query(PAGE) page: Int = 1
+    ): Deferred<TopRated>
 
     companion object {
 

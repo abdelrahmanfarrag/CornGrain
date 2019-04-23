@@ -3,8 +3,10 @@ package com.example.corngrain.data.repository.di
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.corngrain.data.db.dao.PopularDao
+import com.example.corngrain.data.db.dao.TopRatedDao
 import com.example.corngrain.data.db.dao.UpcomingDao
 import com.example.corngrain.data.db.entity.PopularEntity
+import com.example.corngrain.data.db.entity.TopRatedEntity
 import com.example.corngrain.data.db.entity.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +18,8 @@ import kotlinx.coroutines.withContext
 class TmdbRepositoryImpl(
     private val networkSource: TmdbNetworkLayer,
     private val popularDao: PopularDao,
-    private val upcomingDao: UpcomingDao
+    private val upcomingDao: UpcomingDao,
+    private val topRatedDao: TopRatedDao
 ) : TmdbRepository {
 
 
@@ -27,6 +30,9 @@ class TmdbRepositoryImpl(
             }
             upcomingMovies.observeForever { upcoming ->
                 persistUpcomingMovies(upcoming.results)
+            }
+            topRatedMovies.observeForever { topRated ->
+                persistingTopRatedMovies(topRated.results)
             }
         }
     }
@@ -46,6 +52,13 @@ class TmdbRepositoryImpl(
         }
     }
 
+    override suspend fun getTopRatedMovies(): List<TopRatedEntity> {
+        return withContext(Dispatchers.IO) {
+            getTopRatedMoviesFromNetworkCall()
+            return@withContext topRatedDao.getTopRatedMovies()
+        }
+    }
+
 
     private fun persistPopularMovies(entries: List<PopularEntity>) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -60,6 +73,12 @@ class TmdbRepositoryImpl(
 
     }
 
+    private fun persistingTopRatedMovies(entries: List<TopRatedEntity>) {
+        GlobalScope.launch {
+            topRatedDao.insertTopRatedMovies(entries)
+        }
+    }
+
 
     private suspend fun getPopularMoviesFromNetworkCall() {
         networkSource.loadLatestMovies()
@@ -67,6 +86,10 @@ class TmdbRepositoryImpl(
 
     private suspend fun getUpcomingMoviesFromNetworkCall() {
         networkSource.loadUpcomingMovies()
+    }
+
+    private suspend fun getTopRatedMoviesFromNetworkCall() {
+        networkSource.loadTopRatedMovies()
     }
 
 
