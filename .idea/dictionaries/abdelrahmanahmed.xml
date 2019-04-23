@@ -6,6 +6,7 @@
       <w>gson</w>
       <w>kodein</w>
       <w>tmdb</w>
+      <w>toprated</w>
     </words>
   </dictionary>
 </component>

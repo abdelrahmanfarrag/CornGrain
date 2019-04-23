@@ -14,5 +14,8 @@ class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
     val fetchTopRatedMovies by lazyDeferred {
         repository.getTopRatedMovies()
     }
+    val fetchPlayingMovies by lazyDeferred {
+        repository.getPlayingMovies()
+    }
 
 }

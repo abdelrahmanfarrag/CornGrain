@@ -31,6 +31,7 @@ class CornGrain : Application(), KodeinAware {
         bind() from singleton { instance<TmdbLocalDb>().accessToPopularTable() }
         bind() from singleton { instance<TmdbLocalDb>().accessToUpcomingTable() }
         bind() from singleton { instance<TmdbLocalDb>().accessToTopRatedTable() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToPlayingTable() }
         bind<NoConnectionInterceptor>() with singleton {
             NoConnectionInterceptorImpl(
                 instance<Context>()
@@ -49,6 +50,7 @@ class CornGrain : Application(), KodeinAware {
         bind<TmdbRepository>() with singleton {
             TmdbRepositoryImpl(
                 instance<TmdbNetworkLayer>(),
+                instance(),
                 instance(),
                 instance(),
                 instance()

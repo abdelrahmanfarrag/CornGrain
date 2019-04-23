@@ -2,9 +2,11 @@ package com.example.corngrain.data.repository.di
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.corngrain.data.db.dao.PlayingDao
 import com.example.corngrain.data.db.dao.PopularDao
 import com.example.corngrain.data.db.dao.TopRatedDao
 import com.example.corngrain.data.db.dao.UpcomingDao
+import com.example.corngrain.data.db.entity.PlayingEntity
 import com.example.corngrain.data.db.entity.PopularEntity
 import com.example.corngrain.data.db.entity.TopRatedEntity
 import com.example.corngrain.data.db.entity.UpcomingEntity
@@ -19,8 +21,10 @@ class TmdbRepositoryImpl(
     private val networkSource: TmdbNetworkLayer,
     private val popularDao: PopularDao,
     private val upcomingDao: UpcomingDao,
-    private val topRatedDao: TopRatedDao
+    private val topRatedDao: TopRatedDao,
+    private val playingDao: PlayingDao
 ) : TmdbRepository {
+
 
 
     init {
@@ -33,6 +37,10 @@ class TmdbRepositoryImpl(
             }
             topRatedMovies.observeForever { topRated ->
                 persistingTopRatedMovies(topRated.results)
+            }
+            playingMovies.observeForever { playing ->
+                persistingNowPlayingMovies(playing.results)
+
             }
         }
     }
@@ -59,6 +67,13 @@ class TmdbRepositoryImpl(
         }
     }
 
+    override suspend fun getPlayingMovies(): List<PlayingEntity> {
+        return withContext(Dispatchers.IO) {
+            getNowPlayingMoviesFromNetworkCall()
+            return@withContext playingDao.getNowPlayingMovies()
+        }
+    }
+
 
     private fun persistPopularMovies(entries: List<PopularEntity>) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -79,6 +94,12 @@ class TmdbRepositoryImpl(
         }
     }
 
+    private fun persistingNowPlayingMovies(entries: List<PlayingEntity>) {
+        GlobalScope.launch {
+            playingDao.insertNowPlayingMovies(entries)
+        }
+    }
+
 
     private suspend fun getPopularMoviesFromNetworkCall() {
         networkSource.loadLatestMovies()
@@ -92,5 +113,8 @@ class TmdbRepositoryImpl(
         networkSource.loadTopRatedMovies()
     }
 
+    private suspend fun getNowPlayingMoviesFromNetworkCall() {
+        networkSource.loadPlayingMovies()
+    }
 
 }

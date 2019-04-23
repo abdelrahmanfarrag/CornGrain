@@ -2,6 +2,7 @@ package com.example.corngrain.data.network.api
 
 import com.example.corngrain.data.network.di.LogginInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
+import com.example.corngrain.data.network.response.Playing
 import com.example.corngrain.data.network.response.Popular
 import com.example.corngrain.data.network.response.TopRated
 import com.example.corngrain.data.network.response.Upcoming
@@ -21,10 +22,11 @@ const val KEY = "api_key"
 const val LANGUAGE = "language"
 const val PAGE = "page"
 
-//ENDPOINTS
+//ENDPOINTS => For movies
 const val POPULAR_MOVIES = "movie/popular"
 const val UPCOMING_MOVIES = "movie/upcoming"
 const val TOPRATED_MOVIES = "movie/top_rated"
+const val PLAYING_MOVIES = "movie/now_playing"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -48,11 +50,17 @@ interface TmdbApi {
         , @Query(PAGE) page: Int = 1
     ): Deferred<TopRated>
 
+    @GET(PLAYING_MOVIES)
+    fun getPlayingMoviesAsync(
+        @Query(LANGUAGE) language: String = "en-US"
+        , @Query(PAGE) page: Int = 1
+    ): Deferred<Playing>
+
     companion object {
 
         operator fun invoke(
             noConnectionInterceptor: NoConnectionInterceptor,
-            logginInterceptor: LogginInterceptor
+            loggingInterceptor: LogginInterceptor
         ): TmdbApi {
             val interceptedUrl = Interceptor { chain ->
                 val interceptedUrl = chain
@@ -76,7 +84,7 @@ interface TmdbApi {
 
             val httpClient = OkHttpClient.Builder()
                 .addInterceptor(interceptedUrl)
-                .addInterceptor(logginInterceptor.loggingInterceptor())
+                .addInterceptor(loggingInterceptor.loggingInterceptor())
                 .addInterceptor(noConnectionInterceptor)
                 .build()
 

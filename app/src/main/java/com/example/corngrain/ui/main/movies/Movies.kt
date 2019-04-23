@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
+import com.example.corngrain.data.db.entity.PlayingEntity
 import com.example.corngrain.data.db.entity.PopularEntity
 import com.example.corngrain.data.db.entity.TopRatedEntity
 import com.example.corngrain.data.db.entity.UpcomingEntity
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.MoviesAdapter
+import com.example.corngrain.ui.main.movies.adapters.PlayingAdapter
 import com.example.corngrain.ui.main.movies.adapters.TopRatedAdapter
 import com.example.corngrain.ui.main.movies.adapters.UpcomingAdapter
 import com.xwray.groupie.GroupAdapter
@@ -49,7 +51,8 @@ class Movies : ScopedFragment(), KodeinAware {
     }
 
     @Suppress("ReplaceGetOrSet")
-    private fun buildUI() {
+    private fun buildUI() = launch {
+        settingTopRatedClick()
         upcoming_movies_btn.setOnClickListener {
             settingUpcomingClick()
         }
@@ -58,6 +61,9 @@ class Movies : ScopedFragment(), KodeinAware {
         }
         toprated_movies_btn.setOnClickListener {
             settingTopRatedClick()
+        }
+        playing_movies_btn.setOnClickListener {
+            settingPlayingClick()
         }
     }
 
@@ -82,8 +88,16 @@ class Movies : ScopedFragment(), KodeinAware {
         movies_list.adapter = null
         launch {
             val topRatedJob = viewModel.fetchTopRatedMovies.await()
-            Log.d("items",topRatedJob.size.toString())
             initTopRatedRecycler(topRatedJob.toTopRatedItems())
+        }
+    }
+
+    private fun settingPlayingClick() {
+        movies_list.adapter = null
+        launch {
+            val playingJob = viewModel.fetchPlayingMovies.await()
+            initPlayingRecycler(playingJob.toPlayingItems())
+
         }
     }
 
@@ -103,6 +117,12 @@ class Movies : ScopedFragment(), KodeinAware {
     private fun List<TopRatedEntity>.toTopRatedItems(): List<TopRatedAdapter> {
         return this.map { topRatedItem ->
             TopRatedAdapter(topRatedItem)
+        }
+    }
+
+    private fun List<PlayingEntity>.toPlayingItems(): List<PlayingAdapter> {
+        return this.map { playingItem ->
+            PlayingAdapter(playingItem)
         }
     }
 
@@ -142,7 +162,18 @@ class Movies : ScopedFragment(), KodeinAware {
             adapter = groupieAdapter
 
         }
+    }
 
+    private fun initPlayingRecycler(entries: List<PlayingAdapter>) {
+        val groupie = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        movies_list.apply {
+            layoutManager =
+                LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupie
+
+        }
     }
 
 

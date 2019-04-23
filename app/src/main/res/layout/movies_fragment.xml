@@ -107,6 +107,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/playing_movies_btn"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
