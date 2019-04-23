@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.corngrain.data.db.TmdbLocalDb
 import com.example.corngrain.data.db.dao.movies.TopRatedDao
 import com.example.corngrain.data.db.dao.series.OnAirDao
+import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.network.api.TmdbApi
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.LoggingInterceptorImpl
@@ -40,6 +41,7 @@ class CornGrain : Application(), KodeinAware {
         bind() from singleton { instance<TmdbLocalDb>().accessToTopRatedTable() }
         bind() from singleton { instance<TmdbLocalDb>().accessToPlayingTable() }
         bind() from singleton { instance<TmdbLocalDb>().accessToOnAirTodayTable() }
+        bind() from singleton { instance<TmdbLocalDb>().accessToPopularSeriesEntity() }
         bind<NoConnectionInterceptor>() with singleton {
             NoConnectionInterceptorImpl(
                 instance<Context>()
@@ -67,7 +69,8 @@ class CornGrain : Application(), KodeinAware {
         bind<SeriesRepository>() with singleton {
             SeriesRepositoryImpl(
                 instance<TmdbNetworkLayer>(),
-                instance<OnAirDao>()
+                instance<OnAirDao>(),
+                instance<PopularSerieDao>()
             )
         }
         bind() from provider { MovieViewModelFactory(instance<TmdbRepository>()) }

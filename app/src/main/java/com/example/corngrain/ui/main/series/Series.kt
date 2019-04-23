@@ -48,6 +48,8 @@ class Series : ScopedFragment(), KodeinAware {
         today_series_pager.adapter = pagerAdapter
         dots_layout.count = job.size
         pagerToAutoNext(pagerAdapter.count)
+        val popularSeries = viewModel.fetchPopularSeries.await()
+        Log.d("series", popularSeries.size.toString())
 
     }
 
@@ -73,14 +75,18 @@ class Series : ScopedFragment(), KodeinAware {
         handler.post(object : Runnable {
             override fun run() {
                 if (currentPage!! < items) {
-                    today_series_pager.setCurrentItem(currentPage!!, true)
-                    handler.postDelayed(this, 3000)
-                    currentPage++
+                    if (today_series_pager != null) {
+                        today_series_pager.setCurrentItem(currentPage!!, true)
+                        handler.postDelayed(this, 3000)
+                        currentPage++
+                    }
                 } else if (currentPage == items) {
                     currentPage = 0
-                    today_series_pager.setCurrentItem(currentPage, true)
-                    handler.postDelayed(this, 3000)
-                    currentPage++
+                    if (today_series_pager != null) {
+                        today_series_pager.setCurrentItem(currentPage, true)
+                        handler.postDelayed(this, 3000)
+                        currentPage++
+                    }
                 }
             }
         })

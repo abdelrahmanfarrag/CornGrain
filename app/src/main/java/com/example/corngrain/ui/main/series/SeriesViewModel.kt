@@ -9,4 +9,7 @@ class SeriesViewModel(repository: SeriesRepository) : ViewModel() {
     val fetchSeries by lazyDeferred {
         repository.getOnAirTodaySeries()
     }
+    val fetchPopularSeries by lazyDeferred {
+        repository.getPopularSeries()
+    }
 }

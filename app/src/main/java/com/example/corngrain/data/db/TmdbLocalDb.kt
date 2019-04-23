@@ -9,15 +9,17 @@ import com.example.corngrain.data.db.dao.movies.PopularDao
 import com.example.corngrain.data.db.dao.movies.TopRatedDao
 import com.example.corngrain.data.db.dao.movies.UpcomingDao
 import com.example.corngrain.data.db.dao.series.OnAirDao
+import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.db.entity.movies.PlayingEntity
 import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
+import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 
 @Database(
     entities = [PopularEntity::class, UpcomingEntity::class, TopRatedEntity::class,
-        PlayingEntity::class, OnAirTodayEntity::class],
+        PlayingEntity::class, OnAirTodayEntity::class, PopularSeriesEntity::class],
     version = 1
 )
 abstract class TmdbLocalDb : RoomDatabase() {
@@ -44,5 +46,6 @@ abstract class TmdbLocalDb : RoomDatabase() {
     abstract fun accessToTopRatedTable(): TopRatedDao
     abstract fun accessToPlayingTable(): PlayingDao
     abstract fun accessToOnAirTodayTable(): OnAirDao
+    abstract fun accessToPopularSeriesEntity(): PopularSerieDao
 
 }
