@@ -4,10 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
-import com.example.corngrain.data.network.response.Playing
-import com.example.corngrain.data.network.response.Popular
-import com.example.corngrain.data.network.response.TopRated
-import com.example.corngrain.data.network.response.Upcoming
+import com.example.corngrain.data.network.response.movies.Playing
+import com.example.corngrain.data.network.response.movies.Popular
+import com.example.corngrain.data.network.response.movies.TopRated
+import com.example.corngrain.data.network.response.movies.Upcoming
+import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
@@ -17,6 +18,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableUpcomingMoviesData = MutableLiveData<Upcoming>()
     private val _mutableTopRatedMoviesData = MutableLiveData<TopRated>()
     private val _mutablePlayingMoviesData = MutableLiveData<Playing>()
+    private val _mutableOnAirSeriesData = MutableLiveData<OnAirToday>()
 
     override val latestMovies: LiveData<Popular>
         get() = _mutableLatestMoviesData
@@ -64,6 +66,19 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val playingJob = api.getPlayingMoviesAsync().await()
             _mutablePlayingMoviesData.postValue(playingJob)
 
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
+    override val onAirToday: LiveData<OnAirToday>
+        get() = _mutableOnAirSeriesData
+
+    override suspend fun loadOnAirToday() {
+        try {
+            val onAirData = api.getTvOnAirTodayAsync().await()
+            _mutableOnAirSeriesData.postValue(onAirData)
         } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
 

@@ -1,10 +1,10 @@
-package com.example.corngrain.data.db.dao
+package com.example.corngrain.data.db.dao.movies
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.corngrain.data.db.entity.PopularEntity
+import com.example.corngrain.data.db.entity.movies.PopularEntity
 
 
 @Dao

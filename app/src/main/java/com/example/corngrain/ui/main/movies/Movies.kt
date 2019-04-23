@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
-import com.example.corngrain.data.db.entity.PlayingEntity
-import com.example.corngrain.data.db.entity.PopularEntity
-import com.example.corngrain.data.db.entity.TopRatedEntity
-import com.example.corngrain.data.db.entity.UpcomingEntity
+import com.example.corngrain.data.db.entity.movies.PlayingEntity
+import com.example.corngrain.data.db.entity.movies.PopularEntity
+import com.example.corngrain.data.db.entity.movies.TopRatedEntity
+import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.MoviesAdapter
 import com.example.corngrain.ui.main.movies.adapters.PlayingAdapter

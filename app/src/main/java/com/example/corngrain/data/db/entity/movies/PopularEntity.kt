@@ -1,20 +1,22 @@
-package com.example.corngrain.data.db.entity
+package com.example.corngrain.data.db.entity.movies
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "top_rated", indices = [Index(value = ["id"], unique = true)])
-data class TopRatedEntity(
+
+
+@Entity(tableName = "popular",indices =[Index(value = ["movieId"],unique = true)])
+data class PopularEntity(
     @SerializedName("adult")
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("id")
-    val id: Int,
+    val movieId: Int,
     @PrimaryKey(autoGenerate = true)
-    val topRatedTableId: Int? = null,
+    val tableId: Int? = null,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("original_title")

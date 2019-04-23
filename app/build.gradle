@@ -37,6 +37,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
+    //PagerIndicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
+
     // Navigation
     implementation "android.arch.navigation:navigation-fragment:$navigation_version"
     implementation "android.arch.navigation:navigation-ui:$navigation_version"

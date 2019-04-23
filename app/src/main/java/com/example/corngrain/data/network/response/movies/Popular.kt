@@ -1,6 +1,6 @@
-package com.example.corngrain.data.network.response
+package com.example.corngrain.data.network.response.movies
 
-import com.example.corngrain.data.db.entity.PopularEntity
+import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.google.gson.annotations.SerializedName
 
 data class Popular(

@@ -2,8 +2,7 @@ package com.example.corngrain.ui.main.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.example.corngrain.data.repository.di.TmdbRepository
+import com.example.corngrain.data.repository.movies.TmdbRepository
 
 @Suppress("UNCHECKED_CAST")
 class MovieViewModelFactory(private val repository: TmdbRepository) :

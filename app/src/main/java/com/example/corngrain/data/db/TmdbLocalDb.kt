@@ -4,18 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.corngrain.data.db.dao.PlayingDao
-import com.example.corngrain.data.db.dao.PopularDao
-import com.example.corngrain.data.db.dao.TopRatedDao
-import com.example.corngrain.data.db.dao.UpcomingDao
-import com.example.corngrain.data.db.entity.PlayingEntity
-import com.example.corngrain.data.db.entity.PopularEntity
-import com.example.corngrain.data.db.entity.TopRatedEntity
-import com.example.corngrain.data.db.entity.UpcomingEntity
+import com.example.corngrain.data.db.dao.movies.PlayingDao
+import com.example.corngrain.data.db.dao.movies.PopularDao
+import com.example.corngrain.data.db.dao.movies.TopRatedDao
+import com.example.corngrain.data.db.dao.movies.UpcomingDao
+import com.example.corngrain.data.db.dao.series.OnAirDao
+import com.example.corngrain.data.db.entity.movies.PlayingEntity
+import com.example.corngrain.data.db.entity.movies.PopularEntity
+import com.example.corngrain.data.db.entity.movies.TopRatedEntity
+import com.example.corngrain.data.db.entity.movies.UpcomingEntity
+import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 
 @Database(
     entities = [PopularEntity::class, UpcomingEntity::class, TopRatedEntity::class,
-        PlayingEntity::class],
+        PlayingEntity::class, OnAirTodayEntity::class],
     version = 1
 )
 abstract class TmdbLocalDb : RoomDatabase() {
@@ -41,4 +43,6 @@ abstract class TmdbLocalDb : RoomDatabase() {
     abstract fun accessToUpcomingTable(): UpcomingDao
     abstract fun accessToTopRatedTable(): TopRatedDao
     abstract fun accessToPlayingTable(): PlayingDao
+    abstract fun accessToOnAirTodayTable(): OnAirDao
+
 }

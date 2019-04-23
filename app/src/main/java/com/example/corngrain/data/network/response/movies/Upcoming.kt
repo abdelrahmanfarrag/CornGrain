@@ -1,6 +1,6 @@
-package com.example.corngrain.data.network.response
+package com.example.corngrain.data.network.response.movies
 
-import com.example.corngrain.data.db.entity.UpcomingEntity
+import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.google.gson.annotations.SerializedName
 
 data class Upcoming(

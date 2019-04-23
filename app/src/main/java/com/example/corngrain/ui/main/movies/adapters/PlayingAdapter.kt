@@ -1,7 +1,7 @@
 package com.example.corngrain.ui.main.movies.adapters
 
 import com.example.corngrain.R
-import com.example.corngrain.data.db.entity.PlayingEntity
+import com.example.corngrain.data.db.entity.movies.PlayingEntity
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
