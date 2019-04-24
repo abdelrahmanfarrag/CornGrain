@@ -21,6 +21,7 @@ class OnAirTodayAdapter(private val entries: List<OnAirTodayEntity>) : PagerAdap
         val imageView = item.findViewById<ImageView>(R.id.pager_img_item)
         GlideApp.with(container.context)
             .load(BASE_IMG_URL + entries.get(position).posterPath)
+            .placeholder(R.drawable.ic_placeholder)
             .into(imageView)
         container.addView(item)
         return item

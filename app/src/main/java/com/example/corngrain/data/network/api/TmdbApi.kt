@@ -9,6 +9,7 @@ import com.example.corngrain.data.network.response.movies.Upcoming
 import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.PopularSeries
 import com.example.corngrain.data.network.response.series.SerieDetail
+import com.example.corngrain.data.network.response.series.TopRatedSeries
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -35,6 +36,7 @@ const val PLAYING_MOVIES = "movie/now_playing"
 //ENDPOINTS => For Series
 const val ONAIR_TODAY = "tv/airing_today"
 const val POPULAR_SERIES = "tv/popular"
+const val TOP_RATED_SERIES = "tv/top_rated"
 const val SERIE_DETAIL = "tv/{id}"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
@@ -78,9 +80,14 @@ interface TmdbApi {
     ): Deferred<PopularSeries>
 
     @GET(SERIE_DETAIL)
-    fun getSerieDetail(
+    fun getSerieDetailAsync(
         @Path("id") serieId: Int
     ): Deferred<SerieDetail>
+
+    @GET(TOP_RATED_SERIES)
+    fun getTopRatedSeriesAsync(
+        @Query(PAGE) page: Int = 1
+    ): Deferred<TopRatedSeries>
 
 
     companion object {

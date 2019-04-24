@@ -8,32 +8,42 @@ import com.example.corngrain.data.network.response.movies.Upcoming
 import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.PopularSeries
 import com.example.corngrain.data.network.response.series.SerieDetail
+import com.example.corngrain.data.network.response.series.TopRatedSeries
 
 interface TmdbNetworkLayer {
     //Popular Movies
     val latestMovies: LiveData<Popular>
+
     suspend fun loadLatestMovies()
 
     //Upcoming
     val upcomingMovies: LiveData<Upcoming>
+
     suspend fun loadUpcomingMovies()
 
     //TopRated
-    val topRatedMovies : LiveData<TopRated>
+    val topRatedMovies: LiveData<TopRated>
+
     suspend fun loadTopRatedMovies()
 
     //Playing
-    val playingMovies : LiveData<Playing>
+    val playingMovies: LiveData<Playing>
+
     suspend fun loadPlayingMovies()
 
     //SERIES => ON AIR TODAY
-    val onAirToday : LiveData<OnAirToday>
+    val onAirToday: LiveData<OnAirToday>
+
     suspend fun loadOnAirToday()
 
     //SERIES => POPULAR
-    val popularSeries:LiveData<PopularSeries>
+    val popularSeries: LiveData<PopularSeries>
+
     suspend fun loadPopularSeries()
 
-    val serieDetail:LiveData<SerieDetail>
-    suspend fun loadSerieDetail(id:Int)
+    val serieDetail: LiveData<SerieDetail>
+    suspend fun loadSerieDetail(id: Int)
+
+    val topRatedSeries: LiveData<TopRatedSeries>
+    suspend fun loadTopRatedSeries()
 }

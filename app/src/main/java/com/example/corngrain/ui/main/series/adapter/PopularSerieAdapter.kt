@@ -21,6 +21,7 @@ class PopularSerieAdapter(private val entry: PopularSeriesEntity) : Item() {
     private fun ViewHolder.setPopularSerieImage() {
         GlideApp.with(this.containerView)
             .load(BASE_IMG_URL + entry.posterPath)
+            .placeholder(R.drawable.ic_placeholder)
             .into(item_serie_img)
     }
 }

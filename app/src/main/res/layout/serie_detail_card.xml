@@ -161,29 +161,29 @@
             android:id="@+id/season_genres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/cairo_semibold"
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textSize="12sp"
-            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/seasons_list" />
 
         <TextView
+            android:id="@+id/seasons_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/seasons_info"
-            android:fontFamily="@font/cairo_semibold"
-            android:textSize="12sp"
+            android:layout_marginTop="24dp"
             android:drawableTop="@drawable/ic_info"
             android:drawablePadding="4dp"
-
+            android:fontFamily="@font/cairo_semibold"
+            android:background="?selectableItemBackgroundBorderless"
+            android:text="Find more information"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/season_genres"
-            android:layout_marginTop="8dp"
-            android:text="Find more information"/>
+            app:layout_constraintTop_toBottomOf="@+id/season_genres" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

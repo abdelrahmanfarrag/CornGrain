@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +17,19 @@ import androidx.viewpager.widget.ViewPager
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.response.series.SerieDetail
+import com.example.corngrain.data.network.response.series.TopRatedSeries
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.OnAirTodayAdapter
 import com.example.corngrain.ui.main.series.adapter.PopularSerieAdapter
+import com.example.corngrain.ui.main.series.adapter.RatedSeriesAdapter
 import com.example.corngrain.ui.main.series.adapter.SeasonsAdapter
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
+import kotlinx.android.synthetic.main.rated_seasons.*
 import kotlinx.android.synthetic.main.serie_detail_card.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -51,7 +55,6 @@ class Series : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
-
         bindUI()
 
     }
@@ -60,7 +63,9 @@ class Series : ScopedFragment(), KodeinAware {
         val job = viewModel.fetchSeries.await()
         //Log.d("seasons", job.size.toString())
         val pagerAdapter = OnAirTodayAdapter(job)
-        today_series_pager.adapter = pagerAdapter
+        if (today_series_pager != null) {
+            today_series_pager.adapter = pagerAdapter
+        }
         dots_layout.count = job.size
         pagerToAutoNext(pagerAdapter.count)
         val popularSeries = viewModel.fetchPopularSeries.await()
@@ -71,8 +76,11 @@ class Series : ScopedFragment(), KodeinAware {
         initPopularRecycler(popularSeries.toAdapterItems())
 
         val randomEntryToLoad = job[generateRandomizedNumber()].id
-        val testDetail = viewModel.fetchDetails(randomEntryToLoad).await()
-        detailCardUI(testDetail)
+        val randomSerieDetail = viewModel.fetchDetails(randomEntryToLoad)
+        detailCardUI(randomSerieDetail)
+
+        val topRatedSeries = viewModel.fetchTopRatedSeries.await()
+        initToRatedSeasonRecycler(topRatedSeries.value?.results?.toRatedSeriesItems()!!)
 
     }
 
@@ -80,13 +88,13 @@ class Series : ScopedFragment(), KodeinAware {
         return (0..19).random()
     }
 
+
     private fun setGenres(genresList: List<SerieDetail.Genre>): StringBuilder {
         val stringBuilder = StringBuilder()
         genresList.forEachIndexed { index, genre ->
 
             when (index) {
-                1 -> stringBuilder.append(genre.name)
-                genresList.size -> stringBuilder.append(genre.name)
+                (genresList.size - 1) -> stringBuilder.append(genre.name)
                 else -> stringBuilder.append("${genre.name} ,")
             }
         }
@@ -145,6 +153,13 @@ class Series : ScopedFragment(), KodeinAware {
 
     }
 
+    private fun List<TopRatedSeries.Result>.toRatedSeriesItems(): List<RatedSeriesAdapter> {
+        return this.map { item ->
+            RatedSeriesAdapter(item)
+
+        }
+    }
+
     private fun initPopularRecycler(entries: List<PopularSerieAdapter>) {
         val groupie = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
@@ -154,6 +169,17 @@ class Series : ScopedFragment(), KodeinAware {
                 GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
 
             adapter = groupie
+        }
+    }
+
+
+    private fun initToRatedSeasonRecycler(entries: List<RatedSeriesAdapter>) {
+        val group = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        rated_seasons_list.apply {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = group
         }
     }
 

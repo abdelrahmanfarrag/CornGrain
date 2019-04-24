@@ -21,6 +21,7 @@ class SeasonsAdapter(private val entry: SerieDetail.Season) : Item() {
     fun ViewHolder.seasonImage() {
         GlideApp.with(this.containerView)
             .load(BASE_IMG_URL + entry.posterPath)
+            .placeholder(R.drawable.ic_placeholder)
             .into(detail_season_img)
     }
 }

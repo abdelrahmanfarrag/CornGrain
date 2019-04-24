@@ -58,5 +58,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/popular_series" />
+
+        <include
+            android:id="@+id/serie_rated_card"
+            layout="@layout/rated_seasons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/serie_detail_card" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
