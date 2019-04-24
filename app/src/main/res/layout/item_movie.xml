@@ -26,6 +26,7 @@
         android:drawablePadding="4dp"
         android:padding="8dp"
         android:textColor="#FFE500"
+        android:fontFamily="@font/cairo_semibold"
         app:layout_constraintStart_toStartOf="@+id/movie_img"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import com.example.corngrain.data.network.response.movies.TopRated
 import com.example.corngrain.data.network.response.movies.Upcoming
 import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.PopularSeries
+import com.example.corngrain.data.network.response.series.SerieDetail
 
 interface TmdbNetworkLayer {
     //Popular Movies
@@ -32,4 +33,7 @@ interface TmdbNetworkLayer {
     //SERIES => POPULAR
     val popularSeries:LiveData<PopularSeries>
     suspend fun loadPopularSeries()
+
+    val serieDetail:LiveData<SerieDetail>
+    suspend fun loadSerieDetail(id:Int)
 }

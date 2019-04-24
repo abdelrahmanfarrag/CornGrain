@@ -8,6 +8,7 @@ import com.example.corngrain.data.network.response.movies.TopRated
 import com.example.corngrain.data.network.response.movies.Upcoming
 import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.PopularSeries
+import com.example.corngrain.data.network.response.series.SerieDetail
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -15,6 +16,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 //Queries & Parameters
@@ -33,6 +35,7 @@ const val PLAYING_MOVIES = "movie/now_playing"
 //ENDPOINTS => For Series
 const val ONAIR_TODAY = "tv/airing_today"
 const val POPULAR_SERIES = "tv/popular"
+const val SERIE_DETAIL = "tv/{id}"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -72,7 +75,12 @@ interface TmdbApi {
     fun getTvPopularSeriesAsync(
         @Query(LANGUAGE) language: String = "en-US"
         , @Query(PAGE) page: Int = 1
-    ):Deferred<PopularSeries>
+    ): Deferred<PopularSeries>
+
+    @GET(SERIE_DETAIL)
+    fun getSerieDetail(
+        @Path("id") serieId: Int
+    ): Deferred<SerieDetail>
 
 
     companion object {

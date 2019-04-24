@@ -1,33 +1,38 @@
 package com.example.corngrain.ui.main.series
 
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
+import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.OnAirTodayAdapter
 import com.example.corngrain.ui.main.series.adapter.PopularSerieAdapter
+import com.example.corngrain.ui.main.series.adapter.SeasonsAdapter
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
+import kotlinx.android.synthetic.main.serie_detail_card.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
+import java.lang.StringBuilder
 
 class Series : ScopedFragment(), KodeinAware {
     override val kodein: Kodein by closestKodein()
@@ -46,6 +51,7 @@ class Series : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
+
         bindUI()
 
     }
@@ -64,12 +70,79 @@ class Series : ScopedFragment(), KodeinAware {
         popularSeries.removeAt(0)
         initPopularRecycler(popularSeries.toAdapterItems())
 
+        val randomEntryToLoad = job[generateRandomizedNumber()].id
+        val testDetail = viewModel.fetchDetails(randomEntryToLoad).await()
+        detailCardUI(testDetail)
+
     }
+
+    private fun generateRandomizedNumber(): Int {
+        return (0..19).random()
+    }
+
+    private fun setGenres(genresList: List<SerieDetail.Genre>): StringBuilder {
+        val stringBuilder = StringBuilder()
+        genresList.forEachIndexed { index, genre ->
+
+            when (index) {
+                1 -> stringBuilder.append(genre.name)
+                genresList.size -> stringBuilder.append(genre.name)
+                else -> stringBuilder.append("${genre.name} ,")
+            }
+        }
+        return stringBuilder
+    }
+
+    private fun detailCardUI(data: LiveData<SerieDetail>) {
+        serie_detail_title.text = data.value?.originalName
+        serie_detail_overview.text = data.value?.overview
+        serie_detail_rating.text = "Rating \n ${data.value?.voteAverage}"
+        serie_detail_episodes.text = "Episodes \n ${data.value?.numberOfEpisodes}"
+        serie_detail_seasons.text = "Seasons \n ${data.value?.numberOfSeasons}"
+        season_genres.text = setGenres(data.value?.genres!!).toString()
+        seasons_info.setOnClickListener {
+            val uri = Uri.parse(data.value?.homepage)
+            val intents = Intent(Intent.ACTION_VIEW, uri)
+            val b = Bundle()
+            b.putBoolean("new_window", true)
+            intents.putExtras(b)
+            context?.startActivity(intents)
+
+
+        }
+        GlideApp.with(this.context!!)
+            .load(BASE_IMG_URL + data.value?.posterPath)
+            .into(serie_detail_poster)
+        GlideApp.with(this.context!!)
+            .load(BASE_IMG_URL + data.value?.backdropPath)
+            .into(serie_detail_backdrop)
+
+
+        initSeasonsRecycler(data.value?.seasons?.toSeasonDetail()!!)
+    }
+
 
     private fun List<PopularSeriesEntity>.toAdapterItems(): List<PopularSerieAdapter> {
         return this.map { item ->
             PopularSerieAdapter(item)
         }
+    }
+
+    private fun initSeasonsRecycler(entries: List<SeasonsAdapter>) {
+        val groupie = GroupAdapter<ViewHolder>().apply {
+            addAll(entries)
+        }
+        seasons_list.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupie
+        }
+    }
+
+    private fun List<SerieDetail.Season>.toSeasonDetail(): List<SeasonsAdapter> {
+        return this.map { item ->
+            SeasonsAdapter(item)
+        }
+
     }
 
     private fun initPopularRecycler(entries: List<PopularSerieAdapter>) {
@@ -78,7 +151,7 @@ class Series : ScopedFragment(), KodeinAware {
         }
         popular_serie_list.apply {
             layoutManager =
-                GridLayoutManager(context, 2,GridLayoutManager.HORIZONTAL,false)
+                GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
 
             adapter = groupie
         }

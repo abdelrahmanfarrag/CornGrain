@@ -1,10 +1,12 @@
 package com.example.corngrain.data.repository.series
 
+import androidx.lifecycle.LiveData
 import com.example.corngrain.data.db.dao.series.OnAirDao
 import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
+import com.example.corngrain.data.network.response.series.SerieDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,6 +17,14 @@ class SeriesRepositoryImpl(
     private val onAirDao: OnAirDao,
     private val popularSerieDao: PopularSerieDao
 ) : SeriesRepository {
+
+    override suspend fun getSerieDetail(id:Int): LiveData<SerieDetail> {
+        return withContext(Dispatchers.IO) {
+            networkOutSource.loadSerieDetail(id)
+            return@withContext networkOutSource.serieDetail
+        }
+
+    }
 
 
     init {
