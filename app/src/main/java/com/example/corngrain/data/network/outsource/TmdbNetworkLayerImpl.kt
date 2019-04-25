@@ -8,10 +8,7 @@ import com.example.corngrain.data.network.response.movies.Playing
 import com.example.corngrain.data.network.response.movies.Popular
 import com.example.corngrain.data.network.response.movies.TopRated
 import com.example.corngrain.data.network.response.movies.Upcoming
-import com.example.corngrain.data.network.response.series.OnAirToday
-import com.example.corngrain.data.network.response.series.PopularSeries
-import com.example.corngrain.data.network.response.series.SerieDetail
-import com.example.corngrain.data.network.response.series.TopRatedSeries
+import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
@@ -25,7 +22,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutablePopularSeriesData = MutableLiveData<PopularSeries>()
     private val _mutableSerieDetail = MutableLiveData<SerieDetail>()
     private val _mutableTopRatedSeries = MutableLiveData<TopRatedSeries>()
-
+    private val _mutableInshowSeries = MutableLiveData<SerieCurrentlyShowing>()
     override val latestMovies: LiveData<Popular>
         get() = _mutableLatestMoviesData
 
@@ -123,6 +120,21 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val topRatedSeries = api.getTopRatedSeriesAsync().await()
             _mutableTopRatedSeries.postValue(topRatedSeries)
         } catch (e: Exception) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
+
+    override val currentlyViewingSeries: LiveData<SerieCurrentlyShowing>
+        get() = _mutableInshowSeries
+
+    override suspend fun loadInshowSeries() {
+        try {
+            val inshowSeries = api.getCurrentlyShowingSeriesAsync().await()
+            _mutableInshowSeries.postValue(inshowSeries)
+
+        } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
 
         }

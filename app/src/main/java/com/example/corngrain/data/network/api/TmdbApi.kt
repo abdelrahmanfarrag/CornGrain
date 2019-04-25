@@ -6,10 +6,7 @@ import com.example.corngrain.data.network.response.movies.Playing
 import com.example.corngrain.data.network.response.movies.Popular
 import com.example.corngrain.data.network.response.movies.TopRated
 import com.example.corngrain.data.network.response.movies.Upcoming
-import com.example.corngrain.data.network.response.series.OnAirToday
-import com.example.corngrain.data.network.response.series.PopularSeries
-import com.example.corngrain.data.network.response.series.SerieDetail
-import com.example.corngrain.data.network.response.series.TopRatedSeries
+import com.example.corngrain.data.network.response.series.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -37,6 +34,7 @@ const val PLAYING_MOVIES = "movie/now_playing"
 const val ONAIR_TODAY = "tv/airing_today"
 const val POPULAR_SERIES = "tv/popular"
 const val TOP_RATED_SERIES = "tv/top_rated"
+const val CURRENTLY_SHOWING = "tv/on_the_air"
 const val SERIE_DETAIL = "tv/{id}"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
@@ -89,6 +87,11 @@ interface TmdbApi {
         @Query(PAGE) page: Int = 1
     ): Deferred<TopRatedSeries>
 
+    @GET(CURRENTLY_SHOWING)
+    fun getCurrentlyShowingSeriesAsync(
+        @Query(LANGUAGE) language: String = "en-US"
+        , @Query(PAGE) page: Int = 1
+    ): Deferred<SerieCurrentlyShowing>
 
     companion object {
 

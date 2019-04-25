@@ -19,6 +19,10 @@ class SeriesViewModel(private val repository: SeriesRepository) : ViewModel() {
         repository.getRatedSeries()
     }
 
+    val fetchInViewSeries by lazyDeferred {
+        repository.getInshowSeries()
+    }
+
     suspend fun fetchDetails(id: Int): LiveData<SerieDetail> {
         val fetchDetail by lazyDeferred {
             repository.getSerieDetail(id)

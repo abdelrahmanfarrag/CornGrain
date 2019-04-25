@@ -11,7 +11,8 @@ import kotlinx.android.synthetic.main.rated_season_item.*
 class RatedSeriesAdapter(private val entry: TopRatedSeries.Result) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
-            rated_season_txt.text = entry.voteAverage.toString()
+            rating.rating = entry.voteAverage.toFloat()/2.0f
+         //   rating. = 1f
             setRatedImage()
         }
     }

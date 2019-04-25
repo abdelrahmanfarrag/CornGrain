@@ -6,6 +6,7 @@ import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
+import com.example.corngrain.data.network.response.series.SerieCurrentlyShowing
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.data.network.response.series.TopRatedSeries
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +19,27 @@ class SeriesRepositoryImpl(
     private val onAirDao: OnAirDao,
     private val popularSerieDao: PopularSerieDao
 ) : SeriesRepository {
+
+    init {
+        networkOutSource.apply {
+            onAirToday.observeForever { todaySeries ->
+                persistingTodaySeries(todaySeries.results)
+            }
+            popularSeries.observeForever { popularSeries ->
+                persistingPopularSeries(popularSeries.results)
+            }
+        }
+    }
+
+    override suspend fun getInshowSeries(): LiveData<SerieCurrentlyShowing> {
+        return withContext(Dispatchers.IO) {
+            networkOutSource.loadInshowSeries()
+            return@withContext networkOutSource.currentlyViewingSeries
+        }
+    }
+
     override suspend fun getRatedSeries(page: Int): LiveData<TopRatedSeries> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             networkOutSource.loadTopRatedSeries()
             return@withContext networkOutSource.topRatedSeries
         }
@@ -31,18 +51,6 @@ class SeriesRepositoryImpl(
             return@withContext networkOutSource.serieDetail
         }
 
-    }
-
-
-    init {
-        networkOutSource.apply {
-            onAirToday.observeForever { todaySeries ->
-                persistingTodaySeries(todaySeries.results)
-            }
-            popularSeries.observeForever { popularSeries ->
-                persistingPopularSeries(popularSeries.results)
-            }
-        }
     }
 
     override suspend fun getOnAirTodaySeries(): List<OnAirTodayEntity> {

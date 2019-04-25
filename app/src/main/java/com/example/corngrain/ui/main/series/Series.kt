@@ -20,18 +20,19 @@ import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.data.network.response.series.TopRatedSeries
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
-import com.example.corngrain.ui.main.series.adapter.OnAirTodayAdapter
-import com.example.corngrain.ui.main.series.adapter.PopularSerieAdapter
-import com.example.corngrain.ui.main.series.adapter.RatedSeriesAdapter
-import com.example.corngrain.ui.main.series.adapter.SeasonsAdapter
+import com.example.corngrain.ui.main.series.adapter.*
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.item_inshow_serie.*
+import kotlinx.android.synthetic.main.item_on_air.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
 import kotlinx.android.synthetic.main.rated_seasons.*
 import kotlinx.android.synthetic.main.serie_detail_card.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -45,6 +46,7 @@ class Series : ScopedFragment(), KodeinAware {
     private lateinit var viewModel: SeriesViewModel
 
     var currentPage: Int = 0
+    var onAirCurrentPage: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,7 +58,7 @@ class Series : ScopedFragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
         bindUI()
-
+        bindUI2()
     }
 
     private fun bindUI() = launch {
@@ -80,9 +82,35 @@ class Series : ScopedFragment(), KodeinAware {
         detailCardUI(randomSerieDetail)
 
         val topRatedSeries = viewModel.fetchTopRatedSeries.await()
-        initToRatedSeasonRecycler(topRatedSeries.value?.results?.toRatedSeriesItems()!!)
 
+        //value.obresults?.toRatedSeriesItems()!!
+        topRatedSeries.observeForever {
+            initToRatedSeasonRecycler(it.results.toRatedSeriesItems())
+        }
+
+        //  val inshowSeries = viewModel.fetchInViewSeries.await()
+//        val onAirPagerAdapter = OnAirAdapter(inshowSeries.value?.results!!)
+        // if (on_air_series_pager != null) {
+        //      on_air_series_pager.adapter = onAirPagerAdapter
+
+        // on_air_dots_layout.count = inshowSeries.value.let {
+        //     it!!.results.size
+        // }
+        //
     }
+
+    private fun bindUI2() = launch(Dispatchers.Main) {
+        val inshowSeries = viewModel.fetchInViewSeries.await()
+        inshowSeries.observeForever { data ->
+            val onAirPagerAdapter = OnAirAdapter(data.results)
+            if (on_air_series_pager != null) {
+                on_air_series_pager.adapter = onAirPagerAdapter
+                onAirSeries(data.results.size)
+            }
+
+        }
+    }
+
 
     private fun generateRandomizedNumber(): Int {
         return (0..19).random()
@@ -102,12 +130,23 @@ class Series : ScopedFragment(), KodeinAware {
     }
 
     private fun detailCardUI(data: LiveData<SerieDetail>) {
-        serie_detail_title.text = data.value?.originalName
-        serie_detail_overview.text = data.value?.overview
-        serie_detail_rating.text = "Rating \n ${data.value?.voteAverage}"
-        serie_detail_episodes.text = "Episodes \n ${data.value?.numberOfEpisodes}"
-        serie_detail_seasons.text = "Seasons \n ${data.value?.numberOfSeasons}"
-        season_genres.text = setGenres(data.value?.genres!!).toString()
+        data.observeForever {
+            serie_detail_title?.text = it.originalName
+            serie_detail_overview?.text = it.overview
+            serie_detail_rating?.text = "Rating \n ${it.voteAverage}"
+            serie_detail_episodes?.text = "Episodes \n ${it.numberOfEpisodes}"
+            serie_detail_seasons?.text = "Seasons \n ${it.numberOfSeasons}"
+            season_genres?.text = setGenres(it.genres).toString()
+            initSeasonsRecycler(it.seasons.toSeasonDetail())
+
+        }
+
+        GlideApp.with(this.context!!)
+            .load(BASE_IMG_URL + data.value?.posterPath)
+            .into(serie_detail_poster)
+        GlideApp.with(this.context!!)
+            .load(BASE_IMG_URL + data.value?.backdropPath)
+            .into(serie_detail_backdrop)
         seasons_info.setOnClickListener {
             val uri = Uri.parse(data.value?.homepage)
             val intents = Intent(Intent.ACTION_VIEW, uri)
@@ -118,15 +157,7 @@ class Series : ScopedFragment(), KodeinAware {
 
 
         }
-        GlideApp.with(this.context!!)
-            .load(BASE_IMG_URL + data.value?.posterPath)
-            .into(serie_detail_poster)
-        GlideApp.with(this.context!!)
-            .load(BASE_IMG_URL + data.value?.backdropPath)
-            .into(serie_detail_backdrop)
 
-
-        initSeasonsRecycler(data.value?.seasons?.toSeasonDetail()!!)
     }
 
 
@@ -140,9 +171,11 @@ class Series : ScopedFragment(), KodeinAware {
         val groupie = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        seasons_list.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = groupie
+        if (seasons_list != null) {
+            seasons_list.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupie
+            }
         }
     }
 
@@ -177,9 +210,12 @@ class Series : ScopedFragment(), KodeinAware {
         val group = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        rated_seasons_list.apply {
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = group
+        if (rated_seasons_list != null) {
+            rated_seasons_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = group
+            }
         }
     }
 
@@ -223,4 +259,45 @@ class Series : ScopedFragment(), KodeinAware {
         })
 
     }
+
+    private fun onAirSeries(items: Int) {
+        on_air_series_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                onAirCurrentPage = position
+                on_air_dots_layout.setSelected(position)
+            }
+
+        })
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                if (onAirCurrentPage!! < items) {
+                    if (on_air_series_pager != null) {
+                        on_air_series_pager.setCurrentItem(onAirCurrentPage!!, true)
+                        handler.postDelayed(this, 7000)
+                        onAirCurrentPage++
+                    }
+                } else if (onAirCurrentPage == items) {
+                    onAirCurrentPage = 0
+                    if (on_air_series_pager != null) {
+                        on_air_series_pager.setCurrentItem(onAirCurrentPage, true)
+                        handler.postDelayed(this, 7000)
+                        onAirCurrentPage++
+                    }
+                }
+            }
+        })
+
+    }
+
 }
