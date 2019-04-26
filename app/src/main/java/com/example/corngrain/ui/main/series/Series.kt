@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 
 import com.example.corngrain.R
@@ -209,7 +210,7 @@ class Series : ScopedFragment(), KodeinAware {
         if (popular_serie_list != null)
             popular_serie_list.apply {
                 layoutManager =
-                    GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+                    GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
 
                 adapter = groupie
                 groupie.notifyDataSetChanged()
