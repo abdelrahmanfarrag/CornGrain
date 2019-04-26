@@ -64,7 +64,6 @@ class Series : ScopedFragment(), KodeinAware {
 
     private fun bindUI() = launch {
         val job = viewModel.fetchSeries.await()
-
         //Log.d("seasons", job.size.toString())
         val pagerAdapter = OnAirTodayAdapter(job)
         if (today_series_pager != null) {

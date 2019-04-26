@@ -7,6 +7,7 @@ import com.example.corngrain.data.network.response.movies.Popular
 import com.example.corngrain.data.network.response.movies.TopRated
 import com.example.corngrain.data.network.response.movies.Upcoming
 import com.example.corngrain.data.network.response.people.PersonDetail
+import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.data.network.response.series.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -42,6 +43,7 @@ const val SERIE_DETAIL = "tv/{id}"
 //ENDPOINTS => For Persons
 const val POPULAR_PERSONS = "person/popular"
 const val POPULAR_DETAIL = "person/{id}"
+const val PERSON_MOVIES = "person/{id}/combined_credits"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -110,6 +112,11 @@ interface TmdbApi {
     fun getPopularPersonDetailAsync(
         @Path("id") personId: Int
     ): Deferred<PersonDetail>
+
+    @GET(PERSON_MOVIES)
+    fun getPersonMovies(
+        @Path("id") personId: Int
+    ): Deferred<PersonMovies>
 
     companion object {
 

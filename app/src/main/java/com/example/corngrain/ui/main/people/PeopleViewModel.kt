@@ -3,6 +3,7 @@ package com.example.corngrain.ui.main.people
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel;
 import com.example.corngrain.data.network.response.people.PersonDetail
+import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.repository.persons.PersonsRepository
 import com.example.corngrain.utilities.lazyDeferred
 import kotlinx.coroutines.Deferred
@@ -16,6 +17,16 @@ class PeopleViewModel(private val personsRepository: PersonsRepository) : ViewMo
     suspend fun fetchPersonDetail(id: Int): LiveData<PersonDetail> {
         val details by lazyDeferred {
             personsRepository.getPopularPersonDetail(
+                id
+            )
+        }
+        return details.await()
+
+    }
+
+    suspend fun fetchPersonMovies(id: Int): LiveData<PersonMovies> {
+        val details by lazyDeferred {
+            personsRepository.getPersonsMovies(
                 id
             )
         }
