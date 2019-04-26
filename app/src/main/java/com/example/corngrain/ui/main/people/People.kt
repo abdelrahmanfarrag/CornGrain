@@ -2,13 +2,19 @@ package com.example.corngrain.ui.main.people
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
+import com.example.corngrain.data.network.response.people.PersonDetail
+import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.people.adapter.PopularPersonsAdapter
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.people_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -41,11 +47,31 @@ class People : ScopedFragment(), KodeinAware {
     }
 
     private fun bindUI() = launch {
-        val job = viewModel.fetchPersons.await()
-        job.observeForever { personsData ->
-            if (sample_txt_person != null)
-                sample_txt_person.text = personsData.toString()
+        val persons = viewModel.fetchPersons.await()
+        persons.observeForever { personsData ->
+            initPopularPersonsRecycler(personsData.results.toAdapter())
+        }
+        viewModel.fetchPersonDetail(1245).observeForever { personDetail ->
+            Log.d("tse", personDetail.biography)
         }
     }
 
+    private fun List<PopularPersons.Result>.toAdapter(): List<PopularPersonsAdapter> {
+        return this.map { item ->
+            PopularPersonsAdapter(item)
+        }
+    }
+
+    private fun initPopularPersonsRecycler(items: List<PopularPersonsAdapter>) {
+        val groupieAdapter = GroupAdapter<ViewHolder>().apply {
+            addAll(items)
+        }
+        if (persons_list != null) {
+            persons_list.apply {
+                layoutManager =
+                    LinearLayoutManager(this@People.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = groupieAdapter
+            }
+        }
+    }
 }
