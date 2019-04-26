@@ -15,9 +15,12 @@ import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayerImpl
 import com.example.corngrain.data.repository.movies.TmdbRepository
 import com.example.corngrain.data.repository.movies.TmdbRepositoryImpl
+import com.example.corngrain.data.repository.persons.PersonsRepository
+import com.example.corngrain.data.repository.persons.PersonsRepositoryImpl
 import com.example.corngrain.data.repository.series.SeriesRepository
 import com.example.corngrain.data.repository.series.SeriesRepositoryImpl
 import com.example.corngrain.ui.main.movies.MovieViewModelFactory
+import com.example.corngrain.ui.main.people.PeopleViewmodelFactory
 import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -73,8 +76,12 @@ class CornGrain : Application(), KodeinAware {
                 instance<PopularSerieDao>()
             )
         }
+        bind<PersonsRepository>() with singleton {
+            PersonsRepositoryImpl(instance<TmdbNetworkLayer>())
+        }
         bind() from provider { MovieViewModelFactory(instance<TmdbRepository>()) }
-        bind() from provider { SeriesViewmodelFactory(instance<SeriesRepository>()) }
+        bind() from singleton { SeriesViewmodelFactory(instance<SeriesRepository>()) }
+        bind() from singleton { PeopleViewmodelFactory(instance<PersonsRepository>()) }
     }
 
 }

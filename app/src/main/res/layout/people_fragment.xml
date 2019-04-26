@@ -11,13 +11,14 @@
         android:layout_height="match_parent"
         android:text="People"
         android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="6sp"
         android:gravity="center"
+        android:id="@+id/sample_txt_person"
         android:fontFamily="@font/cairo_semibold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        tools:ignore="SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

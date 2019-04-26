@@ -63,19 +63,23 @@ class Series : ScopedFragment(), KodeinAware {
 
     private fun bindUI() = launch {
         val job = viewModel.fetchSeries.await()
+
         //Log.d("seasons", job.size.toString())
         val pagerAdapter = OnAirTodayAdapter(job)
         if (today_series_pager != null) {
             today_series_pager.adapter = pagerAdapter
         }
-        dots_layout.count = job.size
+        if (dots_layout != null)
+            dots_layout.count = job.size
         pagerToAutoNext(pagerAdapter.count)
         val popularSeries = viewModel.fetchPopularSeries.await()
-        GlideApp.with(context!!)
-            .load(BASE_IMG_URL + popularSeries.get(0).posterPath)
-            .into(first_item_img)
+        if (first_item_img != null)
+            GlideApp.with(context!!)
+                .load(BASE_IMG_URL + popularSeries.get(0).posterPath)
+                .into(first_item_img)
         popularSeries.removeAt(0)
         initPopularRecycler(popularSeries.toAdapterItems())
+
 
         val randomEntryToLoad = job[generateRandomizedNumber()].id
         val randomSerieDetail = viewModel.fetchDetails(randomEntryToLoad)
@@ -141,22 +145,25 @@ class Series : ScopedFragment(), KodeinAware {
 
         }
 
-        GlideApp.with(this.context!!)
-            .load(BASE_IMG_URL + data.value?.posterPath)
-            .into(serie_detail_poster)
-        GlideApp.with(this.context!!)
-            .load(BASE_IMG_URL + data.value?.backdropPath)
-            .into(serie_detail_backdrop)
-        seasons_info.setOnClickListener {
-            val uri = Uri.parse(data.value?.homepage)
-            val intents = Intent(Intent.ACTION_VIEW, uri)
-            val b = Bundle()
-            b.putBoolean("new_window", true)
-            intents.putExtras(b)
-            context?.startActivity(intents)
+        if (serie_detail_poster != null)
+            GlideApp.with(this.context!!)
+                .load(BASE_IMG_URL + data.value?.posterPath)
+                .into(serie_detail_poster)
+        if (serie_detail_backdrop != null)
+            GlideApp.with(this.context!!)
+                .load(BASE_IMG_URL + data.value?.backdropPath)
+                .into(serie_detail_backdrop)
+        if (seasons_info != null)
+            seasons_info.setOnClickListener {
+                val uri = Uri.parse(data.value?.homepage)
+                val intents = Intent(Intent.ACTION_VIEW, uri)
+                val b = Bundle()
+                b.putBoolean("new_window", true)
+                intents.putExtras(b)
+                context?.startActivity(intents)
 
 
-        }
+            }
 
     }
 
@@ -175,6 +182,8 @@ class Series : ScopedFragment(), KodeinAware {
             seasons_list.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = groupie
+                groupie.notifyDataSetChanged()
+
             }
         }
     }
@@ -197,12 +206,14 @@ class Series : ScopedFragment(), KodeinAware {
         val groupie = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        popular_serie_list.apply {
-            layoutManager =
-                GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+        if (popular_serie_list != null)
+            popular_serie_list.apply {
+                layoutManager =
+                    GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
 
-            adapter = groupie
-        }
+                adapter = groupie
+                groupie.notifyDataSetChanged()
+            }
     }
 
 
@@ -215,6 +226,7 @@ class Series : ScopedFragment(), KodeinAware {
                 layoutManager =
                     LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = group
+                group.notifyDataSetChanged()
             }
         }
     }
