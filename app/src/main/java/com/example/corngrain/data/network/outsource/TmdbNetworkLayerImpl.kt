@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
-import com.example.corngrain.data.network.response.movies.Playing
-import com.example.corngrain.data.network.response.movies.Popular
-import com.example.corngrain.data.network.response.movies.TopRated
-import com.example.corngrain.data.network.response.movies.Upcoming
+import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
@@ -20,7 +17,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableLatestMoviesData = MutableLiveData<Popular>()
     private val _mutableUpcomingMoviesData = MutableLiveData<Upcoming>()
     private val _mutableTopRatedMoviesData = MutableLiveData<TopRated>()
-    private val _mutablePlayingMoviesData = MutableLiveData<Playing>()
+    private val _mutablePlayingMoviesData = MutableLiveData<PlayingMovies>()
     private val _mutableOnAirSeriesData = MutableLiveData<OnAirToday>()
     private val _mutablePopularSeriesData = MutableLiveData<PopularSeries>()
     private val _mutableSerieDetail = MutableLiveData<SerieDetail>()
@@ -68,7 +65,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         }
     }
 
-    override val playingMovies: LiveData<Playing>
+    override val playingMovies: LiveData<PlayingMovies>
         get() = _mutablePlayingMoviesData
 
     override suspend fun loadPlayingMovies() {

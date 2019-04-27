@@ -15,12 +15,15 @@ import kotlin.coroutines.CoroutineContext
 abstract class ScopedFragment : Fragment(), CoroutineScope {
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    get() = job + Dispatchers.Main
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         job = Job()
+       retainInstance = true// <--------- the fragment retain his configuration
+
     }
 
     override fun onDestroy() {

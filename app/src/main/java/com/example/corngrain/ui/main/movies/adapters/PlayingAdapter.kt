@@ -1,25 +1,31 @@
 package com.example.corngrain.ui.main.movies.adapters
 
+import android.util.Log
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.movies.PlayingEntity
+import com.example.corngrain.data.network.response.movies.Playing
+import com.example.corngrain.data.network.response.movies.PlayingMovies
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_movie.*
+import kotlinx.android.synthetic.main.item_playing_movies.*
 
-class PlayingAdapter(private val entry: PlayingEntity) : Item() {
+class PlayingAdapter(private val entry: PlayingMovies.Result) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        Log.d("executed",entry.posterPath)
+
         viewHolder.apply {
-            movie_rating.text = entry.voteAverage.toString()
+            playing_movie_title.text = entry.originalTitle
             setPlayingImage()
         }
     }
 
-    override fun getLayout(): Int = R.layout.item_movie
+    override fun getLayout(): Int = R.layout.item_playing_movies
 
     private fun ViewHolder.setPlayingImage() {
         GlideApp.with(this.containerView)
             .load(BASE_IMG_URL + entry.posterPath)
-            .into(movie_img)
+            .into(playing_movies_img)
     }
 }

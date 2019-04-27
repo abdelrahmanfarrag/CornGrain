@@ -1,165 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#0C1C24"
-    tools:context=".ui.main.movies.Movies">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttons_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.movies.Movies">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/toprated_movies_btn"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:text="Top"
+        <TextView
+            android:id="@+id/now_playing_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/cairo_semibold"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="8sp"
-            app:cornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_top_guide"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="NOW PLAYING"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@android:color/holo_orange_dark"
-            tools:ignore="SmallSp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/button_top_guide"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintGuide_percent=".25"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upcoming_movies_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:text="Upcoming"
-            android:fontFamily="@font/cairo_semibold"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="8sp"
-            app:cornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_upcoming_guide"
-            app:layout_constraintStart_toEndOf="@+id/button_top_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@android:color/holo_orange_light"
-            tools:ignore="SmallSp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/button_upcoming_guide"
+        <TextView
+            android:id="@+id/now_playing_more"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintGuide_percent=".5"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/movie_popular_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@android:color/holo_green_dark"
-            android:text="Popular"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:drawableEnd="@drawable/ic_more"
+            android:drawablePadding="4dp"
             android:fontFamily="@font/cairo_semibold"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="8sp"
-            app:cornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_popular_guide"
-            app:layout_constraintStart_toEndOf="@+id/button_upcoming_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@android:color/holo_green_light"
-            tools:ignore="SmallSp" />
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/button_popular_guide"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintGuide_percent=".75"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/playing_movies_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@android:color/holo_blue_dark"
-            android:text="Playing"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="8sp"
-            android:fontFamily="@font/cairo_semibold"
-            app:cornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            android:text="MORE"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/now_playing_txt"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_popular_guide"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@android:color/holo_blue_bright"
-            tools:ignore="SmallSp" />
+            app:layout_constraintTop_toTopOf="@+id/now_playing_txt" />
 
+        <include
+            android:id="@+id/playing_layout"
+            layout="@layout/now_playing_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/now_playing_txt" />
+
+        <TextView
+            android:id="@+id/picked_playing_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/cairo_semibold"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="PICKED FROM PLAY MOVIES"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playing_layout" />
+
+        <include
+            android:id="@+id/picked_movie_layout"
+            layout="@layout/picked_movie_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/picked_playing_txt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_container">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_list"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

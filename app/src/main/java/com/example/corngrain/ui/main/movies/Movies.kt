@@ -1,7 +1,9 @@
 package com.example.corngrain.ui.main.movies
 
+import android.media.Rating
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +14,22 @@ import com.example.corngrain.data.db.entity.movies.PlayingEntity
 import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
+import com.example.corngrain.data.network.response.movies.Playing
+import com.example.corngrain.data.network.response.movies.PlayingMovies
 import com.example.corngrain.ui.base.ScopedFragment
-import com.example.corngrain.ui.main.movies.adapters.MoviesAdapter
-import com.example.corngrain.ui.main.movies.adapters.PlayingAdapter
-import com.example.corngrain.ui.main.movies.adapters.TopRatedAdapter
-import com.example.corngrain.ui.main.movies.adapters.UpcomingAdapter
+import com.example.corngrain.ui.main.movies.adapters.*
+import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.movies_fragment.*
+import kotlinx.android.synthetic.main.now_playing_movies.*
+import kotlinx.android.synthetic.main.picked_movie_layout.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
+import java.util.*
 
 class Movies : ScopedFragment(), KodeinAware {
 
@@ -51,137 +56,61 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-        settingTopRatedClick()
-        upcoming_movies_btn.setOnClickListener {
-            settingUpcomingClick()
+        val playMovies = viewModel.fetchLatestMovies.await()
+
+        playMovies.observeForever { playing ->
+            settingPlayingRecycler(playing.results.toAdapterItems())
+            val generatedMovie = generateRandomNumber()
+            val posterPath = playing.results.get(generatedMovie).posterPath
+            val backdrop = playing.results.get(generatedMovie).backdropPath
+            val rating = playing.results.get(generatedMovie).voteAverage.toFloat()
+            val overView = playing.results.get(generatedMovie).overview
+            settingPickedMovieUI(posterPath, backdrop, overView, rating)
+
         }
-        movie_popular_btn.setOnClickListener {
-            settingPopularClick()
-        }
-        toprated_movies_btn.setOnClickListener {
-            settingTopRatedClick()
-        }
-        playing_movies_btn.setOnClickListener {
-            settingPlayingClick()
+
+    }
+
+    private fun List<PlayingMovies.Result>.toAdapterItems(): List<PlayingAdapter> {
+        return this.map { item ->
+            PlayingAdapter(item)
         }
     }
 
-    private fun settingUpcomingClick() {
-        movies_list.adapter = null
-        launch {
-            val job = viewModel.fetchUpcomingMovies.await()
-            initUpcomingRecycler(job.toUpcomingItems())
-        }
+    private fun settingPickedMovieUI(
+        posterPath: String,
+        backdrop: String,
+        overview: String,
+        rating: Float
+    ) {
+        if (picked_movie_poster != null)
+            GlideApp.with(this.context!!)
+                .load(BASE_IMG_URL + posterPath)
+                .into(picked_movie_poster)
+        if (movie_backdrop != null)
+            GlideApp.with(this.context!!)
+                .load(BASE_IMG_URL + backdrop)
+                .into(movie_backdrop)
+        if (movie_rating != null)
+            movie_rating.rating = rating / 2f
+        if (picked_movie_overview != null)
+            picked_movie_overview.text = overview
     }
 
-    private fun settingPopularClick() {
-        movies_list.adapter = null
-        launch {
-            val job = viewModel.fetchLatestMovies.await()
-            initRecycler(job.toMoviesItems())
-
-        }
-    }
-
-    private fun settingTopRatedClick() {
-        movies_list.adapter = null
-        launch {
-            val topRatedJob = viewModel.fetchTopRatedMovies.await()
-            initTopRatedRecycler(topRatedJob.toTopRatedItems())
-        }
-    }
-
-    private fun settingPlayingClick() {
-        movies_list.adapter = null
-        launch {
-            val playingJob = viewModel.fetchPlayingMovies.await()
-            initPlayingRecycler(playingJob.toPlayingItems())
-
-        }
-    }
-
-    private fun List<PopularEntity>.toMoviesItems(): List<MoviesAdapter> {
-
-        return this.map { itemEntity ->
-            MoviesAdapter(itemEntity)
-        }
-    }
-
-    private fun List<UpcomingEntity>.toUpcomingItems(): List<UpcomingAdapter> {
-        return this.map { itemUpcoming ->
-            UpcomingAdapter(itemUpcoming)
-        }
-    }
-
-    private fun List<TopRatedEntity>.toTopRatedItems(): List<TopRatedAdapter> {
-        return this.map { topRatedItem ->
-            TopRatedAdapter(topRatedItem)
-        }
-    }
-
-    private fun List<PlayingEntity>.toPlayingItems(): List<PlayingAdapter> {
-        return this.map { playingItem ->
-            PlayingAdapter(playingItem)
-        }
-    }
-
-
-    private fun initRecycler(entries: List<MoviesAdapter>) {
-        @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
+    private fun settingPlayingRecycler(entries: List<PlayingAdapter>) {
+        val group = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
-        if (movies_list != null) {
-            movies_list.apply {
+        if (now_playing_movies_list != null)
+            now_playing_movies_list.apply {
                 layoutManager =
-                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = groupie_adapter
-
+                    LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = group
             }
-        }
     }
 
-
-    private fun initUpcomingRecycler(entries: List<UpcomingAdapter>) {
-        @Suppress("LocalVariableName") val groupie_adapter = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (movies_list != null) {
-            movies_list.apply {
-                layoutManager =
-                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = groupie_adapter
-
-            }
-        }
+    private fun generateRandomNumber(): Int {
+        return (0..19).random()
     }
-
-    private fun initTopRatedRecycler(entries: List<TopRatedAdapter>) {
-        val groupieAdapter = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (movies_list != null) {
-            movies_list.apply {
-                layoutManager =
-                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = groupieAdapter
-
-            }
-        }
-    }
-
-    private fun initPlayingRecycler(entries: List<PlayingAdapter>) {
-        val groupie = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (movies_list != null) {
-            movies_list.apply {
-                layoutManager =
-                    LinearLayoutManager(this@Movies.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = groupie
-
-            }
-        }
-    }
-
 
 }

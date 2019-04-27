@@ -49,6 +49,9 @@ class Series : ScopedFragment(), KodeinAware {
     var currentPage: Int = 0
     var onAirCurrentPage: Int = 0
     var movieId: Int = 0
+    private var isOnAirTodayHandlerExecuted = false
+    private var isOnshowHandlerExecuted = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -254,24 +257,27 @@ class Series : ScopedFragment(), KodeinAware {
 
         })
         val handler = Handler()
-        handler.post(object : Runnable {
-            override fun run() {
-                if (currentPage!! < items) {
-                    if (today_series_pager != null) {
-                        today_series_pager.setCurrentItem(currentPage!!, true)
-                        handler.postDelayed(this, 3000)
-                        currentPage++
-                    }
-                } else if (currentPage == items) {
-                    currentPage = 0
-                    if (today_series_pager != null) {
-                        today_series_pager.setCurrentItem(currentPage, true)
-                        handler.postDelayed(this, 3000)
-                        currentPage++
+        if (!isOnAirTodayHandlerExecuted) {
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (currentPage!! < items) {
+                        if (today_series_pager != null) {
+                            today_series_pager.setCurrentItem(currentPage!!, true)
+                            handler.postDelayed(this, 3000)
+                            currentPage++
+                        }
+                    } else if (currentPage == items) {
+                        currentPage = 0
+                        if (today_series_pager != null) {
+                            today_series_pager.setCurrentItem(currentPage, true)
+                            handler.postDelayed(this, 3000)
+                            currentPage++
+                        }
                     }
                 }
-            }
-        })
+            })
+            isOnAirTodayHandlerExecuted = true
+        }
 
     }
 
@@ -293,25 +299,28 @@ class Series : ScopedFragment(), KodeinAware {
             }
 
         })
-        val handler = Handler()
-        handler.post(object : Runnable {
-            override fun run() {
-                if (onAirCurrentPage!! < items) {
-                    if (on_air_series_pager != null) {
-                        on_air_series_pager.setCurrentItem(onAirCurrentPage!!, true)
-                        handler.postDelayed(this, 7000)
-                        onAirCurrentPage++
-                    }
-                } else if (onAirCurrentPage == items) {
-                    onAirCurrentPage = 0
-                    if (on_air_series_pager != null) {
-                        on_air_series_pager.setCurrentItem(onAirCurrentPage, true)
-                        handler.postDelayed(this, 7000)
-                        onAirCurrentPage++
+        if (!isOnshowHandlerExecuted) {
+            val handler = Handler()
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (onAirCurrentPage!! < items) {
+                        if (on_air_series_pager != null) {
+                            on_air_series_pager.setCurrentItem(onAirCurrentPage!!, true)
+                            handler.postDelayed(this, 7000)
+                            onAirCurrentPage++
+                        }
+                    } else if (onAirCurrentPage == items) {
+                        onAirCurrentPage = 0
+                        if (on_air_series_pager != null) {
+                            on_air_series_pager.setCurrentItem(onAirCurrentPage, true)
+                            handler.postDelayed(this, 7000)
+                            onAirCurrentPage++
+                        }
                     }
                 }
-            }
-        })
+            })
+            isOnshowHandlerExecuted = true
+        }
 
     }
 

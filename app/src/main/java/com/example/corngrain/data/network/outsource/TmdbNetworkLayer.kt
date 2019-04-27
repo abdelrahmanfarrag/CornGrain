@@ -1,10 +1,7 @@
 package com.example.corngrain.data.network.outsource
 
 import androidx.lifecycle.LiveData
-import com.example.corngrain.data.network.response.movies.Playing
-import com.example.corngrain.data.network.response.movies.Popular
-import com.example.corngrain.data.network.response.movies.TopRated
-import com.example.corngrain.data.network.response.movies.Upcoming
+import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
@@ -27,7 +24,7 @@ interface TmdbNetworkLayer {
     suspend fun loadTopRatedMovies()
 
     //Playing
-    val playingMovies: LiveData<Playing>
+    val playingMovies: LiveData<PlayingMovies>
 
     suspend fun loadPlayingMovies()
 

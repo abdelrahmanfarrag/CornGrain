@@ -35,6 +35,7 @@ class People : ScopedFragment(), KodeinAware {
     private val factory by instance<PeopleViewmodelFactory>()
     private var generatedId: Int? = null
 
+
     companion object {
         fun newInstance() = People()
     }

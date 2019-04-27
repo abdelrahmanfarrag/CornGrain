@@ -2,10 +2,7 @@ package com.example.corngrain.data.network.api
 
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
-import com.example.corngrain.data.network.response.movies.Playing
-import com.example.corngrain.data.network.response.movies.Popular
-import com.example.corngrain.data.network.response.movies.TopRated
-import com.example.corngrain.data.network.response.movies.Upcoming
+import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
@@ -71,7 +68,7 @@ interface TmdbApi {
     fun getPlayingMoviesAsync(
         @Query(LANGUAGE) language: String = "en-US"
         , @Query(PAGE) page: Int = 1
-    ): Deferred<Playing>
+    ): Deferred<PlayingMovies>
 
     @GET(ONAIR_TODAY)
     fun getTvOnAirTodayAsync(
