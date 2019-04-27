@@ -48,6 +48,7 @@ class Series : ScopedFragment(), KodeinAware {
 
     var currentPage: Int = 0
     var onAirCurrentPage: Int = 0
+    var movieId: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,14 +65,17 @@ class Series : ScopedFragment(), KodeinAware {
 
     private fun bindUI() = launch {
         val job = viewModel.fetchSeries.await()
-        //Log.d("seasons", job.size.toString())
-        val pagerAdapter = OnAirTodayAdapter(job)
-        if (today_series_pager != null) {
-            today_series_pager.adapter = pagerAdapter
+        job.observeForever { onAirJob ->
+            val pagerAdapter = OnAirTodayAdapter(onAirJob)
+            movieId = onAirJob.results[generateRandomizedNumber()].id
+            if (today_series_pager != null) {
+                today_series_pager.adapter = pagerAdapter
+            }
+            if (dots_layout != null)
+                dots_layout.count = onAirJob.results.size
+            pagerToAutoNext(pagerAdapter.count)
         }
-        if (dots_layout != null)
-            dots_layout.count = job.size
-        pagerToAutoNext(pagerAdapter.count)
+
         val popularSeries = viewModel.fetchPopularSeries.await()
         if (first_item_img != null)
             GlideApp.with(context!!)
@@ -81,8 +85,7 @@ class Series : ScopedFragment(), KodeinAware {
         initPopularRecycler(popularSeries.toAdapterItems())
 
 
-        val randomEntryToLoad = job[generateRandomizedNumber()].id
-        val randomSerieDetail = viewModel.fetchDetails(randomEntryToLoad)
+        val randomSerieDetail = viewModel.fetchDetails(movieId)
         detailCardUI(randomSerieDetail)
 
         val topRatedSeries = viewModel.fetchTopRatedSeries.await()

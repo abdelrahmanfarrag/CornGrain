@@ -6,6 +6,7 @@ import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
+import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.SerieCurrentlyShowing
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.data.network.response.series.TopRatedSeries
@@ -21,14 +22,14 @@ class SeriesRepositoryImpl(
 ) : SeriesRepository {
 
     init {
-        networkOutSource.apply {
-            onAirToday.observeForever { todaySeries ->
-                persistingTodaySeries(todaySeries.results)
-            }
-            popularSeries.observeForever { popularSeries ->
-                persistingPopularSeries(popularSeries.results)
-            }
-        }
+        /*       networkOutSource.apply {
+                   onAirToday.observeForever { todaySeries ->
+                       persistingTodaySeries(todaySeries.results)
+                   }
+                   popularSeries.observeForever { popularSeries ->
+                       persistingPopularSeries(popularSeries.results)
+                   }
+               }*/
     }
 
     override suspend fun getInshowSeries(): LiveData<SerieCurrentlyShowing> {
@@ -53,10 +54,10 @@ class SeriesRepositoryImpl(
 
     }
 
-    override suspend fun getOnAirTodaySeries(): List<OnAirTodayEntity> {
+    override suspend fun getOnAirTodaySeries(): LiveData<OnAirToday> {
         return withContext(Dispatchers.IO) {
             loadOnAirTodayFromNetworkCall()
-            return@withContext onAirDao.getOnAirToday()
+            return@withContext networkOutSource.onAirToday
         }
     }
 
