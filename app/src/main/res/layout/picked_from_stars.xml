@@ -28,23 +28,23 @@
             android:layout_height="0dp"
             android:background="#0C1C24"
             app:layout_constraintBottom_toBottomOf="@+id/picked_overview_txt"
-            app:layout_constraintStart_toEndOf="@+id/picked_star_img"
-            app:layout_constraintTop_toBottomOf="@+id/overview_div" />
+            app:layout_constraintBottom_toTopOf="@+id/movies_txt"
+            app:layout_constraintStart_toEndOf="@+id/picked_star_img" />
 
         <View
             android:id="@+id/divide_horizontal"
             android:layout_width="0dp"
             android:layout_height="1dp"
+            android:layout_marginTop="12dp"
             android:background="#0C1C24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_divide_vertical" />
+            app:layout_constraintTop_toBottomOf="@+id/picked_born" />
 
         <TextView
             android:id="@+id/movies_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:fontFamily="@font/cairo_semibold"
             android:gravity="center"
             android:text="MOVIES"
@@ -54,10 +54,12 @@
             app:layout_constraintTop_toBottomOf="@+id/divide_horizontal" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
             android:id="@+id/picked_detail_list"
-            android:layout_marginTop="4dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movies_txt" />
@@ -107,12 +109,14 @@
         <TextView
             android:id="@+id/picked_overview_txt"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/cairo_semibold"
             android:padding="1dp"
             android:textSize="8sp"
+            app:layout_constraintBottom_toTopOf="@+id/movies_txt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/picked_guideline_dividor"
             app:layout_constraintTop_toBottomOf="@+id/overview_div"
@@ -120,7 +124,7 @@
 
         <TextView
             android:id="@+id/picked_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/cairo_semibold"
@@ -134,13 +138,14 @@
 
         <TextView
             android:id="@+id/picked_dob"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/cairo_semibold"
             android:gravity="center"
             android:padding="2dp"
             android:textColor="@android:color/black"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/picked_guideline_dividor"
             app:layout_constraintStart_toStartOf="parent"
 
@@ -148,16 +153,18 @@
 
         <TextView
             android:id="@+id/picked_born"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/cairo_semibold"
+            android:gravity="center"
             android:padding="2dp"
             android:textColor="@android:color/black"
-            android:textSize="12sp"
+            android:textSize="10sp"
             app:layout_constraintEnd_toStartOf="@+id/picked_guideline_dividor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/picked_dob" />
+            app:layout_constraintTop_toBottomOf="@+id/picked_dob"
+            tools:ignore="SmallSp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
