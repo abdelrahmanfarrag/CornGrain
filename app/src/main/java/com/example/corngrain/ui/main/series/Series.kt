@@ -5,17 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
-
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.response.series.SerieDetail
@@ -24,9 +18,6 @@ import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.*
 import com.example.corngrain.utilities.GlideApp
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.item_inshow_serie.*
 import kotlinx.android.synthetic.main.item_on_air.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
@@ -46,7 +37,7 @@ class Series : ScopedFragment(), KodeinAware {
     private val factory by instance<SeriesViewmodelFactory>()
     private lateinit var viewModel: SeriesViewModel
 
-    var movieId: Int = 0
+    private var movieId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
