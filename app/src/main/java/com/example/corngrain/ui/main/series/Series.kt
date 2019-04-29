@@ -1,5 +1,6 @@
 package com.example.corngrain.ui.main.series
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
@@ -33,7 +34,6 @@ import kotlinx.android.synthetic.main.rated_seasons.*
 import kotlinx.android.synthetic.main.serie_detail_card.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -46,11 +46,7 @@ class Series : ScopedFragment(), KodeinAware {
     private val factory by instance<SeriesViewmodelFactory>()
     private lateinit var viewModel: SeriesViewModel
 
-    var currentPage: Int = 0
-    var onAirCurrentPage: Int = 0
     var movieId: Int = 0
-    private var isOnAirTodayHandlerExecuted = false
-    private var isOnshowHandlerExecuted = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +58,7 @@ class Series : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
+        retainInstance = true// <--------- the fragment retain his configuration
         bindUI()
         bindUI2()
     }
@@ -70,22 +67,28 @@ class Series : ScopedFragment(), KodeinAware {
         val job = viewModel.fetchSeries.await()
         job.observeForever { onAirJob ->
             val pagerAdapter = OnAirTodayAdapter(onAirJob)
-            movieId = onAirJob.results[generateRandomizedNumber()].id
             if (today_series_pager != null) {
                 today_series_pager.adapter = pagerAdapter
             }
-            if (dots_layout != null)
-                dots_layout.count = onAirJob.results.size
-            pagerToAutoNext(pagerAdapter.count)
+            movieId = onAirJob.results[generateRandomizedNumber()].id
+            autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
         }
 
         val popularSeries = viewModel.fetchPopularSeries.await()
         if (first_item_img != null)
             GlideApp.with(context!!)
-                .load(BASE_IMG_URL + popularSeries.get(0).posterPath)
+                .load(BASE_IMG_URL + popularSeries[0].posterPath)
                 .into(first_item_img)
         popularSeries.removeAt(0)
-        initPopularRecycler(popularSeries.toAdapterItems())
+
+        if (popular_serie_list != null)
+            settingNormalRecyclerViewConfigs(
+                this@Series.context,
+                popularSeries.toAdapterItems(),
+                popular_serie_list,
+                RecyclerView.HORIZONTAL,
+                true
+            )
 
 
         val randomSerieDetail = viewModel.fetchDetails(movieId)
@@ -93,37 +96,28 @@ class Series : ScopedFragment(), KodeinAware {
 
         val topRatedSeries = viewModel.fetchTopRatedSeries.await()
 
-        //value.obresults?.toRatedSeriesItems()!!
         topRatedSeries.observeForever {
-            initToRatedSeasonRecycler(it.results.toRatedSeriesItems())
+            if (rated_seasons_list != null)
+                settingNormalRecyclerViewConfigs(
+                    this@Series.context!!,
+                    it.results.toRatedSeriesItems(),
+                    rated_seasons_list,
+                    RecyclerView.HORIZONTAL
+                )
         }
 
-        //  val inshowSeries = viewModel.fetchInViewSeries.await()
-//        val onAirPagerAdapter = OnAirAdapter(inshowSeries.value?.results!!)
-        // if (on_air_series_pager != null) {
-        //      on_air_series_pager.adapter = onAirPagerAdapter
-
-        // on_air_dots_layout.count = inshowSeries.value.let {
-        //     it!!.results.size
-        // }
-        //
     }
 
     private fun bindUI2() = launch(Dispatchers.Main) {
         val inshowSeries = viewModel.fetchInViewSeries.await()
         inshowSeries.observeForever { data ->
             val onAirPagerAdapter = OnAirAdapter(data.results)
-            if (on_air_series_pager != null) {
+            if (on_air_series_pager != null)
                 on_air_series_pager.adapter = onAirPagerAdapter
-                onAirSeries(data.results.size)
-            }
+            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size)
+
 
         }
-    }
-
-
-    private fun generateRandomizedNumber(): Int {
-        return (0..19).random()
     }
 
 
@@ -139,6 +133,7 @@ class Series : ScopedFragment(), KodeinAware {
         return stringBuilder
     }
 
+    @SuppressLint("SetTextI18n")
     private fun detailCardUI(data: LiveData<SerieDetail>) {
         data.observeForever {
             serie_detail_title?.text = it.originalName
@@ -147,7 +142,11 @@ class Series : ScopedFragment(), KodeinAware {
             serie_detail_episodes?.text = "Episodes \n ${it.numberOfEpisodes}"
             serie_detail_seasons?.text = "Seasons \n ${it.numberOfSeasons}"
             season_genres?.text = setGenres(it.genres).toString()
-            initSeasonsRecycler(it.seasons.toSeasonDetail())
+            //initSeasonsRecycler(it.seasons.toSeasonDetail())
+            settingNormalRecyclerViewConfigs(
+                this.context, it.seasons.toSeasonDetail(), seasons_list, RecyclerView
+                    .HORIZONTAL
+            )
 
         }
 
@@ -180,20 +179,6 @@ class Series : ScopedFragment(), KodeinAware {
         }
     }
 
-    private fun initSeasonsRecycler(entries: List<SeasonsAdapter>) {
-        val groupie = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (seasons_list != null) {
-            seasons_list.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = groupie
-                groupie.notifyDataSetChanged()
-
-            }
-        }
-    }
-
     private fun List<SerieDetail.Season>.toSeasonDetail(): List<SeasonsAdapter> {
         return this.map { item ->
             SeasonsAdapter(item)
@@ -208,120 +193,5 @@ class Series : ScopedFragment(), KodeinAware {
         }
     }
 
-    private fun initPopularRecycler(entries: List<PopularSerieAdapter>) {
-        val groupie = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (popular_serie_list != null)
-            popular_serie_list.apply {
-                layoutManager =
-                    GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
-
-                adapter = groupie
-                groupie.notifyDataSetChanged()
-            }
-    }
-
-
-    private fun initToRatedSeasonRecycler(entries: List<RatedSeriesAdapter>) {
-        val group = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (rated_seasons_list != null) {
-            rated_seasons_list.apply {
-                layoutManager =
-                    LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = group
-                group.notifyDataSetChanged()
-            }
-        }
-    }
-
-
-    private fun pagerToAutoNext(items: Int) {
-        today_series_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                currentPage = position
-                dots_layout.setSelected(position)
-            }
-
-        })
-        val handler = Handler()
-        if (!isOnAirTodayHandlerExecuted) {
-            handler.post(object : Runnable {
-                override fun run() {
-                    if (currentPage!! < items) {
-                        if (today_series_pager != null) {
-                            today_series_pager.setCurrentItem(currentPage!!, true)
-                            handler.postDelayed(this, 3000)
-                            currentPage++
-                        }
-                    } else if (currentPage == items) {
-                        currentPage = 0
-                        if (today_series_pager != null) {
-                            today_series_pager.setCurrentItem(currentPage, true)
-                            handler.postDelayed(this, 3000)
-                            currentPage++
-                        }
-                    }
-                }
-            })
-            isOnAirTodayHandlerExecuted = true
-        }
-
-    }
-
-    private fun onAirSeries(items: Int) {
-        on_air_series_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                onAirCurrentPage = position
-                on_air_dots_layout.setSelected(position)
-            }
-
-        })
-        if (!isOnshowHandlerExecuted) {
-            val handler = Handler()
-            handler.post(object : Runnable {
-                override fun run() {
-                    if (onAirCurrentPage!! < items) {
-                        if (on_air_series_pager != null) {
-                            on_air_series_pager.setCurrentItem(onAirCurrentPage!!, true)
-                            handler.postDelayed(this, 7000)
-                            onAirCurrentPage++
-                        }
-                    } else if (onAirCurrentPage == items) {
-                        onAirCurrentPage = 0
-                        if (on_air_series_pager != null) {
-                            on_air_series_pager.setCurrentItem(onAirCurrentPage, true)
-                            handler.postDelayed(this, 7000)
-                            onAirCurrentPage++
-                        }
-                    }
-                }
-            })
-            isOnshowHandlerExecuted = true
-        }
-
-    }
 
 }

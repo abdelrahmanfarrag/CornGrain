@@ -36,12 +36,12 @@
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/picked_movie_poster"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/picked_movie_poster" />
+            app:layout_constraintStart_toEndOf="@+id/picked_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/picked_movie_overview" />
 
         <ImageView
             android:id="@+id/movie_backdrop"
@@ -58,6 +58,7 @@
         <TextView
             android:id="@+id/picked_movie_overview"
             android:layout_width="0dp"
+            android:padding="4dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/cairo_semibold"
             android:textColor="@android:color/black"

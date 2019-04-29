@@ -10,7 +10,6 @@ import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
-import java.lang.Exception
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
@@ -179,7 +178,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
     override suspend fun loadPersonMovies(id: Int) {
         try {
-            val movies = api.getPersonMovies(id).await()
+            val movies = api.getPersonMoviesAsync(id).await()
             _mutablePersonMoviesData.postValue(movies)
 
         } catch (e: NoNetworkException) {

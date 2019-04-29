@@ -111,7 +111,7 @@ interface TmdbApi {
     ): Deferred<PersonDetail>
 
     @GET(PERSON_MOVIES)
-    fun getPersonMovies(
+    fun getPersonMoviesAsync(
         @Path("id") personId: Int
     ): Deferred<PersonMovies>
 

@@ -1,27 +1,17 @@
 package com.example.corngrain.ui.main.movies
 
-import android.media.Rating
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
-import com.example.corngrain.data.db.entity.movies.PlayingEntity
-import com.example.corngrain.data.db.entity.movies.PopularEntity
-import com.example.corngrain.data.db.entity.movies.TopRatedEntity
-import com.example.corngrain.data.db.entity.movies.UpcomingEntity
-import com.example.corngrain.data.network.response.movies.Playing
 import com.example.corngrain.data.network.response.movies.PlayingMovies
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.*
 import com.example.corngrain.utilities.GlideApp
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.android.synthetic.main.now_playing_movies.*
 import kotlinx.android.synthetic.main.picked_movie_layout.*
 import kotlinx.coroutines.launch
@@ -29,7 +19,6 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
-import java.util.*
 
 class Movies : ScopedFragment(), KodeinAware {
 
@@ -59,8 +48,14 @@ class Movies : ScopedFragment(), KodeinAware {
         val playMovies = viewModel.fetchLatestMovies.await()
 
         playMovies.observeForever { playing ->
-            settingPlayingRecycler(playing.results.toAdapterItems())
-            val generatedMovie = generateRandomNumber()
+            //     settingPlayingRecycler(playing.results.toAdapterItems())
+            settingNormalRecyclerViewConfigs(
+                this@Movies.context!!,
+                playing.results.toAdapterItems(),
+                now_playing_movies_list,
+                LinearLayoutManager.HORIZONTAL
+            )
+            val generatedMovie = generateRandomizedNumber()
             val posterPath = playing.results.get(generatedMovie).posterPath
             val backdrop = playing.results.get(generatedMovie).backdropPath
             val rating = playing.results.get(generatedMovie).voteAverage.toFloat()
@@ -97,20 +92,6 @@ class Movies : ScopedFragment(), KodeinAware {
             picked_movie_overview.text = overview
     }
 
-    private fun settingPlayingRecycler(entries: List<PlayingAdapter>) {
-        val group = GroupAdapter<ViewHolder>().apply {
-            addAll(entries)
-        }
-        if (now_playing_movies_list != null)
-            now_playing_movies_list.apply {
-                layoutManager =
-                    LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = group
-            }
-    }
 
-    private fun generateRandomNumber(): Int {
-        return (0..19).random()
-    }
 
 }
