@@ -48,9 +48,8 @@ class Movies : ScopedFragment(), KodeinAware {
         val playMovies = viewModel.fetchLatestMovies.await()
 
         playMovies.observeForever { playing ->
-            //     settingPlayingRecycler(playing.results.toAdapterItems())
             settingNormalRecyclerViewConfigs(
-                this@Movies.context!!,
+                this@Movies.context,
                 playing.results.toAdapterItems(),
                 now_playing_movies_list,
                 LinearLayoutManager.HORIZONTAL
