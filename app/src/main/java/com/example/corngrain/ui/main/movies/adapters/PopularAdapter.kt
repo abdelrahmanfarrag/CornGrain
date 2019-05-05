@@ -14,7 +14,7 @@ class MoviesAdapter(private val entry: PopularEntity) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
         viewHolder.apply {
-            movie_rating.text = entry.voteAverage.toString()
+        //    movie_rating.text = entry.voteAverage.toString()
             settingWeatherImage()
         }
     }

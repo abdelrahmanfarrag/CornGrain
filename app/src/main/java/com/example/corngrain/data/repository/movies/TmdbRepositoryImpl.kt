@@ -12,6 +12,7 @@ import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.response.movies.Playing
 import com.example.corngrain.data.network.response.movies.PlayingMovies
+import com.example.corngrain.data.network.response.movies.UpcomingMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -54,11 +55,11 @@ class TmdbRepositoryImpl(
         }
     }
 
-    override suspend fun getUpcomingMovies(): List<UpcomingEntity> {
+    override suspend fun getUpcomingMovies(): LiveData<UpcomingMovies> {
 
         return withContext(Dispatchers.IO) {
             getUpcomingMoviesFromNetworkCall()
-            return@withContext upcomingDao.getPopularMovies()
+            return@withContext networkSource.upcomingMovies
         }
     }
 

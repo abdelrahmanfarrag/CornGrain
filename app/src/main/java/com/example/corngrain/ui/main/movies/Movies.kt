@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.movies.PlayingMovies
+import com.example.corngrain.data.network.response.movies.UpcomingMovies
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.*
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.now_playing_movies.*
-import kotlinx.android.synthetic.main.picked_movie_layout.*
+import kotlinx.android.synthetic.main.upcoming_movies.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -29,7 +31,6 @@ class Movies : ScopedFragment(), KodeinAware {
 
 
     private lateinit var viewModel: MoviesViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,22 +47,49 @@ class Movies : ScopedFragment(), KodeinAware {
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
         val playMovies = viewModel.fetchLatestMovies.await()
+        val upcomingMovies = viewModel.fetchUpcomingMovies.await()
+        buildingUpcomingMovieUI(upcomingMovies)
+        buildingPlayingMovies(playMovies)
 
-        playMovies.observeForever { playing ->
+    }
+
+    private fun buildingPlayingMovies(playingMovies: LiveData<PlayingMovies>) {
+        playingMovies.observeForever { playing ->
             settingNormalRecyclerViewConfigs(
                 this@Movies.context,
                 playing.results.toAdapterItems(),
                 now_playing_movies_list,
                 LinearLayoutManager.HORIZONTAL
             )
-            val generatedMovie = generateRandomizedNumber()
-            val posterPath = playing.results.get(generatedMovie).posterPath
-            val backdrop = playing.results.get(generatedMovie).backdropPath
-            val rating = playing.results.get(generatedMovie).voteAverage.toFloat()
-            val overView = playing.results.get(generatedMovie).overview
-            settingPickedMovieUI(posterPath, backdrop, overView, rating)
 
         }
+
+
+    }
+
+    private fun buildingUpcomingMovieUI(upcomingMovies: LiveData<UpcomingMovies>) {
+        upcomingMovies.observeForever { upcomingData ->
+            if (upcoming_movies_first_img != null)
+                GlideApp.with(this@Movies.context!!)
+                    .load(BASE_IMG_URL + upcomingData.results[0].posterPath)
+                    .into(upcoming_movies_first_img)
+
+            if (upcoming_movies_second_img != null)
+                GlideApp.with(this@Movies.context!!)
+                    .load(BASE_IMG_URL + upcomingData.results[1].posterPath)
+                    .into(upcoming_movies_second_img)
+            val list: MutableList<UpcomingMovies.Result> = upcomingData.results.toMutableList()
+            list.subList(0, 2).clear()
+
+            if (upcoming_list != null)
+                settingNormalRecyclerViewConfigs(
+                    this@Movies.context!!
+                    , list.toUpcomingMoviesData(),
+                    upcoming_list,
+                    LinearLayoutManager.HORIZONTAL
+                )
+        }
+
 
     }
 
@@ -71,26 +99,11 @@ class Movies : ScopedFragment(), KodeinAware {
         }
     }
 
-    private fun settingPickedMovieUI(
-        posterPath: String,
-        backdrop: String,
-        overview: String,
-        rating: Float
-    ) {
-        if (picked_movie_poster != null)
-            GlideApp.with(this.context!!)
-                .load(BASE_IMG_URL + posterPath)
-                .into(picked_movie_poster)
-        if (movie_backdrop != null)
-            GlideApp.with(this.context!!)
-                .load(BASE_IMG_URL + backdrop)
-                .into(movie_backdrop)
-        if (movie_rating != null)
-            movie_rating.rating = rating / 2f
-        if (picked_movie_overview != null)
-            picked_movie_overview.text = overview
+    private fun List<UpcomingMovies.Result>.toUpcomingMoviesData(): List<UpcomingAdapter> {
+        return this.map { item ->
+            UpcomingAdapter(item)
+        }
     }
-
 
 
 }

@@ -14,7 +14,7 @@ class TopRatedAdapter(private val entry: TopRatedEntity) : Item() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
-            movie_rating.text = entry.voteAverage.toString()
+            //movie_rating.text = entry.voteAverage.toString()
             settingTopRatedImage()
         }
     }

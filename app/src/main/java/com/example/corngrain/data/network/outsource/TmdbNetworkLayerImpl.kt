@@ -14,7 +14,7 @@ import com.example.corngrain.utilities.NoNetworkException
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
     private val _mutableLatestMoviesData = MutableLiveData<Popular>()
-    private val _mutableUpcomingMoviesData = MutableLiveData<Upcoming>()
+    private val _mutableUpcomingMoviesData = MutableLiveData<UpcomingMovies>()
     private val _mutableTopRatedMoviesData = MutableLiveData<TopRated>()
     private val _mutablePlayingMoviesData = MutableLiveData<PlayingMovies>()
     private val _mutableOnAirSeriesData = MutableLiveData<OnAirToday>()
@@ -38,7 +38,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         }
     }
 
-    override val upcomingMovies: LiveData<Upcoming>
+    override val upcomingMovies: LiveData<UpcomingMovies>
         get() = _mutableUpcomingMoviesData
 
     override suspend fun loadUpcomingMovies() {

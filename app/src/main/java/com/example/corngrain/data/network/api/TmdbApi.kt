@@ -56,7 +56,7 @@ interface TmdbApi {
     fun getUpcomingMoviesAsync(
         @Query(LANGUAGE) language: String = "en-US"
         , @Query(PAGE) page: Int = 1
-    ): Deferred<Upcoming>
+    ): Deferred<UpcomingMovies>
 
     @GET(TOPRATED_MOVIES)
     fun getTopRatedMoviesAsync(

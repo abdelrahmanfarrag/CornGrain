@@ -14,7 +14,7 @@ interface TmdbNetworkLayer {
     suspend fun loadLatestMovies()
 
     //Upcoming
-    val upcomingMovies: LiveData<Upcoming>
+    val upcomingMovies: LiveData<UpcomingMovies>
 
     suspend fun loadUpcomingMovies()
 

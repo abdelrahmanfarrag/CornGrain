@@ -7,12 +7,13 @@ import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.response.movies.Playing
 import com.example.corngrain.data.network.response.movies.PlayingMovies
+import com.example.corngrain.data.network.response.movies.UpcomingMovies
 
 interface TmdbRepository {
 
     suspend fun getPopularMovies(): LiveData<PlayingMovies>
 
-    suspend fun getUpcomingMovies(): List<UpcomingEntity>
+    suspend fun getUpcomingMovies(): LiveData<UpcomingMovies>
 
     suspend fun getTopRatedMovies(): List<TopRatedEntity>
 
