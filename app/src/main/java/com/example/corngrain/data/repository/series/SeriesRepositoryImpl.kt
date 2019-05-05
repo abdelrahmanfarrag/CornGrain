@@ -22,14 +22,15 @@ class SeriesRepositoryImpl(
 ) : SeriesRepository {
 
     init {
-        /*       networkOutSource.apply {
+
+       networkOutSource.apply {
                    onAirToday.observeForever { todaySeries ->
                        persistingTodaySeries(todaySeries.results)
                    }
                    popularSeries.observeForever { popularSeries ->
                        persistingPopularSeries(popularSeries.results)
                    }
-               }*/
+               }
     }
 
     override suspend fun getInshowSeries(): LiveData<SerieCurrentlyShowing> {
@@ -63,7 +64,7 @@ class SeriesRepositoryImpl(
 
     override suspend fun getPopularSeries(): MutableList<PopularSeriesEntity> {
         return withContext(Dispatchers.IO) {
-            loadPopularSeriesFromNetworkCall()
+            networkOutSource.loadPopularSeries()
             return@withContext popularSerieDao.getTvPopularSeries()
         }
     }

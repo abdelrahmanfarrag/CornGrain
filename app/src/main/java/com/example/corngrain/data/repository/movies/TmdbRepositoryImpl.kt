@@ -10,9 +10,7 @@ import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
-import com.example.corngrain.data.network.response.movies.Playing
-import com.example.corngrain.data.network.response.movies.PlayingMovies
-import com.example.corngrain.data.network.response.movies.UpcomingMovies
+import com.example.corngrain.data.network.response.movies.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,7 +29,7 @@ class TmdbRepositoryImpl(
 
     init {
         /*    networkSource.apply {
-                latestMovies.observeForever { popular ->
+                popularMovies.observeForever { popular ->
                     persistPopularMovies(popular.results)
                 }
                 upcomingMovies.observeForever { upcoming ->
@@ -48,9 +46,9 @@ class TmdbRepositoryImpl(
             */
     }
 
-    override suspend fun getPopularMovies(): LiveData<PlayingMovies> {
+    override suspend fun getPlayingMoviesFromResponse(): LiveData<PlayingMovies> {
         return withContext(Dispatchers.IO) {
-            getPopularMoviesFromNetworkCall()
+            networkSource.loadPlayingMovies()
             return@withContext networkSource.playingMovies
         }
     }
@@ -63,17 +61,17 @@ class TmdbRepositoryImpl(
         }
     }
 
-    override suspend fun getTopRatedMovies(): List<TopRatedEntity> {
+    override suspend fun getTopRatedMovies(): LiveData<TopRatedMovies> {
         return withContext(Dispatchers.IO) {
-            getTopRatedMoviesFromNetworkCall()
-            return@withContext topRatedDao.getTopRatedMovies()
+            networkSource.loadTopRatedMovies()
+            return@withContext networkSource.topRatedMovies
         }
     }
 
-    override suspend fun getPlayingMovies(): List<PlayingEntity> {
+    override suspend fun getPopularMovies(): LiveData<PopularMovies> {
         return withContext(Dispatchers.IO) {
-            getNowPlayingMoviesFromNetworkCall()
-            return@withContext playingDao.getNowPlayingMovies()
+            getPopularMoviesFromNetworkCall()
+            return@withContext networkSource.popularMovies
         }
     }
 
@@ -105,7 +103,7 @@ class TmdbRepositoryImpl(
 
 
     private suspend fun getPopularMoviesFromNetworkCall() {
-        networkSource.loadPlayingMovies()
+        networkSource.loadPopularMovies()
     }
 
     private suspend fun getUpcomingMoviesFromNetworkCall() {

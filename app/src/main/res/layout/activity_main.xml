@@ -22,7 +22,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:background="#4F5462"
+        android:background="#1C2033"
         app:itemIconTint="@drawable/bottom_nav_textcolor"
         app:itemTextColor="@drawable/bottom_nav_textcolor"
         app:layout_constraintBottom_toBottomOf="parent"

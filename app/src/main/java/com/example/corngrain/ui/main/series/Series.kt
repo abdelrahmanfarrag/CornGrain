@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,20 +67,20 @@ class Series : ScopedFragment(), KodeinAware {
         }
 
         val popularSeries = viewModel.fetchPopularSeries.await()
+        Log.d("itemsOfSeries", popularSeries.size.toString())
         if (first_item_img != null)
             GlideApp.with(context!!)
                 .load(BASE_IMG_URL + popularSeries[0].posterPath)
                 .into(first_item_img)
         popularSeries.removeAt(0)
-
-        if (popular_serie_list != null)
-            settingNormalRecyclerViewConfigs(
-                this@Series.context,
-                popularSeries.toAdapterItems(),
-                popular_serie_list,
-                RecyclerView.HORIZONTAL,
-                true
-            )
+        (popular_serie_list != null)
+        settingNormalRecyclerViewConfigs(
+            this@Series.context,
+            popularSeries.toAdapterItems(),
+            popular_serie_list,
+            RecyclerView.HORIZONTAL,
+            true
+        )
 
 
         val randomSerieDetail = viewModel.fetchDetails(movieId)

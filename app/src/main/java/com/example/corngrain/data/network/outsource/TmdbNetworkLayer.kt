@@ -9,9 +9,9 @@ import com.example.corngrain.data.network.response.series.*
 
 interface TmdbNetworkLayer {
     //PopularPersons Movies
-    val latestMovies: LiveData<Popular>
+    val popularMovies: LiveData<PopularMovies>
 
-    suspend fun loadLatestMovies()
+    suspend fun loadPopularMovies()
 
     //Upcoming
     val upcomingMovies: LiveData<UpcomingMovies>
@@ -19,7 +19,7 @@ interface TmdbNetworkLayer {
     suspend fun loadUpcomingMovies()
 
     //TopRated
-    val topRatedMovies: LiveData<TopRated>
+    val topRatedMovies: LiveData<TopRatedMovies>
 
     suspend fun loadTopRatedMovies()
 

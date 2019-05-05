@@ -47,10 +47,10 @@ const val PERSON_MOVIES = "person/{id}/combined_credits"
 interface TmdbApi {
 
     @GET(POPULAR_MOVIES)
-    fun getLatestMoviesAsync(
+    fun getPopularMoviesAsync(
         @Query(LANGUAGE) language: String = "en-Us",
         @Query(PAGE) page: Int = 1
-    ): Deferred<Popular>
+    ): Deferred<PopularMovies>
 
     @GET(UPCOMING_MOVIES)
     fun getUpcomingMoviesAsync(
@@ -62,7 +62,7 @@ interface TmdbApi {
     fun getTopRatedMoviesAsync(
         @Query(LANGUAGE) language: String = "en-US"
         , @Query(PAGE) page: Int = 1
-    ): Deferred<TopRated>
+    ): Deferred<TopRatedMovies>
 
     @GET(PLAYING_MOVIES)
     fun getPlayingMoviesAsync(
