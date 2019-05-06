@@ -67,7 +67,6 @@ class Series : ScopedFragment(), KodeinAware {
         }
 
         val popularSeries = viewModel.fetchPopularSeries.await()
-        Log.d("itemsOfSeries", popularSeries.size.toString())
         if (first_item_img != null)
             GlideApp.with(context!!)
                 .load(BASE_IMG_URL + popularSeries[0].posterPath)
@@ -106,7 +105,7 @@ class Series : ScopedFragment(), KodeinAware {
             val onAirPagerAdapter = OnAirAdapter(data.results)
             if (on_air_series_pager != null)
                 on_air_series_pager.adapter = onAirPagerAdapter
-            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size)
+            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size,7000)
 
 
         }
@@ -145,10 +144,12 @@ class Series : ScopedFragment(), KodeinAware {
         if (serie_detail_poster != null)
             GlideApp.with(this.context!!)
                 .load(BASE_IMG_URL + data.value?.posterPath)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(serie_detail_poster)
         if (serie_detail_backdrop != null)
             GlideApp.with(this.context!!)
                 .load(BASE_IMG_URL + data.value?.backdropPath)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(serie_detail_backdrop)
         if (seasons_info != null)
             seasons_info.setOnClickListener {

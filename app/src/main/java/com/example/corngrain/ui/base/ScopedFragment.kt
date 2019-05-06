@@ -3,6 +3,7 @@ package com.example.corngrain.ui.base
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +39,12 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
 
     }
 
-    fun autoPagerSlide(viewPager: ViewPager?, pagerIndicator: PageIndicatorView?, items: Int) {
+    fun autoPagerSlide(
+        viewPager: ViewPager?,
+        pagerIndicator: PageIndicatorView?,
+        items: Int,
+        duration: Long = 3000
+    ) {
         var currentPage = 0
         if (viewPager != null && dots_layout != null) {
             viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -65,13 +71,13 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
                     override fun run() {
                         if (currentPage < items) {
                             viewPager.setCurrentItem(currentPage, true)
-                            handler.postDelayed(this, 7000)
+                            handler.postDelayed(this, duration)
                             currentPage++
 
                         } else if (currentPage == items) {
                             currentPage = 0
                             viewPager.setCurrentItem(currentPage, true)
-                            handler.postDelayed(this, 7000)
+                            handler.postDelayed(this, duration)
                             currentPage++
                         }
                     }
@@ -90,7 +96,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
         orientation: Int = RecyclerView.VERTICAL
         , isGrid: Boolean = false,
         spinCount: Int = 2
-    ) {
+    ): GroupAdapter<ViewHolder> {
         val groupieAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(entries)
         }
@@ -126,6 +132,8 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
             }
             this.adapter = groupieAdapter
         }
+        return groupieAdapter
+
     }
 
 

@@ -8,7 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_movie.*
 
-class TopRatedAdapter(private val entry: TopRatedMovies.Result) : Item() {
+class TopRatedAdapter( val entry: TopRatedMovies.Result) : Item() {
 
 
     override fun getLayout(): Int = R.layout.item_movie

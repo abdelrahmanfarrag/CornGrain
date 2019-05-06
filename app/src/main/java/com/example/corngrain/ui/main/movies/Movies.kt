@@ -28,6 +28,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
+import kotlin.math.sin
 
 class Movies : ScopedFragment(), KodeinAware {
 
@@ -137,7 +138,11 @@ class Movies : ScopedFragment(), KodeinAware {
                     data.results.toTopRatedMoviesAdapterItems(),
                     movies_rated_list,
                     RecyclerView.HORIZONTAL
-                )
+                ).setOnItemClickListener { item, view ->
+                    (item as TopRatedAdapter).let { singleItem->
+                        Toast.makeText(context!!, singleItem.entry.id.toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
     }
 
