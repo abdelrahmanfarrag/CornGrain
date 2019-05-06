@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -140,12 +141,17 @@ class Movies : ScopedFragment(), KodeinAware {
                     RecyclerView.HORIZONTAL
                 ).setOnItemClickListener { item, view ->
                     (item as TopRatedAdapter).let { singleItem->
-                        Toast.makeText(context!!, singleItem.entry.id.toString(),Toast.LENGTH_SHORT).show()
+                        toDetailScreen(singleItem.entry.id,view)
                     }
                 }
         }
     }
 
+    private fun toDetailScreen(id:Int,viewClicked :View){
+        val actionWithValue = MoviesDirections.actionMoviesTabToMovieDetail(id)
+        Navigation.findNavController(viewClicked).navigate(actionWithValue)
+
+    }
 
     private fun List<PlayingMovies.Result>.toAdapterItems(): List<PlayingAdapter> {
         return this.map { item ->

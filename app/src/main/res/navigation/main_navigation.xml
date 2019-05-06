@@ -9,7 +9,11 @@
         android:id="@+id/movies_tab"
         android:name="com.example.corngrain.ui.main.movies.Movies"
         android:label="Movies"
-        tools:layout="@layout/movies_fragment" />
+        tools:layout="@layout/movies_fragment" >
+        <action
+            android:id="@+id/action_movies_tab_to_movieDetail"
+            app:destination="@id/movieDetail" />
+    </fragment>
     <fragment
         android:id="@+id/series_tab"
         android:name="com.example.corngrain.ui.main.series.Series"
@@ -20,4 +24,13 @@
         android:name="com.example.corngrain.ui.main.people.People"
         android:label="people_fragment"
         tools:layout="@layout/people_fragment" />
+    <fragment
+        android:id="@+id/movieDetail"
+        android:name="com.example.corngrain.ui.main.movies.details.MovieDetail"
+        android:label="movie_detail_fragment"
+        tools:layout="@layout/movie_detail_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>
