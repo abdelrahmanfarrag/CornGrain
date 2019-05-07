@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/bilbo_swash_caps</item>
+        <item>@font/cairo_bold</item>
         <item>@font/cairo_semibold</item>
     </array>
 </resources>

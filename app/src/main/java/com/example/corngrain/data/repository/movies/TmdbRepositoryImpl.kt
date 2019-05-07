@@ -10,6 +10,7 @@ import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
+import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.movies.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,8 +25,6 @@ class TmdbRepositoryImpl(
     private val topRatedDao: TopRatedDao,
     private val playingDao: PlayingDao
 ) : TmdbRepository {
-
-
 
     init {
         /*    networkSource.apply {
@@ -100,6 +99,14 @@ class TmdbRepositoryImpl(
             playingDao.insertNowPlayingMovies(entries)
         }
     }
+
+    override suspend fun getDetailedMovie(id: Int): LiveData<Detail> {
+        return withContext(Dispatchers.IO) {
+            networkSource.loadMovieDetail(id)
+            return@withContext networkSource.movieDetail
+        }
+    }
+
 
 
     private suspend fun getPopularMoviesFromNetworkCall() {

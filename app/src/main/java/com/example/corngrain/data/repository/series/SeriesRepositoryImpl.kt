@@ -22,7 +22,7 @@ class SeriesRepositoryImpl(
 ) : SeriesRepository {
 
     init {
-
+/*
        networkOutSource.apply {
                    onAirToday.observeForever { todaySeries ->
                        persistingTodaySeries(todaySeries.results)
@@ -31,6 +31,7 @@ class SeriesRepositoryImpl(
                        persistingPopularSeries(popularSeries.results)
                    }
                }
+               */
     }
 
     override suspend fun getInshowSeries(): LiveData<SerieCurrentlyShowing> {

@@ -2,34 +2,33 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/img_container"
-    android:layout_width="120dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
     android:background="@android:color/transparent">
 
-    <ImageView
-        android:id="@+id/movie_img"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cast_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:background="?selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="0dp"
+        android:id="@+id/similar_media_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rated_movie_title"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:fontFamily="@font/cairo_semibold"
-        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:padding="2dp"
+        android:textColor="#DD4A08"
         android:textSize="10sp"
-        android:textAlignment="viewStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cast_img"
+        app:layout_constraintStart_toStartOf="@+id/cast_img"
+        app:layout_constraintTop_toBottomOf="@+id/cast_img"
         tools:ignore="SmallSp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

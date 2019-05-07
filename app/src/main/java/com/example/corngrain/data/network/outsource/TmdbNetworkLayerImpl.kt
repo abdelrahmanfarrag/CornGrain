@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
+import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -12,6 +13,17 @@ import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
+    override val movieDetail: LiveData<Detail>
+        get() = _mutableMovieDetail
+    override suspend fun loadMovieDetail(id:Int) {
+        try {
+           val movieDetail = api.getDetailOfMovieAsync(id).await()
+            _mutableMovieDetail.postValue(movieDetail)
+
+        }catch (e:NoNetworkException){
+            Log.d("noConnection", "No network")
+        }
+    }
 
     private val _mutablePopularMovies = MutableLiveData<PopularMovies>()
     private val _mutableUpcomingMoviesData = MutableLiveData<UpcomingMovies>()
@@ -25,6 +37,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutablePopularPersons = MutableLiveData<PopularPersons>()
     private val _mutablePersonDetailData = MutableLiveData<PersonDetail>()
     private val _mutablePersonMoviesData = MutableLiveData<PersonMovies>()
+    private val _mutableMovieDetail = MutableLiveData<Detail>()
 
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies

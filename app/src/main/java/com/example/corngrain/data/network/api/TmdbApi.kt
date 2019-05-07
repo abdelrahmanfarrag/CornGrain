@@ -2,6 +2,7 @@ package com.example.corngrain.data.network.api
 
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
+import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -29,6 +30,7 @@ const val POPULAR_MOVIES = "movie/popular"
 const val UPCOMING_MOVIES = "movie/upcoming"
 const val TOPRATED_MOVIES = "movie/top_rated"
 const val PLAYING_MOVIES = "movie/now_playing"
+const val MOVIE_DETAIL = "movie/{id}"
 
 //ENDPOINTS => For Series
 const val ONAIR_TODAY = "tv/airing_today"
@@ -114,6 +116,12 @@ interface TmdbApi {
     fun getPersonMoviesAsync(
         @Path("id") personId: Int
     ): Deferred<PersonMovies>
+
+    @GET(MOVIE_DETAIL)
+    fun getDetailOfMovieAsync(
+        @Path("id") movieId: Int
+    ): Deferred<Detail>
+
 
     companion object {
 
