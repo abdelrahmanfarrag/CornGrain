@@ -28,7 +28,6 @@ class OnAirAdapter(private val entries: List<SerieCurrentlyShowing.Result>) : Pa
         val desc = item.findViewById<TextView>(R.id.on_air_desc)
 
         desc.text = entries.get(position).overview
-        Log.d("text", entries.get(position).overview)
         rating.text = entries.get(position).voteAverage.toString()
         GlideApp.with(container.context)
             .load(BASE_IMG_URL + entries.get(position).posterPath)

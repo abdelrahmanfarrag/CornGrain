@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -13,14 +14,39 @@ import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
+    override val reviews: LiveData<Reviews>
+        get() = _mutableReview
+
+    override suspend fun loadReviews(id: Int) {
+        try {
+            val reviews = api.getReviews(id).await()
+            _mutableReview.postValue(reviews)
+        }catch (e:NoNetworkException){
+            Log.d("noConnection", "No network")
+        }
+    }
+
+    override val movieCast: LiveData<MovieCredits>
+        get() = _mutableMovieCast
+
+    override suspend fun loadMovieCast(id: Int) {
+        try {
+            val cast = api.getMovieCastAsync(id).await()
+            _mutableMovieCast.postValue(cast)
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+        }
+    }
+
     override val movieDetail: LiveData<Detail>
         get() = _mutableMovieDetail
-    override suspend fun loadMovieDetail(id:Int) {
+
+    override suspend fun loadMovieDetail(id: Int) {
         try {
-           val movieDetail = api.getDetailOfMovieAsync(id).await()
+            val movieDetail = api.getDetailOfMovieAsync(id).await()
             _mutableMovieDetail.postValue(movieDetail)
 
-        }catch (e:NoNetworkException){
+        } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
         }
     }
@@ -38,6 +64,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutablePersonDetailData = MutableLiveData<PersonDetail>()
     private val _mutablePersonMoviesData = MutableLiveData<PersonMovies>()
     private val _mutableMovieDetail = MutableLiveData<Detail>()
+    private val _mutableMovieCast = MutableLiveData<MovieCredits>()
+    private val _mutableReview = MutableLiveData<Reviews>()
 
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies

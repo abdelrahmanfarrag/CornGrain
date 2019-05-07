@@ -3,6 +3,7 @@ package com.example.corngrain.data.network.api
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -31,6 +32,9 @@ const val UPCOMING_MOVIES = "movie/upcoming"
 const val TOPRATED_MOVIES = "movie/top_rated"
 const val PLAYING_MOVIES = "movie/now_playing"
 const val MOVIE_DETAIL = "movie/{id}"
+const val MOVIE_CAST = "movie/{id}/credits"
+const val REVIEWS = "movie/{id}/reviews"
+
 
 //ENDPOINTS => For Series
 const val ONAIR_TODAY = "tv/airing_today"
@@ -43,6 +47,7 @@ const val SERIE_DETAIL = "tv/{id}"
 const val POPULAR_PERSONS = "person/popular"
 const val POPULAR_DETAIL = "person/{id}"
 const val PERSON_MOVIES = "person/{id}/combined_credits"
+
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -121,6 +126,16 @@ interface TmdbApi {
     fun getDetailOfMovieAsync(
         @Path("id") movieId: Int
     ): Deferred<Detail>
+
+    @GET(MOVIE_CAST)
+    fun getMovieCastAsync(
+        @Path("id") movieId: Int
+    ): Deferred<MovieCredits>
+
+    @GET(REVIEWS)
+    fun getReviews(
+        @Path("id") mediaId:Int
+    ):Deferred<Reviews>
 
 
     companion object {

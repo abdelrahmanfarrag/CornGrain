@@ -11,12 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.movies.MovieCredits
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
+import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
+import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.movie_detail_fragment.*
 import kotlinx.coroutines.launch
@@ -49,7 +53,9 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         val id = safedMovieId?.id
         viewModel = ViewModelProviders.of(this, movieDetailViewModelInstanceFactory(id!!))
             .get(MovieDetailViewModel::class.java)
-        bindUI()
+        bindDetailUI()
+        bindCastUI()
+        bindReviewUI()
         //  testing_pass.text = safedMovieId?.id.toString()
         // testing_pass.gravity=Gravity.CENTER
 
@@ -57,7 +63,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
 
 
     @SuppressLint("SetTextI18n")
-    private fun bindUI() {
+    private fun bindDetailUI() {
         launch {
             val detailedData = viewModel.fetchMovieDetail.await()
             detailedData.observe(this@MovieDetail, Observer { data ->
@@ -99,6 +105,39 @@ class MovieDetail : ScopedFragment(), KodeinAware {
                 detail_screen_story_value.text = data.overview
 
             })
+        }
+    }
+
+    private fun bindCastUI() {
+        launch {
+            val cast = viewModel.fetchMovieCast.await()
+            cast.observe(this@MovieDetail, Observer { castData ->
+                settingNormalRecyclerViewConfigs(
+                    context!!,
+                    castData.cast.toCastAdapter(),
+                    detail_screen_cast_list,
+                    RecyclerView.HORIZONTAL
+                )
+
+            })
+        }
+    }
+
+    private fun bindReviewUI() {
+        launch {
+            val reviews = viewModel.fetchMovieReviews.await()
+            reviews.observe(this@MovieDetail, Observer { reviews ->
+                val reviewsAdapter = ReviewsAdapter(reviews.results)
+                reviews_pager.adapter = reviewsAdapter
+                autoPagerSlide(reviews_pager, reviews_layout, reviews.results.size, 5000)
+
+            })
+        }
+    }
+
+    private fun List<MovieCredits.Cast>.toCastAdapter(): List<CastAdapter> {
+        return this.map { item ->
+            CastAdapter(item)
         }
     }
 

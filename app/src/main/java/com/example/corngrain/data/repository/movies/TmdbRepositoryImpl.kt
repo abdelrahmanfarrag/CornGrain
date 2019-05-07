@@ -11,6 +11,7 @@ import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.movies.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,6 +26,19 @@ class TmdbRepositoryImpl(
     private val topRatedDao: TopRatedDao,
     private val playingDao: PlayingDao
 ) : TmdbRepository {
+    override suspend fun getReviews(id: Int): LiveData<Reviews> {
+        return withContext(Dispatchers.IO){
+            networkSource.loadReviews(id)
+            return@withContext networkSource.reviews
+        }
+    }
+
+    override suspend fun getMovieCast(id: Int): LiveData<MovieCredits> {
+        return withContext(Dispatchers.IO) {
+            networkSource.loadMovieCast(id)
+            return@withContext networkSource.movieCast
+        }
+    }
 
     init {
         /*    networkSource.apply {
@@ -106,7 +120,6 @@ class TmdbRepositoryImpl(
             return@withContext networkSource.movieDetail
         }
     }
-
 
 
     private suspend fun getPopularMoviesFromNetworkCall() {

@@ -6,6 +6,7 @@ import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.movies.*
 
 interface TmdbRepository {
@@ -19,5 +20,9 @@ interface TmdbRepository {
     suspend fun getPopularMovies(): LiveData<PopularMovies>
 
     suspend fun getDetailedMovie(id:Int):LiveData<Detail>
+
+    suspend fun getMovieCast(id:Int):LiveData<MovieCredits>
+
+    suspend fun getReviews(id:Int):LiveData<Reviews>
 
 }
