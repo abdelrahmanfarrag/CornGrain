@@ -9,7 +9,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_movie.*
 
 
-class UpcomingAdapter(private val upcomingMovies: UpcomingMovies.Result) : Item() {
+class UpcomingAdapter( val upcomingMovies: UpcomingMovies.Result) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
             setUpcomingMoviePoster()

@@ -6,15 +6,44 @@
     android:layout_height="250dp"
     android:layout_margin="4dp">
 
-    <ImageView
-        android:id="@+id/trailer_image"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:contentDescription="@null"
-        android:scaleType="fitXY"
+        android:id="@+id/trailer_image_container"
+        app:cardCornerRadius="4dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@android:color/holo_red_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/trailer_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
     <TextView
         android:id="@+id/trailer_type"
@@ -25,7 +54,7 @@
         android:gravity="center"
         android:textColor="@android:color/white"
         android:textSize="8sp"
-        app:layout_constraintBottom_toBottomOf="@+id/trailer_image"
+        app:layout_constraintBottom_toBottomOf="@+id/trailer_image_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SmallSp" />

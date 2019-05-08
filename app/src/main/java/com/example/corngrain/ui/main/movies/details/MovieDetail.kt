@@ -74,47 +74,51 @@ class MovieDetail : ScopedFragment(), KodeinAware {
 
     @SuppressLint("SetTextI18n")
     private fun bindDetailUI() {
+
         launch {
             val detailedData = viewModel.fetchMovieDetail.await()
             detailedData.observe(this@MovieDetail, Observer { data ->
-                GlideApp.with(this@MovieDetail)
-                    .load(BASE_IMG_URL + data.backdropPath)
-                    .placeholder(R.drawable.ic_placeholder)
-                    .into(detail_screen_image)
-                detail_screen_title.text = data.originalTitle
-                detail_screen_tagline.text = data.tagline
-                detail_screen_genres.text = setGenres(data.genres).toString()
-                detail_screen_rating.rating = data.voteAverage.toFloat() / 2f
-                val reviewersInDecimal = DecimalFormat("#,###")
-                val profitDecimal = DecimalFormat("#,###,###")
-                detail_screen_rating_reviewers_count.text =
-                    "${reviewersInDecimal.format(data.voteCount)} Reviewers"
-                detail_screen_year_value.text = data.releaseDate
-                detail_screen_lang_value.text = data.originalLanguage
-                detail_screen_runtime_value.text = "${data.runtime} MIN"
-                val profit = data.revenue - data.budget
+                if (data == null) return@Observer
+                else {
+                    GlideApp.with(this@MovieDetail)
+                        .load(BASE_IMG_URL + data.backdropPath)
+                        .placeholder(R.drawable.ic_placeholder)
+                        .into(detail_screen_image)
+                    detail_screen_title.text = data.originalTitle
+                    detail_screen_tagline.text = data.tagline
+                    detail_screen_genres.text = setGenres(data.genres).toString()
+                    detail_screen_rating.rating = data.voteAverage.toFloat() / 2f
+                    val reviewersInDecimal = DecimalFormat("#,###")
+                    val profitDecimal = DecimalFormat("#,###,###")
+                    detail_screen_rating_reviewers_count.text =
+                        "${reviewersInDecimal.format(data.voteCount)} Reviewers"
+                    detail_screen_year_value.text = data.releaseDate
+                    detail_screen_lang_value.text = data.originalLanguage
+                    detail_screen_runtime_value.text = "${data.runtime} MIN"
+                    val profit = data.revenue - data.budget
 
-                detail_screen_profit_value.compoundDrawablePadding = 4
-                detail_screen_profit_value.text = "${profitDecimal.format(profit)} M"
+                    detail_screen_profit_value.compoundDrawablePadding = 4
+                    detail_screen_profit_value.text = "${profitDecimal.format(profit)} M"
 
-                if (profit > 0) {
-                    detail_screen_profit_value.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.ic_profit,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
-                    detail_screen_profit_value.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.ic_lost,
-                        0,
-                        0,
-                        0
-                    )
+                    if (profit > 0) {
+                        detail_screen_profit_value.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            R.drawable.ic_profit,
+                            0,
+                            0,
+                            0
+                        )
+                    } else {
+                        detail_screen_profit_value.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            R.drawable.ic_lost,
+                            0,
+                            0,
+                            0
+                        )
+                    }
+                    detail_screen_story_value.text = data.overview
                 }
-                detail_screen_story_value.text = data.overview
-
             })
+
         }
     }
 
@@ -137,12 +141,15 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val reviews = viewModel.fetchMovieReviews.await()
             reviews.observe(this@MovieDetail, Observer { reviewsData ->
-                settingNormalRecyclerViewConfigs(
-                    this@MovieDetail.context,
-                    reviewsData.results.toReviewsAdapter(),
-                    reviews_list,
-                    RecyclerView.VERTICAL
-                )
+                if (reviewsData == null) return@Observer
+                else {
+                    settingNormalRecyclerViewConfigs(
+                        this@MovieDetail.context,
+                        reviewsData.results.toReviewsAdapter(),
+                        reviews_list,
+                        RecyclerView.VERTICAL
+                    )
+                }
             })
 
         }
@@ -153,18 +160,21 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val trailers = viewModel.fetchMovieTrailers.await()
             trailers.observe(this@MovieDetail, Observer { videos ->
-                settingNormalRecyclerViewConfigs(
-                    context!!,
-                    videos.results.toTrailerAdapter(),
-                    videos_list,
-                    RecyclerView.HORIZONTAL
-                ).setOnItemClickListener { item, view ->
-                    (item as TrailersAdapter).let { singleItem ->
-                        val intent = Intent(context!!, YoutubeActivity::class.java)
-                        intent.putExtra("key", singleItem.entry.key)
-                        startActivity(intent)
-                    }
+                if (videos == null) return@Observer
+                else {
+                    settingNormalRecyclerViewConfigs(
+                        context!!,
+                        videos.results.toTrailerAdapter(),
+                        videos_list,
+                        RecyclerView.HORIZONTAL
+                    ).setOnItemClickListener { item, view ->
+                        (item as TrailersAdapter).let { singleItem ->
+                            val intent = Intent(context!!, YoutubeActivity::class.java)
+                            intent.putExtra("key", singleItem.entry.key)
+                            startActivity(intent)
+                        }
 
+                    }
                 }
             })
         }
@@ -173,14 +183,18 @@ class MovieDetail : ScopedFragment(), KodeinAware {
     private fun bindSimilarMovieUI() {
         launch {
             val similar = viewModel.fetchSimilarMovies.await()
-            similar.observe(this@MovieDetail, Observer { similar ->
-                settingNormalRecyclerViewConfigs(
-                    context!!,
-                    similar.results.toSimilarAdapter(),
-                    similar_list,
-                    RecyclerView.HORIZONTAL
-                )
-
+            similar.observe(this@MovieDetail, Observer { similarDetails ->
+                if (similarDetails == null) return@Observer
+                else {
+                    loading_container.visibility = View.INVISIBLE
+                    views_container.visibility = View.VISIBLE
+                    settingNormalRecyclerViewConfigs(
+                        context!!,
+                        similarDetails.results.toSimilarAdapter(),
+                        similar_list,
+                        RecyclerView.HORIZONTAL
+                    )
+                }
             })
         }
     }

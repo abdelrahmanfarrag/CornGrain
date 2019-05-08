@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_popular.*
 
 const val BASE_IMG_URL = "https://image.tmdb.org/t/p/w500"
 
-class PopularAdapter(private val entry: PopularMovies.Result) : Item() {
+class PopularAdapter( val entry: PopularMovies.Result) : Item() {
     @SuppressLint("SetTextI18n")
     override fun bind(viewHolder: ViewHolder, position: Int) {
 

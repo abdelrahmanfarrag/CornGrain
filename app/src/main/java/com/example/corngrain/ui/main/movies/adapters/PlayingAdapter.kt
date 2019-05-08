@@ -9,7 +9,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_playing_movies.*
 
-class PlayingAdapter(private val entry: PlayingMovies.Result) : Item() {
+class PlayingAdapter(val entry: PlayingMovies.Result) : Item() {
     @SuppressLint("SetTextI18n")
     override fun bind(viewHolder: ViewHolder, position: Int) {
         Log.d("executed", entry.posterPath)
