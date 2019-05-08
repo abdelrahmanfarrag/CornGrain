@@ -20,4 +20,8 @@ class MovieDetailViewModel(id: Int, repository: TmdbRepository) : ViewModel() {
     val fetchMovieTrailers by lazyDeferred {
         repository.getTrailers(id)
     }
+
+    val fetchSimilarMovies by lazyDeferred {
+        repository.getSimilarMovies(id)
+    }
 }

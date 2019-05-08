@@ -12,6 +12,7 @@ import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,13 @@ class TmdbRepositoryImpl(
     private val topRatedDao: TopRatedDao,
     private val playingDao: PlayingDao
 ) : TmdbRepository {
+    override suspend fun getSimilarMovies(id: Int): LiveData<Similar> {
+        return withContext(Dispatchers.IO) {
+            networkSource.loadSimilarMovies(id)
+            return@withContext networkSource.similar
+        }
+    }
+
     override suspend fun getTrailers(id: Int): LiveData<Videos> {
         return withContext(Dispatchers.IO) {
             networkSource.loadTrailers(id)

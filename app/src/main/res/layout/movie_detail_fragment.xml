@@ -336,5 +336,48 @@
             app:layout_constraintStart_toStartOf="@id/reviews_txt"
             app:layout_constraintTop_toBottomOf="@+id/reviews_txt" />
 
+        <TextView
+            android:id="@+id/videos_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="VIDEOS"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reviews_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/videos_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/videos_txt"
+            app:layout_constraintTop_toBottomOf="@+id/videos_txt" />
+
+        <TextView
+            android:id="@+id/similar_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="SIMILAR MOVIES"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videos_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/similar_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/similar_txt"
+            app:layout_constraintTop_toBottomOf="@+id/similar_txt" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

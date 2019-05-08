@@ -4,6 +4,7 @@ import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
@@ -36,6 +37,7 @@ const val MOVIE_DETAIL = "movie/{id}"
 const val MOVIE_CAST = "movie/{id}/credits"
 const val REVIEWS = "movie/{id}/reviews"
 const val VIDEOS = "movie/{id}/videos"
+const val SIMILAR = "movie/{id}/similar"
 
 
 //ENDPOINTS => For Series
@@ -144,6 +146,10 @@ interface TmdbApi {
         @Path("id") mediaId: Int
     ): Deferred<Videos>
 
+    @GET(SIMILAR)
+    fun getSimilarMoviesAsync(
+        @Path("id") mediaId: Int
+    ):Deferred<Similar>
 
     companion object {
 

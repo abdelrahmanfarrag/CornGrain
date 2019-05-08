@@ -7,6 +7,7 @@ import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 
@@ -27,5 +28,7 @@ interface TmdbRepository {
     suspend fun getReviews(id:Int):LiveData<Reviews>
 
     suspend fun getTrailers(id: Int):LiveData<Videos>
+
+    suspend fun getSimilarMovies(id:Int):LiveData<Similar>
 
 }

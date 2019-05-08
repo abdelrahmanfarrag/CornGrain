@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
@@ -15,6 +16,20 @@ import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
+    override val similar: LiveData<Similar>
+        get() = _mutableSimilar
+
+    override suspend fun loadSimilarMovies(id: Int) {
+        try {
+            val similar = api.getSimilarMoviesAsync(id).await()
+            _mutableSimilar.postValue(similar)
+
+        }catch (e:NoNetworkException){
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
     override val videos: LiveData<Videos>
         get() = _mutableVideo
 
@@ -80,6 +95,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableMovieCast = MutableLiveData<MovieCredits>()
     private val _mutableReview = MutableLiveData<Reviews>()
     private val _mutableVideo = MutableLiveData<Videos>()
+    private val _mutableSimilar = MutableLiveData<Similar>()
 
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies

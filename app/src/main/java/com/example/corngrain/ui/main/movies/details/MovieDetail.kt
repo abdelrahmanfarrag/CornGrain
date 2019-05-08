@@ -1,6 +1,8 @@
 package com.example.corngrain.ui.main.movies.details
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Movie
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +13,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Similar
+import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.MovieCredits
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
+import com.example.corngrain.ui.main.movies.adapters.TopRatedAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
+import com.example.corngrain.ui.main.movies.details.adapter.SimilarAdapter
+import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
+import com.example.corngrain.ui.main.youtube.YoutubeActivity
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.movie_detail_fragment.*
 import kotlinx.coroutines.launch
@@ -31,6 +40,7 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.factory
 import java.lang.StringBuilder
 import java.text.DecimalFormat
+import kotlin.math.sin
 
 class MovieDetail : ScopedFragment(), KodeinAware {
     override val kodein: Kodein by closestKodein()
@@ -58,9 +68,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         bindCastUI()
         bindReviewUI()
         bindTrailersUI()
-        //  testing_pass.text = safedMovieId?.id.toString()
-        // testing_pass.gravity=Gravity.CENTER
-
+        bindSimilarMovieUI()
     }
 
 
@@ -145,11 +153,48 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val trailers = viewModel.fetchMovieTrailers.await()
             trailers.observe(this@MovieDetail, Observer { videos ->
-                Log.d(
-                    "trailersCount", videos.results.size
-                        .toString()
-                )
+                settingNormalRecyclerViewConfigs(
+                    context!!,
+                    videos.results.toTrailerAdapter(),
+                    videos_list,
+                    RecyclerView.HORIZONTAL
+                ).setOnItemClickListener { item, view ->
+                    (item as TrailersAdapter).let { singleItem ->
+                        val intent = Intent(context!!, YoutubeActivity::class.java)
+                        intent.putExtra("key", singleItem.entry.key)
+                        startActivity(intent)
+                    }
+
+                }
             })
+        }
+    }
+
+    private fun bindSimilarMovieUI() {
+        launch {
+            val similar = viewModel.fetchSimilarMovies.await()
+            similar.observe(this@MovieDetail, Observer { similar ->
+                settingNormalRecyclerViewConfigs(
+                    context!!,
+                    similar.results.toSimilarAdapter(),
+                    similar_list,
+                    RecyclerView.HORIZONTAL
+                )
+
+            })
+        }
+    }
+
+    private fun List<Similar.Result>.toSimilarAdapter(): List<SimilarAdapter> {
+        return this.map { item ->
+            SimilarAdapter(item)
+        }
+
+    }
+
+    private fun List<Videos.Result>.toTrailerAdapter(): List<TrailersAdapter> {
+        return this.map { item ->
+            TrailersAdapter(item)
         }
     }
 
@@ -177,5 +222,6 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         }
         return stringBuilder
     }
+
 
 }
