@@ -3,6 +3,7 @@ package com.example.corngrain.ui.main.movies.details
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Movie
+import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -143,13 +144,18 @@ class MovieDetail : ScopedFragment(), KodeinAware {
             reviews.observe(this@MovieDetail, Observer { reviewsData ->
                 if (reviewsData == null) return@Observer
                 else {
-                    settingNormalRecyclerViewConfigs(
-                        this@MovieDetail.context,
-                        reviewsData.results.toReviewsAdapter(),
-                        reviews_list,
-                        RecyclerView.VERTICAL
-                    )
+                    if (reviewsData.results.isNotEmpty()) {
+                        settingNormalRecyclerViewConfigs(
+                            this@MovieDetail.context,
+                            reviewsData.results.toReviewsAdapter(),
+                            reviews_list,
+                            RecyclerView.VERTICAL
+                        )
+                    } else {
+                        no_review_tv.visibility = View.VISIBLE
+                    }
                 }
+
             })
 
         }
@@ -162,18 +168,22 @@ class MovieDetail : ScopedFragment(), KodeinAware {
             trailers.observe(this@MovieDetail, Observer { videos ->
                 if (videos == null) return@Observer
                 else {
-                    settingNormalRecyclerViewConfigs(
-                        context!!,
-                        videos.results.toTrailerAdapter(),
-                        videos_list,
-                        RecyclerView.HORIZONTAL
-                    ).setOnItemClickListener { item, view ->
-                        (item as TrailersAdapter).let { singleItem ->
-                            val intent = Intent(context!!, YoutubeActivity::class.java)
-                            intent.putExtra("key", singleItem.entry.key)
-                            startActivity(intent)
-                        }
+                    if (videos.results.isNotEmpty()) {
+                        settingNormalRecyclerViewConfigs(
+                            context!!,
+                            videos.results.toTrailerAdapter(),
+                            videos_list,
+                            RecyclerView.HORIZONTAL
+                        ).setOnItemClickListener { item, view ->
+                            (item as TrailersAdapter).let { singleItem ->
+                                val intent = Intent(context!!, YoutubeActivity::class.java)
+                                intent.putExtra("key", singleItem.entry.key)
+                                startActivity(intent)
+                            }
 
+                        }
+                    } else {
+                        no_videos_tv.visibility = View.VISIBLE
                     }
                 }
             })
@@ -188,12 +198,16 @@ class MovieDetail : ScopedFragment(), KodeinAware {
                 else {
                     loading_container.visibility = View.INVISIBLE
                     views_container.visibility = View.VISIBLE
-                    settingNormalRecyclerViewConfigs(
-                        context!!,
-                        similarDetails.results.toSimilarAdapter(),
-                        similar_list,
-                        RecyclerView.HORIZONTAL
-                    )
+                    if (similarDetails.results.isNotEmpty()) {
+                        settingNormalRecyclerViewConfigs(
+                            context!!,
+                            similarDetails.results.toSimilarAdapter(),
+                            similar_list,
+                            RecyclerView.HORIZONTAL
+                        )
+                    } else {
+                        no_similar_tv.visibility = View.VISIBLE
+                    }
                 }
             })
         }

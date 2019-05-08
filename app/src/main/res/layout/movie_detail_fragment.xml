@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#041B2B"
     android:animateLayoutChanges="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#041B2B">
 
     <ScrollView
         android:id="@+id/views_container"
@@ -332,14 +332,43 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_screen_div_3" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reviews_list"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/reviews_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/reviews_txt"
-                app:layout_constraintTop_toBottomOf="@+id/reviews_txt" />
+                app:layout_constraintTop_toBottomOf="@+id/reviews_txt">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviews_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/no_review_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:drawableTop="@drawable/ic_not_found"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="NO REVIEWS FOUND FOR THIS MOVIES"
+                    android:textColor="@android:color/white"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                 android:id="@+id/videos_txt"
@@ -351,16 +380,45 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviews_list" />
+                app:layout_constraintTop_toBottomOf="@+id/reviews_container" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/videos_list"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/videos_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/videos_txt"
-                app:layout_constraintTop_toBottomOf="@+id/videos_txt" />
+                app:layout_constraintTop_toBottomOf="@+id/videos_txt">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/videos_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/no_videos_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:drawableTop="@drawable/ic_not_found"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="NO VIDEOS FOUND FOR THIS MOVIE"
+                    android:textColor="@android:color/white"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                 android:id="@+id/similar_txt"
@@ -368,11 +426,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="SIMILAR MOVIES"
+                android:text="SIMILAR MOVIE"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/videos_list" />
+                app:layout_constraintTop_toBottomOf="@+id/videos_container" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/similar_list"
@@ -383,13 +441,30 @@
                 app:layout_constraintStart_toStartOf="@id/similar_txt"
                 app:layout_constraintTop_toBottomOf="@+id/similar_txt" />
 
+            <TextView
+                android:id="@+id/no_similar_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableTop="@drawable/ic_not_found"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/cairo_bold"
+                android:gravity="center"
+                android:text="NO SIMILAR MOVIES FOUND FOR THIS MOVIE"
+                android:textColor="@android:color/white"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/similar_txt"
+                app:layout_constraintTop_toBottomOf="@+id/similar_list" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/loading_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
