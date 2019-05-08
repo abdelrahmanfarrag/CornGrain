@@ -4,6 +4,7 @@ import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -34,6 +35,7 @@ const val PLAYING_MOVIES = "movie/now_playing"
 const val MOVIE_DETAIL = "movie/{id}"
 const val MOVIE_CAST = "movie/{id}/credits"
 const val REVIEWS = "movie/{id}/reviews"
+const val VIDEOS = "movie/{id}/videos"
 
 
 //ENDPOINTS => For Series
@@ -133,9 +135,14 @@ interface TmdbApi {
     ): Deferred<MovieCredits>
 
     @GET(REVIEWS)
-    fun getReviews(
-        @Path("id") mediaId:Int
-    ):Deferred<Reviews>
+    fun getReviewsAsync(
+        @Path("id") mediaId: Int
+    ): Deferred<Reviews>
+
+    @GET(VIDEOS)
+    fun getMovieTrailersAsync(
+        @Path("id") mediaId: Int
+    ): Deferred<Videos>
 
 
     companion object {

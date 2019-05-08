@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -320,41 +321,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:text="REVIEWS"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:text="REVIEWS"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_screen_div_3" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/reviews_pager"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviews_list"
             android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
-            android:overScrollMode="never"
-            app:layout_constraintStart_toStartOf="@+id/reviews_txt"
-            app:layout_constraintTop_toBottomOf="@+id/reviews_txt" />
-
-        <com.rd.PageIndicatorView
-            android:id="@+id/reviews_layout"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/dots_item"
-            android:padding="3dp"
-            app:layout_constraintBottom_toBottomOf="@+id/reviews_txt"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/reviews_txt"
-            app:piv_animationType="fill"
-            app:piv_dynamicCount="true"
-            app:piv_interactiveAnimation="true"
-            app:piv_padding="4dp"
-            app:piv_radius="4dp"
-            app:piv_selectedColor="@android:color/white"
-            app:piv_unselectedColor="@android:color/white"
-            app:piv_viewPager="@+id/reviews_pager" />
-
+            app:layout_constraintStart_toStartOf="@id/reviews_txt"
+            app:layout_constraintTop_toBottomOf="@+id/reviews_txt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

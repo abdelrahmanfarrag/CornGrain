@@ -3,6 +3,7 @@ package com.example.corngrain.data.network.outsource
 import androidx.lifecycle.LiveData
 import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -43,6 +44,10 @@ interface TmdbNetworkLayer {
     //Reviews
     val reviews :LiveData<Reviews>
     suspend fun loadReviews(id:Int)
+
+    //Videos
+    val videos:LiveData<Videos>
+    suspend fun loadTrailers(id:Int)
 
     //SERIES => ON AIR TODAY
     val onAirToday: LiveData<OnAirToday>

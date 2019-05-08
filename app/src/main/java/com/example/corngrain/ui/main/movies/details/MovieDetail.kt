@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Detail
+import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.movies.MovieCredits
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
@@ -56,6 +57,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         bindDetailUI()
         bindCastUI()
         bindReviewUI()
+        bindTrailersUI()
         //  testing_pass.text = safedMovieId?.id.toString()
         // testing_pass.gravity=Gravity.CENTER
 
@@ -126,12 +128,35 @@ class MovieDetail : ScopedFragment(), KodeinAware {
     private fun bindReviewUI() {
         launch {
             val reviews = viewModel.fetchMovieReviews.await()
-            reviews.observe(this@MovieDetail, Observer { reviews ->
-                val reviewsAdapter = ReviewsAdapter(reviews.results)
-                reviews_pager.adapter = reviewsAdapter
-                autoPagerSlide(reviews_pager, reviews_layout, reviews.results.size, 5000)
-
+            reviews.observe(this@MovieDetail, Observer { reviewsData ->
+                settingNormalRecyclerViewConfigs(
+                    this@MovieDetail.context,
+                    reviewsData.results.toReviewsAdapter(),
+                    reviews_list,
+                    RecyclerView.VERTICAL
+                )
             })
+
+        }
+    }
+
+
+    private fun bindTrailersUI() {
+        launch {
+            val trailers = viewModel.fetchMovieTrailers.await()
+            trailers.observe(this@MovieDetail, Observer { videos ->
+                Log.d(
+                    "trailersCount", videos.results.size
+                        .toString()
+                )
+            })
+        }
+    }
+
+    private fun List<Reviews.Result>.toReviewsAdapter(): List<ReviewsAdapter> {
+        return this.map { item ->
+            ReviewsAdapter(item)
+
         }
     }
 
