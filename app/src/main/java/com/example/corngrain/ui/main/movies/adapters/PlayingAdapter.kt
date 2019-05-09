@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.item_playing_movies.*
 class PlayingAdapter(val entry: PlayingMovies.Result) : Item() {
     @SuppressLint("SetTextI18n")
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        Log.d("executed", entry.posterPath)
 
         viewHolder.apply {
             playing_movie_title.text = entry.originalTitle

@@ -59,26 +59,22 @@ interface TmdbApi {
 
     @GET(POPULAR_MOVIES)
     fun getPopularMoviesAsync(
-        @Query(LANGUAGE) language: String = "en-Us",
         @Query(PAGE) page: Int = 1
     ): Deferred<PopularMovies>
 
     @GET(UPCOMING_MOVIES)
     fun getUpcomingMoviesAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+         @Query(PAGE) page: Int = 1
     ): Deferred<UpcomingMovies>
 
     @GET(TOPRATED_MOVIES)
     fun getTopRatedMoviesAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+         @Query(PAGE) page: Int = 1
     ): Deferred<TopRatedMovies>
 
     @GET(PLAYING_MOVIES)
     fun getPlayingMoviesAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+         @Query(PAGE) page: Int = 1
     ): Deferred<PlayingMovies>
 
     @GET(ONAIR_TODAY)

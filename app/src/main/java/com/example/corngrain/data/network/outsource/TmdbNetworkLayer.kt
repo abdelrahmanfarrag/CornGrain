@@ -15,22 +15,22 @@ interface TmdbNetworkLayer {
     //PopularPersons Movies
     val popularMovies: LiveData<PopularMovies>
 
-    suspend fun loadPopularMovies()
+    suspend fun loadPopularMovies(page: Int)
 
     //Upcoming
     val upcomingMovies: LiveData<UpcomingMovies>
 
-    suspend fun loadUpcomingMovies()
+    suspend fun loadUpcomingMovies(page: Int)
 
     //TopRated
     val topRatedMovies: LiveData<TopRatedMovies>
 
-    suspend fun loadTopRatedMovies()
+    suspend fun loadTopRatedMovies(page: Int)
 
     //Playing
     val playingMovies: LiveData<PlayingMovies>
 
-    suspend fun loadPlayingMovies()
+    suspend fun loadPlayingMovies(page:Int)
 
 
     //Detail

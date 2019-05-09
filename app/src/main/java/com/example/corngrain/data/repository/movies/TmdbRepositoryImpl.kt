@@ -56,50 +56,32 @@ class TmdbRepositoryImpl(
         }
     }
 
-    init {
-        /*    networkSource.apply {
-                popularMovies.observeForever { popular ->
-                    persistPopularMovies(popular.results)
-                }
-                upcomingMovies.observeForever { upcoming ->
-                    persistUpcomingMovies(upcoming.results)
-                }
-                topRatedMovies.observeForever { topRated ->
-                    persistingTopRatedMovies(topRated.results)
-                }
-                playingMovies.observeForever { playing ->
-                    persistingNowPlayingMovies(playing.results)
 
-                }
-            }
-            */
-    }
-
-    override suspend fun getPlayingMoviesFromResponse(): LiveData<PlayingMovies> {
+    override suspend fun getPlayingMoviesFromResponse(page:Int): LiveData<PlayingMovies> {
         return withContext(Dispatchers.IO) {
-            networkSource.loadPlayingMovies()
+            networkSource.loadPlayingMovies(page)
             return@withContext networkSource.playingMovies
         }
     }
 
-    override suspend fun getUpcomingMovies(): LiveData<UpcomingMovies> {
+    override suspend fun getUpcomingMovies(page: Int): LiveData<UpcomingMovies> {
 
         return withContext(Dispatchers.IO) {
-            getUpcomingMoviesFromNetworkCall()
+            getUpcomingMoviesFromNetworkCall(page)
             return@withContext networkSource.upcomingMovies
         }
     }
 
-    override suspend fun getTopRatedMovies(): LiveData<TopRatedMovies> {
+    override suspend fun getTopRatedMovies(page: Int): LiveData<TopRatedMovies> {
         return withContext(Dispatchers.IO) {
-            networkSource.loadTopRatedMovies()
+            networkSource.loadTopRatedMovies(page)
             return@withContext networkSource.topRatedMovies
         }
     }
 
-    override suspend fun getPopularMovies(): LiveData<PopularMovies> {
+    override suspend fun getPopularMovies(page: Int): LiveData<PopularMovies> {
         return withContext(Dispatchers.IO) {
-            getPopularMoviesFromNetworkCall()
+            getPopularMoviesFromNetworkCall(page)
             return@withContext networkSource.popularMovies
         }
     }
@@ -138,20 +120,20 @@ class TmdbRepositoryImpl(
     }
 
 
-    private suspend fun getPopularMoviesFromNetworkCall() {
-        networkSource.loadPopularMovies()
+    private suspend fun getPopularMoviesFromNetworkCall(page: Int) {
+        networkSource.loadPopularMovies(page)
     }
 
-    private suspend fun getUpcomingMoviesFromNetworkCall() {
-        networkSource.loadUpcomingMovies()
+    private suspend fun getUpcomingMoviesFromNetworkCall(page: Int) {
+        networkSource.loadUpcomingMovies(page)
     }
 
     private suspend fun getTopRatedMoviesFromNetworkCall() {
-        networkSource.loadTopRatedMovies()
+   //     networkSource.loadTopRatedMovies()
     }
 
     private suspend fun getNowPlayingMoviesFromNetworkCall() {
-        networkSource.loadPlayingMovies()
+        //networkSource.loadPlayingMovies()
     }
 
 }

@@ -100,9 +100,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies
 
-    override suspend fun loadPopularMovies() {
+    override suspend fun loadPopularMovies(page: Int) {
         try {
-            val latestMoviesJob = api.getPopularMoviesAsync().await()
+            val latestMoviesJob = api.getPopularMoviesAsync(page).await()
             _mutablePopularMovies.postValue(latestMoviesJob)
         } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
@@ -112,9 +112,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val upcomingMovies: LiveData<UpcomingMovies>
         get() = _mutableUpcomingMoviesData
 
-    override suspend fun loadUpcomingMovies() {
+    override suspend fun loadUpcomingMovies(page: Int) {
         try {
-            val upcomingJob = api.getUpcomingMoviesAsync().await()
+            val upcomingJob = api.getUpcomingMoviesAsync(page).await()
             _mutableUpcomingMoviesData.postValue(upcomingJob)
         } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
@@ -125,9 +125,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val topRatedMovies: LiveData<TopRatedMovies>
         get() = _mutableTopRatedMoviesData
 
-    override suspend fun loadTopRatedMovies() {
+    override suspend fun loadTopRatedMovies(page: Int) {
         try {
-            val topRatedJob = api.getTopRatedMoviesAsync().await()
+            val topRatedJob = api.getTopRatedMoviesAsync(page).await()
             _mutableTopRatedMoviesData.postValue(topRatedJob)
         } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
@@ -138,9 +138,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val playingMovies: LiveData<PlayingMovies>
         get() = _mutablePlayingMoviesData
 
-    override suspend fun loadPlayingMovies() {
+    override suspend fun loadPlayingMovies(page:Int) {
         try {
-            val playingJob = api.getPlayingMoviesAsync().await()
+            val playingJob = api.getPlayingMoviesAsync(page).await()
             _mutablePlayingMoviesData.postValue(playingJob)
 
         } catch (e: NoNetworkException) {

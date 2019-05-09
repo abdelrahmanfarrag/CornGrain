@@ -58,23 +58,34 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-        val playMovies = viewModel.fetchPlayingMovies.await()
-        val upcomingMovies = viewModel.fetchUpcomingMovies.await()
-        val popularMovies = viewModel.fetchPopularMovies.await()
-        val topRatedMovies = viewModel.fetchTopRatedMovies.await()
+        val playMovies = viewModel.loadMorePlayingMoviesAsync(1).await()
+        val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1).await()
+        val popularMovies = viewModel.loadMorePopularMoviesAsync(1).await()
+        val topRatedMovies = viewModel.loadMoreRatedMovies(1).await()
         buildingUpcomingMovieUI(upcomingMovies)
         buildingPlayingMovies(playMovies)
         buildingTopRatedMoviesUI(topRatedMovies)
         buildingPopularMoviesUI(popularMovies)
 
+
     }
 
     private fun buildingPlayingMovies(playingMovies: LiveData<PlayingMovies>) {
+
 
         playingMovies.observe(this, Observer { playing ->
             if (playing == null) return@Observer
             loading_container.visibility = View.INVISIBLE
             view_container.visibility = View.VISIBLE
+            now_playing_more.setOnClickListener {
+                launch {
+                    var currentPage = playing.page
+                    if (currentPage < playing.totalPages) {
+                        currentPage += 1
+                        viewModel.loadMorePlayingMoviesAsync(currentPage).await()
+                    }
+                }
+            }
             settingNormalRecyclerViewConfigs(
                 this@Movies.context,
                 playing.results.toAdapterItems(),
@@ -95,6 +106,16 @@ class Movies : ScopedFragment(), KodeinAware {
 
     private fun buildingUpcomingMovieUI(upcomingMovies: LiveData<UpcomingMovies>) {
         upcomingMovies.observe(this, Observer { upcomingData ->
+
+            upcoming_more.setOnClickListener {
+                launch {
+                    var currentPage = upcomingData.page
+                    if (currentPage < upcomingData.totalPages) {
+                        currentPage += 1
+                        viewModel.loadMoreUpcomingMoviesAsync(currentPage).await()
+                    }
+                }
+            }
             GlideApp.with(this@Movies.context!!)
                 .load(BASE_IMG_URL + upcomingData.results[0].posterPath)
                 .into(upcoming_movies_first_img)
@@ -131,6 +152,16 @@ class Movies : ScopedFragment(), KodeinAware {
     private fun buildingPopularMoviesUI(popularMovies: LiveData<PopularMovies>) {
         popularMovies.observe(this, Observer { data ->
 
+
+            var currentPage = data.page
+            if (currentPage < data.totalPages) {
+                currentPage += 1
+                popular_more.setOnClickListener {
+                    launch {
+                        viewModel.loadMorePopularMoviesAsync(currentPage).await()
+                    }
+                }
+            }
             if (popular_list != null)
                 settingNormalRecyclerViewConfigs(
                     this.context!!,
@@ -181,6 +212,15 @@ class Movies : ScopedFragment(), KodeinAware {
                         toDetailScreen(singleItem.entry.id, view)
                     }
                 }
+            var currentPage = data.page
+            if (currentPage < data.totalPages) {
+                currentPage += 1
+                rated_more.setOnClickListener {
+                    launch {
+                        viewModel.loadMoreRatedMovies(currentPage).await()
+                    }
+                }
+            }
 
         })
 

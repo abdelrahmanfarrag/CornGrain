@@ -13,13 +13,13 @@ import com.example.corngrain.data.network.response.movies.*
 
 interface TmdbRepository {
 
-    suspend fun getPlayingMoviesFromResponse(): LiveData<PlayingMovies>
+    suspend fun getPlayingMoviesFromResponse(page:Int): LiveData<PlayingMovies>
 
-    suspend fun getUpcomingMovies(): LiveData<UpcomingMovies>
+    suspend fun getUpcomingMovies(page: Int): LiveData<UpcomingMovies>
 
-    suspend fun getTopRatedMovies(): LiveData<TopRatedMovies>
+    suspend fun getTopRatedMovies(page: Int): LiveData<TopRatedMovies>
 
-    suspend fun getPopularMovies(): LiveData<PopularMovies>
+    suspend fun getPopularMovies(page: Int): LiveData<PopularMovies>
 
     suspend fun getDetailedMovie(id:Int):LiveData<Detail>
 
