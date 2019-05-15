@@ -10,6 +10,7 @@ import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
+import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 //Queries & Parameters
 const val BASE_URL = "https://api.themoviedb.org/3/"
@@ -52,7 +54,8 @@ const val POPULAR_PERSONS = "person/popular"
 const val POPULAR_DETAIL = "person/{id}"
 const val PERSON_MOVIES = "person/{id}/combined_credits"
 
-
+//SEARCH APIS
+const val MOVIE_SEARCH = "search/movie"
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
 interface TmdbApi {
@@ -64,17 +67,17 @@ interface TmdbApi {
 
     @GET(UPCOMING_MOVIES)
     fun getUpcomingMoviesAsync(
-         @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<UpcomingMovies>
 
     @GET(TOPRATED_MOVIES)
     fun getTopRatedMoviesAsync(
-         @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<TopRatedMovies>
 
     @GET(PLAYING_MOVIES)
     fun getPlayingMoviesAsync(
-         @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<PlayingMovies>
 
     @GET(ONAIR_TODAY)
@@ -145,7 +148,14 @@ interface TmdbApi {
     @GET(SIMILAR)
     fun getSimilarMoviesAsync(
         @Path("id") mediaId: Int
-    ):Deferred<Similar>
+    ): Deferred<Similar>
+
+    @GET(MOVIE_SEARCH)
+    fun searchForaMovieAsync(
+        @Query("query") query: String,
+        @Query("page") page: Int
+        , @Query("include_adult") adult: Boolean = false
+    ):Deferred<MovieSearch>
 
     companion object {
 
@@ -177,6 +187,10 @@ interface TmdbApi {
                 .addInterceptor(interceptedUrl)
                 .addInterceptor(loggingInterceptor.loggingInterceptor())
                 .addInterceptor(noConnectionInterceptor)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .build()
 
             return Retrofit

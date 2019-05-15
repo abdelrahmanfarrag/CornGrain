@@ -12,36 +12,34 @@ import kotlinx.coroutines.Deferred
 
 class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
 
-    suspend fun loadMoreRatedMovies(page: Int):Deferred<LiveData<TopRatedMovies>>{
+    init {
+    }
+    suspend fun loadMoreRatedMoviesAsync(page: Int):LiveData<TopRatedMovies>{
         val fetchMoreRatedMovies by lazyDeferred {
             repository.getTopRatedMovies(page)
         }
-        return fetchMoreRatedMovies
+        return fetchMoreRatedMovies.await()
     }
 
-    suspend fun loadMorePopularMoviesAsync(page: Int): Deferred<LiveData<PopularMovies>> {
+    suspend fun loadMorePopularMoviesAsync(page: Int): LiveData<PopularMovies> {
         val fetchPopularMovies by lazyDeferred {
             repository.getPopularMovies(page)
         }
-        return fetchPopularMovies
+        return fetchPopularMovies.await()
     }
 
-    suspend fun loadMorePlayingMoviesAsync(page: Int): Deferred<LiveData<PlayingMovies>> {
+    suspend fun loadMorePlayingMoviesAsync(page: Int): LiveData<PlayingMovies> {
         val fetchMoreMovies by lazyDeferred {
             repository.getPlayingMoviesFromResponse(page)
         }
-        return fetchMoreMovies
+        return fetchMoreMovies.await()
     }
 
-    suspend fun loadMoreUpcomingMoviesAsync(page: Int): Deferred<LiveData<UpcomingMovies>> {
+    suspend fun loadMoreUpcomingMoviesAsync(page: Int): LiveData<UpcomingMovies> {
         val fetchMoreUpcomingMovies by lazyDeferred {
             repository.getUpcomingMovies(page)
         }
-        return fetchMoreUpcomingMovies
+        return fetchMoreUpcomingMovies.await()
     }
-
-    //   val fetchPlayingMovies by lazyDeferred {
-    //     repository.getPopularMovies()
-    // }
 
 }

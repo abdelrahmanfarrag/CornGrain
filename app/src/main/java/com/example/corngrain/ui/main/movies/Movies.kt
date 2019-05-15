@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -32,13 +31,11 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
-import kotlin.math.sin
 
 class Movies : ScopedFragment(), KodeinAware {
 
 
     override val kodein: Kodein by closestKodein()
-
     private val factory by instance<MovieViewModelFactory>()
 
 
@@ -58,17 +55,20 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-        val playMovies = viewModel.loadMorePlayingMoviesAsync(1).await()
-        val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1).await()
-        val popularMovies = viewModel.loadMorePopularMoviesAsync(1).await()
-        val topRatedMovies = viewModel.loadMoreRatedMovies(1).await()
+        val playMovies = viewModel.loadMorePlayingMoviesAsync(1)
+        val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1)
+        val popularMovies = viewModel.loadMorePopularMoviesAsync(1)
+        val topRatedMovies = viewModel.loadMoreRatedMoviesAsync(1)
         buildingUpcomingMovieUI(upcomingMovies)
         buildingPlayingMovies(playMovies)
         buildingTopRatedMoviesUI(topRatedMovies)
         buildingPopularMoviesUI(popularMovies)
-
+        search_card_container.setOnClickListener { card ->
+            toSearchScreen(card)
+        }
 
     }
+
 
     private fun buildingPlayingMovies(playingMovies: LiveData<PlayingMovies>) {
 
@@ -82,7 +82,7 @@ class Movies : ScopedFragment(), KodeinAware {
                     var currentPage = playing.page
                     if (currentPage < playing.totalPages) {
                         currentPage += 1
-                        viewModel.loadMorePlayingMoviesAsync(currentPage).await()
+                        viewModel.loadMorePlayingMoviesAsync(currentPage)
                     }
                 }
             }
@@ -112,7 +112,7 @@ class Movies : ScopedFragment(), KodeinAware {
                     var currentPage = upcomingData.page
                     if (currentPage < upcomingData.totalPages) {
                         currentPage += 1
-                        viewModel.loadMoreUpcomingMoviesAsync(currentPage).await()
+                        viewModel.loadMoreUpcomingMoviesAsync(currentPage)
                     }
                 }
             }
@@ -158,7 +158,7 @@ class Movies : ScopedFragment(), KodeinAware {
                 currentPage += 1
                 popular_more.setOnClickListener {
                     launch {
-                        viewModel.loadMorePopularMoviesAsync(currentPage).await()
+                        viewModel.loadMorePopularMoviesAsync(currentPage)
                     }
                 }
             }
@@ -217,7 +217,7 @@ class Movies : ScopedFragment(), KodeinAware {
                 currentPage += 1
                 rated_more.setOnClickListener {
                     launch {
-                        viewModel.loadMoreRatedMovies(currentPage).await()
+                        viewModel.loadMoreRatedMoviesAsync(currentPage)
                     }
                 }
             }
@@ -230,6 +230,11 @@ class Movies : ScopedFragment(), KodeinAware {
         val actionWithValue = MoviesDirections.actionMoviesTabToMovieDetail(id)
         Navigation.findNavController(viewClicked).navigate(actionWithValue)
 
+    }
+
+    private fun toSearchScreen(viewClicked: View) {
+        val actionToSearchScreen = MoviesDirections.actionSearchMovies()
+        Navigation.findNavController(viewClicked).navigate(actionToSearchScreen)
     }
 
     private fun List<PlayingMovies.Result>.toAdapterItems(): List<PlayingAdapter> {

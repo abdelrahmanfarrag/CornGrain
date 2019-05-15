@@ -12,72 +12,11 @@ import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
+import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
-    override val similar: LiveData<Similar>
-        get() = _mutableSimilar
-
-    override suspend fun loadSimilarMovies(id: Int) {
-        try {
-            val similar = api.getSimilarMoviesAsync(id).await()
-            _mutableSimilar.postValue(similar)
-
-        }catch (e:NoNetworkException){
-            Log.d("noConnection", "No network")
-
-        }
-    }
-
-    override val videos: LiveData<Videos>
-        get() = _mutableVideo
-
-    override suspend fun loadTrailers(id: Int) {
-        try {
-            val videos = api.getMovieTrailersAsync(id).await()
-            _mutableVideo.postValue(videos)
-        }catch (e:NoNetworkException){
-            Log.d("noConnection", "No network")
-        }
-    }
-
-    override val reviews: LiveData<Reviews>
-        get() = _mutableReview
-
-    override suspend fun loadReviews(id: Int) {
-        try {
-            val reviews = api.getReviewsAsync(id).await()
-            _mutableReview.postValue(reviews)
-        } catch (e: NoNetworkException) {
-            Log.d("noConnection", "No network")
-        }
-    }
-
-    override val movieCast: LiveData<MovieCredits>
-        get() = _mutableMovieCast
-
-    override suspend fun loadMovieCast(id: Int) {
-        try {
-            val cast = api.getMovieCastAsync(id).await()
-            _mutableMovieCast.postValue(cast)
-        } catch (e: NoNetworkException) {
-            Log.d("noConnection", "No network")
-        }
-    }
-
-    override val movieDetail: LiveData<Detail>
-        get() = _mutableMovieDetail
-
-    override suspend fun loadMovieDetail(id: Int) {
-        try {
-            val movieDetail = api.getDetailOfMovieAsync(id).await()
-            _mutableMovieDetail.postValue(movieDetail)
-
-        } catch (e: NoNetworkException) {
-            Log.d("noConnection", "No network")
-        }
-    }
 
     private val _mutablePopularMovies = MutableLiveData<PopularMovies>()
     private val _mutableUpcomingMoviesData = MutableLiveData<UpcomingMovies>()
@@ -96,6 +35,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableReview = MutableLiveData<Reviews>()
     private val _mutableVideo = MutableLiveData<Videos>()
     private val _mutableSimilar = MutableLiveData<Similar>()
+    private val _mutableSearchedMovies = MutableLiveData<MovieSearch>()
 
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies
@@ -138,7 +78,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val playingMovies: LiveData<PlayingMovies>
         get() = _mutablePlayingMoviesData
 
-    override suspend fun loadPlayingMovies(page:Int) {
+    override suspend fun loadPlayingMovies(page: Int) {
         try {
             val playingJob = api.getPlayingMoviesAsync(page).await()
             _mutablePlayingMoviesData.postValue(playingJob)
@@ -258,5 +198,79 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         }
     }
 
+    override val similar: LiveData<Similar>
+        get() = _mutableSimilar
+
+    override suspend fun loadSimilarMovies(id: Int) {
+        try {
+            val similar = api.getSimilarMoviesAsync(id).await()
+            _mutableSimilar.postValue(similar)
+
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
+    override val videos: LiveData<Videos>
+        get() = _mutableVideo
+
+    override suspend fun loadTrailers(id: Int) {
+        try {
+            val videos = api.getMovieTrailersAsync(id).await()
+            _mutableVideo.postValue(videos)
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+        }
+    }
+
+    override val reviews: LiveData<Reviews>
+        get() = _mutableReview
+
+    override suspend fun loadReviews(id: Int) {
+        try {
+            val reviews = api.getReviewsAsync(id).await()
+            _mutableReview.postValue(reviews)
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+        }
+    }
+
+    override val movieCast: LiveData<MovieCredits>
+        get() = _mutableMovieCast
+
+    override suspend fun loadMovieCast(id: Int) {
+        try {
+            val cast = api.getMovieCastAsync(id).await()
+            _mutableMovieCast.postValue(cast)
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+        }
+    }
+
+    override val movieDetail: LiveData<Detail>
+        get() = _mutableMovieDetail
+
+    override suspend fun loadMovieDetail(id: Int) {
+        try {
+            val movieDetail = api.getDetailOfMovieAsync(id).await()
+            _mutableMovieDetail.postValue(movieDetail)
+
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+        }
+    }
+    override val searchMovies: LiveData<MovieSearch>
+        get() = _mutableSearchedMovies
+
+    override suspend fun getUserSearchedMovies(query: String, page: Int) {
+        try {
+            val loadSeachMoviesJob = api.searchForaMovieAsync(query,page).await()
+            _mutableSearchedMovies.postValue(loadSeachMoviesJob)
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
 
 }

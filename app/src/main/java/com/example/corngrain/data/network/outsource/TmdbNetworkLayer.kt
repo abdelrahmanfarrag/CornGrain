@@ -9,6 +9,7 @@ import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
+import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
 
 interface TmdbNetworkLayer {
@@ -30,29 +31,33 @@ interface TmdbNetworkLayer {
     //Playing
     val playingMovies: LiveData<PlayingMovies>
 
-    suspend fun loadPlayingMovies(page:Int)
-
 
     //Detail
-    val movieDetail:LiveData<Detail>
-    suspend fun loadMovieDetail(id:Int)
+    val movieDetail: LiveData<Detail>
+
+    suspend fun loadMovieDetail(id: Int)
 
 
+    suspend fun loadPlayingMovies(page: Int)
     //Cast
-    val movieCast:LiveData<MovieCredits>
-    suspend fun loadMovieCast(id:Int)
+    val movieCast: LiveData<MovieCredits>
+
+    suspend fun loadMovieCast(id: Int)
 
     //Reviews
-    val reviews :LiveData<Reviews>
-    suspend fun loadReviews(id:Int)
+    val reviews: LiveData<Reviews>
+
+    suspend fun loadReviews(id: Int)
 
     //Videos
-    val videos:LiveData<Videos>
-    suspend fun loadTrailers(id:Int)
+    val videos: LiveData<Videos>
+
+    suspend fun loadTrailers(id: Int)
 
     //Similar
-    val similar:LiveData<Similar>
-    suspend fun loadSimilarMovies(id:Int)
+    val similar: LiveData<Similar>
+
+    suspend fun loadSimilarMovies(id: Int)
 
     //SERIES => ON AIR TODAY
     val onAirToday: LiveData<OnAirToday>
@@ -84,4 +89,10 @@ interface TmdbNetworkLayer {
 
     val personMovies: LiveData<PersonMovies>
     suspend fun loadPersonMovies(id: Int)
+
+
+    //Search
+    val searchMovies: LiveData<MovieSearch>
+
+    suspend fun getUserSearchedMovies(query: String, page: Int)
 }

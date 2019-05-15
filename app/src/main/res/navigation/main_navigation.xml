@@ -13,6 +13,13 @@
         <action
             android:id="@+id/action_movies_tab_to_movieDetail"
             app:destination="@id/movieDetail" />
+        <action
+            android:id="@+id/action_search_movies"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/series_tab"
@@ -32,5 +39,14 @@
         <argument
             android:name="id"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.corngrain.ui.main.search.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/search_to_detail"
+            app:destination="@id/movieDetail" />
     </fragment>
 </navigation>

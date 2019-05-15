@@ -6,12 +6,51 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="#041B2B">
-
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="0dp"
+    android:layout_height="?actionBarSize"
+    android:backgroundTint="@android:color/transparent"
+    android:elevation="12dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:id="@+id/search_card_container">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/cairo_bold"
+            android:id="@+id/movie_search_desc"
+            android:text="Type movie name you looking for"
+            android:padding="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:textColor="@android:color/white"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/movie_search_desc"
+            app:layout_constraintBottom_toBottomOf="@+id/movie_search_desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@null"
+            android:id="@+id/movie_search_img"
+            android:src="@drawable/ic_search"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
     <ScrollView
         android:id="@+id/view_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/search_card_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:tools="http://schemas.android.com/tools"
