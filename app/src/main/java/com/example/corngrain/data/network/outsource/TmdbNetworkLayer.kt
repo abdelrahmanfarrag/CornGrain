@@ -11,6 +11,8 @@ import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
+import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
+import com.example.corngrain.data.network.response.trending.Trending
 
 interface TmdbNetworkLayer {
     //PopularPersons Movies
@@ -95,4 +97,13 @@ interface TmdbNetworkLayer {
     val searchMovies: LiveData<MovieSearch>
 
     suspend fun getUserSearchedMovies(query: String, page: Int)
+
+    //trending
+    val trending: LiveData<Trending>
+
+    suspend fun getTrendingMovies()
+
+    val trendingSeries: LiveData<SeriesAndTvShows>
+
+    suspend fun getTrendingShows()
 }

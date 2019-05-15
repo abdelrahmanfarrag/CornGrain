@@ -14,6 +14,8 @@ import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
+import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
+import com.example.corngrain.data.network.response.trending.Trending
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
@@ -36,6 +38,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableVideo = MutableLiveData<Videos>()
     private val _mutableSimilar = MutableLiveData<Similar>()
     private val _mutableSearchedMovies = MutableLiveData<MovieSearch>()
+    private val _mutableTrendingMovies = MutableLiveData<Trending>()
+    private val _mutableTrendingShows = MutableLiveData<SeriesAndTvShows>()
 
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies
@@ -260,17 +264,49 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             Log.d("noConnection", "No network")
         }
     }
+
     override val searchMovies: LiveData<MovieSearch>
         get() = _mutableSearchedMovies
 
     override suspend fun getUserSearchedMovies(query: String, page: Int) {
         try {
-            val loadSeachMoviesJob = api.searchForaMovieAsync(query,page).await()
+            val loadSeachMoviesJob = api.searchForaMovieAsync(query, page).await()
             _mutableSearchedMovies.postValue(loadSeachMoviesJob)
         } catch (e: NoNetworkException) {
             Log.d("noConnection", "No network")
 
         }
     }
+
+    override val trending: LiveData<Trending>
+        get() = _mutableTrendingMovies
+
+    override suspend fun getTrendingMovies() {
+        try {
+            val loadTrendingJob = api.trendingMoviesAsync().await()
+            _mutableTrendingMovies.postValue(loadTrendingJob)
+
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
+    override val trendingSeries: LiveData<SeriesAndTvShows>
+        get() = _mutableTrendingShows
+
+
+    override suspend fun getTrendingShows() {
+        try {
+            val loadTrendingJob = api.trendingTvShowsAsync().await()
+            _mutableTrendingShows.postValue(loadTrendingJob)
+
+        } catch (e: NoNetworkException) {
+            Log.d("noConnection", "No network")
+
+        }
+
+    }
+
 
 }

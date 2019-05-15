@@ -22,12 +22,15 @@ import com.example.corngrain.data.repository.search.SearchRepository
 import com.example.corngrain.data.repository.search.SearchRepositoryImpl
 import com.example.corngrain.data.repository.series.SeriesRepository
 import com.example.corngrain.data.repository.series.SeriesRepositoryImpl
+import com.example.corngrain.data.repository.trending.TrendingRepository
+import com.example.corngrain.data.repository.trending.TrendingRepositoryImpl
 import com.example.corngrain.ui.main.movies.MovieViewModelFactory
 import com.example.corngrain.ui.main.movies.details.MovieDetailViewModelFactory
 import com.example.corngrain.ui.main.people.PeopleViewmodelFactory
 import com.example.corngrain.ui.main.search.SearchViewModel
 import com.example.corngrain.ui.main.search.SearchViewmodelFactory
 import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
+import com.example.corngrain.ui.main.trending.TrendingFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -85,10 +88,14 @@ class CornGrain : Application(), KodeinAware {
         bind<PersonsRepository>() with singleton {
             PersonsRepositoryImpl(instance<TmdbNetworkLayer>())
         }
+        bind<TrendingRepository>() with singleton {
+            TrendingRepositoryImpl(instance<TmdbNetworkLayer>())
+        }
         bind() from singleton { MovieViewModelFactory(instance<TmdbRepository>()) }
         bind() from singleton { SeriesViewmodelFactory(instance<SeriesRepository>()) }
         bind() from singleton { PeopleViewmodelFactory(instance<PersonsRepository>()) }
         bind() from singleton { SearchViewmodelFactory(instance<SearchRepository>()) }
+        bind() from singleton { TrendingFactory(instance<TrendingRepository>()) }
         bind() from factory { id: Int ->
             MovieDetailViewModelFactory(
                 id,

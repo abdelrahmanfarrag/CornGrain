@@ -12,6 +12,8 @@ import com.example.corngrain.data.network.response.people.PersonMovies
 import com.example.corngrain.data.network.response.people.PopularPersons
 import com.example.corngrain.data.network.response.search.MovieSearch
 import com.example.corngrain.data.network.response.series.*
+import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
+import com.example.corngrain.data.network.response.trending.Trending
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -56,6 +58,13 @@ const val PERSON_MOVIES = "person/{id}/combined_credits"
 
 //SEARCH APIS
 const val MOVIE_SEARCH = "search/movie"
+
+
+//TRENDING API
+const val TRENDING_MOVIE = "trending/movie/day"
+const val TRENDING_SERIES_TV_SHOWS ="trending/tv/day"
+const val TRENDING_SUPER_STARS="trending/tv/day"
+
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
 interface TmdbApi {
@@ -155,7 +164,15 @@ interface TmdbApi {
         @Query("query") query: String,
         @Query("page") page: Int
         , @Query("include_adult") adult: Boolean = false
-    ):Deferred<MovieSearch>
+    ): Deferred<MovieSearch>
+
+    @GET(TRENDING_MOVIE)
+    fun trendingMoviesAsync(
+    ): Deferred<Trending>
+
+    @GET(TRENDING_SERIES_TV_SHOWS)
+    fun trendingTvShowsAsync()
+    :Deferred<SeriesAndTvShows>
 
     companion object {
 

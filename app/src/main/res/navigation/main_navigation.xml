@@ -53,5 +53,9 @@
         android:id="@+id/trending_tab"
         android:name="com.example.corngrain.ui.main.trending.TrendingFragment"
         android:label="trending_fragment"
-        tools:layout="@layout/trending_fragment" />
+        tools:layout="@layout/trending_fragment" >
+        <action
+            android:id="@+id/trending_to_movie_detail"
+            app:destination="@id/movieDetail" />
+    </fragment>
 </navigation>

@@ -1,13 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.trending.TrendingFragment">
+    android:background="#041B2B">
 
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/views_container"
+        android:visibility="invisible">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.main.trending.TrendingFragment">
+
+            <TextView
+                android:id="@+id/trending_movies_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_trending"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="4dp"
+                android:text="Trending Movies"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/trending_movies"
+                layout="@layout/on_airtoday"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/trending_dividor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/trending_movies_txt"
+                app:layout_constraintTop_toBottomOf="@+id/trending_movies_txt" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/trending_dividor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent=".5" />
+
+            <TextView
+                android:id="@+id/trending_series_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_trending"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="4dp"
+                android:text="Trending TV shows &amp; Series"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@+id/trending_movies_txt"
+                app:layout_constraintTop_toBottomOf="@+id/trending_dividor"
+                app:layout_goneMarginTop="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trending_series_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/trending_series_txt"
+                app:layout_constraintTop_toBottomOf="@+id/trending_series_txt" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="progressBar_loading, textView_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progressBar_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:matProg_barColor="@android:color/white"
+            app:matProg_barWidth="4dp"
+            app:matProg_progressIndeterminate="true" />
+
+        <TextView
+            android:id="@+id/textView_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="Loading"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar_loading"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
