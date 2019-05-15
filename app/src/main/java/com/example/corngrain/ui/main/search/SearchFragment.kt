@@ -65,7 +65,9 @@ class SearchFragment : ScopedFragment(), KodeinAware {
     private fun bindSearchListUI(query: String, page: Int) = launch {
         if (query.isEmpty()) {
             more_search_movies.visibility = View.INVISIBLE
-            group_loading.visibility=View.VISIBLE
+            group_loading.visibility = View.VISIBLE
+            no_result.visibility=View.INVISIBLE
+            textView_loading.text = "Waiting for your type"
             search_list.adapter = null
         } else {
             val search = viewModel.getSearchedMoviesAsync(query, page)
@@ -77,34 +79,43 @@ class SearchFragment : ScopedFragment(), KodeinAware {
 
     private fun observeData(query: String, movieResult: LiveData<MovieSearch>) {
         movieResult.observe(this, Observer { result ->
-            if (result==null) return@Observer
-            group_loading.visibility=View.INVISIBLE
+            if (result == null) return@Observer
+            group_loading.visibility = View.INVISIBLE
             more_search_movies.visibility = View.VISIBLE
             var currentPage = result.page
             val totalPages = result.totalPages
             more_search_movies.setOnClickListener {
                 launch {
-                    Log.d("moreClicked", "$currentPage \n $totalPages")
-
                     if (currentPage < totalPages) {
                         currentPage += 1
                         viewModel.getSearchedMoviesAsync(query, currentPage)
                     }
                 }
             }
-            settingNormalRecyclerViewConfigs(
-                context!!,
-                result.results.toAdapterItems(),
-                search_list,
-                RecyclerView.VERTICAL
-            ).setOnItemClickListener { item, view ->
-                (item as SearchAdapter).let { adapter ->
-                    toDetailScreen(adapter.entries.id, view)
+            if (result.results.isEmpty()) {
+                Log.d("empty","Result isempty")
+                no_result.visibility = View.VISIBLE
+                group_loading.visibility=View.INVISIBLE
+                more_search_movies.visibility = View.INVISIBLE
+                search_list.visibility = View.INVISIBLE
+            } else {
+                no_result.visibility = View.INVISIBLE
+                more_search_movies.visibility = View.VISIBLE
+                search_list.visibility = View.VISIBLE
+                settingNormalRecyclerViewConfigs(
+                    context!!,
+                    result.results.toAdapterItems(),
+                    search_list,
+                    RecyclerView.VERTICAL
+                ).setOnItemClickListener { item, view ->
+                    (item as SearchAdapter).let { adapter ->
+                        toDetailScreen(adapter.entries.id, view)
+                    }
                 }
             }
 
+            })
 
-        })
     }
 
 
