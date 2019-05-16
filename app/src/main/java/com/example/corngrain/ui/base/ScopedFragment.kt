@@ -3,6 +3,7 @@ package com.example.corngrain.ui.base
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,6 +15,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.on_airtoday.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,10 +28,14 @@ import kotlin.coroutines.CoroutineContext
  * also have the common ui items setup such as viewPager auto rotate ,RecyclerView configs
  */
 abstract class ScopedFragment : Fragment(), CoroutineScope {
+
     private lateinit var job: Job
     private var isHandleStarted: Boolean = false
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        Log.d("coroutineException", "$exception handled !")
+    }
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+        get() = job + handler+Dispatchers.Main
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

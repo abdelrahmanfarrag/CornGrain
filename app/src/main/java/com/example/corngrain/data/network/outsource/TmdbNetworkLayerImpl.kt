@@ -48,7 +48,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val latestMoviesJob = api.getPopularMoviesAsync(page).await()
             _mutablePopularMovies.postValue(latestMoviesJob)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
         }
     }
@@ -60,9 +60,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val upcomingJob = api.getUpcomingMoviesAsync(page).await()
             _mutableUpcomingMoviesData.postValue(upcomingJob)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
-
         }
     }
 
@@ -73,9 +72,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val topRatedJob = api.getTopRatedMoviesAsync(page).await()
             _mutableTopRatedMoviesData.postValue(topRatedJob)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
-
         }
     }
 
@@ -86,10 +84,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val playingJob = api.getPlayingMoviesAsync(page).await()
             _mutablePlayingMoviesData.postValue(playingJob)
-
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
-
         }
     }
 
@@ -100,8 +96,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val onAirData = api.getTvOnAirTodayAsync().await()
             _mutableOnAirSeriesData.postValue(onAirData)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -112,8 +109,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val popularSeriesData = api.getTvPopularSeriesAsync().await()
             _mutablePopularSeriesData.postValue(popularSeriesData)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -124,7 +122,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val serieDetail = api.getSerieDetailAsync(id).await()
             _mutableSerieDetail.postValue(serieDetail)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -137,7 +135,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val topRatedSeries = api.getTopRatedSeriesAsync().await()
             _mutableTopRatedSeries.postValue(topRatedSeries)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -152,7 +150,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val inshowSeries = api.getCurrentlyShowingSeriesAsync().await()
             _mutableInshowSeries.postValue(inshowSeries)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -163,7 +161,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val popularPersons = api.getPopularPersonsAsync().await()
             _mutablePopularPersons.postValue(popularPersons)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -182,7 +180,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             _mutablePersonDetailData.postValue(detail)
 
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -210,7 +208,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val similar = api.getSimilarMoviesAsync(id).await()
             _mutableSimilar.postValue(similar)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -223,8 +221,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val videos = api.getMovieTrailersAsync(id).await()
             _mutableVideo.postValue(videos)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -235,8 +234,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val reviews = api.getReviewsAsync(id).await()
             _mutableReview.postValue(reviews)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -247,8 +247,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val cast = api.getMovieCastAsync(id).await()
             _mutableMovieCast.postValue(cast)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -260,8 +261,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val movieDetail = api.getDetailOfMovieAsync(id).await()
             _mutableMovieDetail.postValue(movieDetail)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
+
         }
     }
 
@@ -272,7 +274,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         try {
             val loadSeachMoviesJob = api.searchForaMovieAsync(query, page).await()
             _mutableSearchedMovies.postValue(loadSeachMoviesJob)
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -286,7 +288,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val loadTrendingJob = api.trendingMoviesAsync().await()
             _mutableTrendingMovies.postValue(loadTrendingJob)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }
@@ -301,7 +303,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
             val loadTrendingJob = api.trendingTvShowsAsync().await()
             _mutableTrendingShows.postValue(loadTrendingJob)
 
-        } catch (e: NoNetworkException) {
+        } catch (e: Throwable) {
             Log.d("noConnection", "No network")
 
         }

@@ -2,9 +2,7 @@ package com.example.corngrain
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Movie
 import com.example.corngrain.data.db.TmdbLocalDb
-import com.example.corngrain.data.db.dao.movies.TopRatedDao
 import com.example.corngrain.data.db.dao.series.OnAirDao
 import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.network.api.TmdbApi
@@ -27,7 +25,6 @@ import com.example.corngrain.data.repository.trending.TrendingRepositoryImpl
 import com.example.corngrain.ui.main.movies.MovieViewModelFactory
 import com.example.corngrain.ui.main.movies.details.MovieDetailViewModelFactory
 import com.example.corngrain.ui.main.people.PeopleViewmodelFactory
-import com.example.corngrain.ui.main.search.SearchViewModel
 import com.example.corngrain.ui.main.search.SearchViewmodelFactory
 import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
 import com.example.corngrain.ui.main.trending.TrendingFactory
@@ -35,7 +32,6 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.*
-import kotlin.math.sin
 
 //Adding all dependencies here through Kodein block
 //make app class implement KodeinAware to make the entire app know that u r using DI to provide dependencies
