@@ -2,19 +2,12 @@ package com.example.corngrain.ui.main.movies.details
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Movie
-import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
@@ -22,11 +15,9 @@ import com.example.corngrain.data.network.response.Detail
 import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
-import com.example.corngrain.data.network.response.movies.MovieCredits
-import com.example.corngrain.data.network.response.series.SerieDetail
+import com.example.corngrain.data.network.response.Credits
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
-import com.example.corngrain.ui.main.movies.adapters.TopRatedAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.SimilarAdapter
@@ -41,7 +32,6 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.factory
 import java.lang.StringBuilder
 import java.text.DecimalFormat
-import kotlin.math.sin
 
 class MovieDetail : ScopedFragment(), KodeinAware {
     override val kodein: Kodein by closestKodein()
@@ -233,7 +223,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         }
     }
 
-    private fun List<MovieCredits.Cast>.toCastAdapter(): List<CastAdapter> {
+    private fun List<Credits.Cast>.toCastAdapter(): List<CastAdapter> {
         return this.map { item ->
             CastAdapter(item)
         }

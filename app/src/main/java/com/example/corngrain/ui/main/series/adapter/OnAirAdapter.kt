@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.navigation.Navigation
 import androidx.viewpager.widget.PagerAdapter
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.series.SerieCurrentlyShowing
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
+import com.example.corngrain.ui.main.series.SeriesDirections
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.item_inshow_serie.view.*
 
@@ -21,6 +23,10 @@ class OnAirAdapter(private val entries: List<SerieCurrentlyShowing.Result>) : Pa
         val inflater: LayoutInflater =
             container.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val item = inflater.inflate(R.layout.item_inshow_serie, container, false)
+
+        item.setOnClickListener { view ->
+            toSerieDetailScreen(entries[position].id, view)
+        }
 
 
         val img = item.findViewById<ImageView>(R.id.in_show_img)
@@ -47,6 +53,10 @@ class OnAirAdapter(private val entries: List<SerieCurrentlyShowing.Result>) : Pa
         container.removeView(container)
     }
 
-    override fun getCount(): Int = entries!!.size
 
+    override fun getCount(): Int = entries.size
+    private fun toSerieDetailScreen(id: Int, view: View) {
+        val action = SeriesDirections.serieDetailAction(id)
+        Navigation.findNavController(view).navigate(action)
+    }
 }

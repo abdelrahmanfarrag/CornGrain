@@ -114,6 +114,8 @@ dependencies {
 
     implementation "com.jakewharton.rxbinding2:rxbinding:2.1.1"
     implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0"
+    implementation 'jp.wasabeef:blurry:3.0.0'
+
 
 
     testImplementation 'junit:junit:4.12'

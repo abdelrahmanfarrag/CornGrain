@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.corngrain.data.network.api.TmdbApi
-import com.example.corngrain.data.network.response.Detail
-import com.example.corngrain.data.network.response.Reviews
-import com.example.corngrain.data.network.response.Similar
-import com.example.corngrain.data.network.response.Videos
+import com.example.corngrain.data.network.response.*
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -19,6 +16,7 @@ import com.example.corngrain.data.network.response.trending.Trending
 import com.example.corngrain.utilities.NoNetworkException
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
+
 
     private val _mutablePopularMovies = MutableLiveData<PopularMovies>()
     private val _mutableUpcomingMoviesData = MutableLiveData<UpcomingMovies>()
@@ -33,14 +31,14 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutablePersonDetailData = MutableLiveData<PersonDetail>()
     private val _mutablePersonMoviesData = MutableLiveData<PersonMovies>()
     private val _mutableMovieDetail = MutableLiveData<Detail>()
-    private val _mutableMovieCast = MutableLiveData<MovieCredits>()
+    private val _mutableMovieCast = MutableLiveData<Credits>()
     private val _mutableReview = MutableLiveData<Reviews>()
     private val _mutableVideo = MutableLiveData<Videos>()
     private val _mutableSimilar = MutableLiveData<Similar>()
     private val _mutableSearchedMovies = MutableLiveData<MovieSearch>()
     private val _mutableTrendingMovies = MutableLiveData<Trending>()
     private val _mutableTrendingShows = MutableLiveData<SeriesAndTvShows>()
-
+    private val _mutableSerieCrdit = MutableLiveData<Credits>()
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies
 
@@ -240,7 +238,8 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
         }
     }
 
-    override val movieCast: LiveData<MovieCredits>
+
+    override val cast: LiveData<Credits>
         get() = _mutableMovieCast
 
     override suspend fun loadMovieCast(id: Int) {
@@ -308,6 +307,20 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
         }
 
+    }
+
+    override val serieCredits: LiveData<Credits>
+        get() = _mutableSerieCrdit
+
+    override suspend fun loadSerieCredits(id: Int) {
+        try {
+            val loadSerieCast = api.getSerieCast(id).await()
+            _mutableSerieCrdit.postValue(loadSerieCast)
+
+        } catch (e: Throwable) {
+            Log.d("noConnection", "No network")
+
+        }
     }
 
 

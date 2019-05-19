@@ -1,14 +1,7 @@
 package com.example.corngrain.data.repository.movies
 
 import androidx.lifecycle.LiveData
-import com.example.corngrain.data.db.entity.movies.PlayingEntity
-import com.example.corngrain.data.db.entity.movies.PopularEntity
-import com.example.corngrain.data.db.entity.movies.TopRatedEntity
-import com.example.corngrain.data.db.entity.movies.UpcomingEntity
-import com.example.corngrain.data.network.response.Detail
-import com.example.corngrain.data.network.response.Reviews
-import com.example.corngrain.data.network.response.Similar
-import com.example.corngrain.data.network.response.Videos
+import com.example.corngrain.data.network.response.*
 import com.example.corngrain.data.network.response.movies.*
 
 interface TmdbRepository {
@@ -23,7 +16,7 @@ interface TmdbRepository {
 
     suspend fun getDetailedMovie(id:Int):LiveData<Detail>
 
-    suspend fun getMovieCast(id:Int):LiveData<MovieCredits>
+    suspend fun getMovieCast(id:Int):LiveData<Credits>
 
     suspend fun getReviews(id:Int):LiveData<Reviews>
 

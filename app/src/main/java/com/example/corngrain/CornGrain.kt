@@ -41,6 +41,7 @@ import org.kodein.di.generic.*
 //make app class implement KodeinAware to make the entire app know that u r using DI to provide dependencies
 
 const val CHANNEL_ID = "movie_channel"
+const val CHANNEL_LOCAL_ID = "local_channel"
 
 
 @Suppress("unused", "RemoveExplicitTypeArguments")
@@ -111,6 +112,8 @@ class CornGrain : Application(), KodeinAware {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        createLocalNotificationChannel()
+
     }
 
     private fun createNotificationChannel() {
@@ -121,6 +124,18 @@ class CornGrain : Application(), KodeinAware {
                 NotificationManager.IMPORTANCE_HIGH
             )
             channel.description = "it receives movies notification on this channel"
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
+    }
+    private fun createLocalNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_LOCAL_ID,
+                "Recommendation Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description = "It recommend you with some of great movies and TV series"
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
         }

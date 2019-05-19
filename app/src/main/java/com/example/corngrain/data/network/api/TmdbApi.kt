@@ -2,10 +2,7 @@ package com.example.corngrain.data.network.api
 
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
-import com.example.corngrain.data.network.response.Detail
-import com.example.corngrain.data.network.response.Reviews
-import com.example.corngrain.data.network.response.Similar
-import com.example.corngrain.data.network.response.Videos
+import com.example.corngrain.data.network.response.*
 import com.example.corngrain.data.network.response.movies.*
 import com.example.corngrain.data.network.response.people.PersonDetail
 import com.example.corngrain.data.network.response.people.PersonMovies
@@ -49,6 +46,8 @@ const val ONAIR_TODAY = "tv/airing_today"
 const val POPULAR_SERIES = "tv/popular"
 const val TOP_RATED_SERIES = "tv/top_rated"
 const val CURRENTLY_SHOWING = "tv/on_the_air"
+const val SERIE_CAST = "tv/{id}/credits"
+
 const val SERIE_DETAIL = "tv/{id}"
 
 //ENDPOINTS => For Persons
@@ -142,7 +141,7 @@ interface TmdbApi {
     @GET(MOVIE_CAST)
     fun getMovieCastAsync(
         @Path("id") movieId: Int
-    ): Deferred<MovieCredits>
+    ): Deferred<Credits>
 
     @GET(REVIEWS)
     fun getReviewsAsync(
@@ -173,6 +172,8 @@ interface TmdbApi {
     @GET(TRENDING_SERIES_TV_SHOWS)
     fun trendingTvShowsAsync()
     :Deferred<SeriesAndTvShows>
+    @GET(SERIE_CAST)
+    fun getSerieCast(@Path("id") id:Int):Deferred<Credits>
 
     companion object {
 

@@ -1,8 +1,8 @@
-package com.example.corngrain.data.network.response.movies
+package com.example.corngrain.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieCredits(
+data class Credits(
     @SerializedName("cast")
     val cast: List<Cast>,
     @SerializedName("crew")

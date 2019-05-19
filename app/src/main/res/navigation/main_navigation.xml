@@ -25,7 +25,11 @@
         android:id="@+id/series_tab"
         android:name="com.example.corngrain.ui.main.series.Series"
         android:label="series_fragment"
-        tools:layout="@layout/series_fragment" />
+        tools:layout="@layout/series_fragment" >
+        <action
+            android:id="@+id/serie_detail_action"
+            app:destination="@id/serieDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/people_tab"
         android:name="com.example.corngrain.ui.main.people.People"
@@ -57,5 +61,14 @@
         <action
             android:id="@+id/trending_to_movie_detail"
             app:destination="@id/movieDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/serieDetailFragment"
+        android:name="com.example.corngrain.ui.main.series.detail.SerieDetailFragment"
+        android:label="serie_detail_fragment"
+        tools:layout="@layout/serie_detail_fragment" >
+        <argument
+            android:name="serieId"
+            app:argType="integer" />
     </fragment>
 </navigation>

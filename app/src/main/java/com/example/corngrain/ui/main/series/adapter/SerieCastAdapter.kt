@@ -1,6 +1,5 @@
-package com.example.corngrain.ui.main.movies.details.adapter
+package com.example.corngrain.ui.main.series.adapter
 
-import android.annotation.SuppressLint
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Credits
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
@@ -9,8 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_cast.*
 
-class CastAdapter(private val entries: Credits.Cast) : Item() {
-    @SuppressLint("SetTextI18n")
+class SerieCastAdapter(val entries:Credits.Cast):Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
             setImage()
@@ -32,4 +30,5 @@ class CastAdapter(private val entries: Credits.Cast) : Item() {
             .placeholder(R.drawable.ic_placeholder)
             .into(cast_img)
     }
+
 }

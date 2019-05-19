@@ -10,10 +10,7 @@ import com.example.corngrain.data.db.entity.movies.PopularEntity
 import com.example.corngrain.data.db.entity.movies.TopRatedEntity
 import com.example.corngrain.data.db.entity.movies.UpcomingEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
-import com.example.corngrain.data.network.response.Detail
-import com.example.corngrain.data.network.response.Reviews
-import com.example.corngrain.data.network.response.Similar
-import com.example.corngrain.data.network.response.Videos
+import com.example.corngrain.data.network.response.*
 import com.example.corngrain.data.network.response.movies.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -49,10 +46,10 @@ class TmdbRepositoryImpl(
         }
     }
 
-    override suspend fun getMovieCast(id: Int): LiveData<MovieCredits> {
+    override suspend fun getMovieCast(id: Int): LiveData<Credits> {
         return withContext(Dispatchers.IO) {
             networkSource.loadMovieCast(id)
-            return@withContext networkSource.movieCast
+            return@withContext networkSource.cast
         }
     }
 
