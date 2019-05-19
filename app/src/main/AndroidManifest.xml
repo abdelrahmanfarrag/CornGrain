@@ -23,8 +23,10 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+
             </intent-filter>
         </service>
+        <receiver android:name=".data.fcm.NotificationRecevier" />
 
         <activity
             android:name=".ui.main.youtube.YoutubeActivity"
@@ -40,6 +42,10 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_fire" />
+
     </application>
 
 </manifest>

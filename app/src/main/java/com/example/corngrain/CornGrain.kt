@@ -1,7 +1,11 @@
 package com.example.corngrain
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
+import androidx.core.content.getSystemService
 import com.example.corngrain.data.db.TmdbLocalDb
 import com.example.corngrain.data.db.dao.series.OnAirDao
 import com.example.corngrain.data.db.dao.series.PopularSerieDao
@@ -35,6 +39,9 @@ import org.kodein.di.generic.*
 
 //Adding all dependencies here through Kodein block
 //make app class implement KodeinAware to make the entire app know that u r using DI to provide dependencies
+
+const val CHANNEL_ID = "movie_channel"
+
 
 @Suppress("unused", "RemoveExplicitTypeArguments")
 class CornGrain : Application(), KodeinAware {
@@ -97,6 +104,25 @@ class CornGrain : Application(), KodeinAware {
                 id,
                 instance<TmdbRepository>()
             )
+        }
+    }
+
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "THIS IS MOVIE CHANNEL",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description = "it receives movies notification on this channel"
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
         }
     }
 
