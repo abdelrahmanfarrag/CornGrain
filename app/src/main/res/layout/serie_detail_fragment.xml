@@ -48,9 +48,13 @@
         app:layout_constraintVertical_bias="0.0" />
 
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detail_series_view"
         android:layout_width="match_parent"
@@ -61,26 +65,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/serie_detail_dividor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".15" />
 
         <ImageView
             android:id="@+id/serie_detail_backdrop"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="220dp"
             android:alpha=".4"
             android:contentDescription="@null"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/serie_detail_dividor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+/>
 
         <ImageView
             android:id="@+id/serie_detail_poster"
@@ -234,5 +230,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
