@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
@@ -50,36 +52,39 @@ class Series : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
-        retainInstance = true// <--------- the fragment retain his configuration
         bindUI()
         bindUI2()
     }
 
     private fun bindUI() = launch {
         val job = viewModel.fetchSeries.await()
-        job.observeForever { onAirJob ->
+        job.observe(this@Series, Observer { onAirJob ->
             val pagerAdapter = OnAirTodayAdapter(onAirJob)
-            if (today_series_pager != null) {
-                today_series_pager.adapter = pagerAdapter
-            }
+            today_series_pager.adapter = pagerAdapter
             movieId = onAirJob.results[generateRandomizedNumber()].id
             autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
-        }
+
+        })
 
         val popularSeries = viewModel.fetchPopularSeries.await()
-        if (first_item_img != null)
-            GlideApp.with(context!!)
-                .load(BASE_IMG_URL + popularSeries[0].posterPath)
-                .into(first_item_img)
+        GlideApp.with(context!!)
+            .load(BASE_IMG_URL + popularSeries[0].posterPath)
+            .into(first_item_img)
+        first_item_img.setOnClickListener {
+            toSerieDetailScreen(popularSeries[0].id, it)
+        }
         popularSeries.removeAt(0)
-        (popular_serie_list != null)
         settingNormalRecyclerViewConfigs(
             this@Series.context,
             popularSeries.toAdapterItems(),
             popular_serie_list,
             RecyclerView.HORIZONTAL,
             true
-        )
+        ).setOnItemClickListener { item, view ->
+            (item as PopularSerieAdapter).let {
+                toSerieDetailScreen(it.entry.id, view)
+            }
+        }
 
 
         val randomSerieDetail = viewModel.fetchDetails(movieId)
@@ -87,28 +92,30 @@ class Series : ScopedFragment(), KodeinAware {
 
         val topRatedSeries = viewModel.fetchTopRatedSeries.await()
 
-        topRatedSeries.observeForever {
-            if (rated_seasons_list != null)
-                settingNormalRecyclerViewConfigs(
-                    this@Series.context!!,
-                    it.results.toRatedSeriesItems(),
-                    rated_seasons_list,
-                    RecyclerView.HORIZONTAL
-                )
-        }
+        topRatedSeries.observe(this@Series, Observer {
+            settingNormalRecyclerViewConfigs(
+                this@Series.context!!,
+                it.results.toRatedSeriesItems(),
+                rated_seasons_list,
+                RecyclerView.HORIZONTAL
+            ).setOnItemClickListener { item, view ->
+                (item as RatedSeriesAdapter).let {
+                    toSerieDetailScreen(it.entry.id, view)
+                }
+            }
+        })
 
     }
 
     private fun bindUI2() = launch(Dispatchers.Main) {
         val inshowSeries = viewModel.fetchInViewSeries.await()
-        inshowSeries.observeForever { data ->
+        inshowSeries.observe(this@Series, Observer { data ->
             val onAirPagerAdapter = OnAirAdapter(data.results)
-            if (on_air_series_pager != null)
-                on_air_series_pager.adapter = onAirPagerAdapter
-            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size,7000)
+            on_air_series_pager.adapter = onAirPagerAdapter
+            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size, 7000)
 
 
-        }
+        })
     }
 
 
@@ -126,32 +133,25 @@ class Series : ScopedFragment(), KodeinAware {
 
     @SuppressLint("SetTextI18n")
     private fun detailCardUI(data: LiveData<SerieDetail>) {
-        data.observeForever {
+        data.observe(this, Observer {
             serie_detail_title?.text = it.originalName
             serie_detail_overview?.text = it.overview
             serie_detail_rating?.text = "Rating \n ${it.voteAverage}"
             serie_detail_episodes?.text = "Episodes \n ${it.numberOfEpisodes}"
             serie_detail_seasons?.text = "Seasons \n ${it.numberOfSeasons}"
             season_genres?.text = setGenres(it.genres).toString()
-            //initSeasonsRecycler(it.seasons.toSeasonDetail())
             settingNormalRecyclerViewConfigs(
                 this.context, it.seasons.toSeasonDetail(), seasons_list, RecyclerView
                     .HORIZONTAL
             )
-
-        }
-
-        if (serie_detail_poster != null)
             GlideApp.with(this.context!!)
                 .load(BASE_IMG_URL + data.value?.posterPath)
                 .placeholder(R.drawable.ic_placeholder)
                 .into(serie_detail_poster)
-        if (serie_detail_backdrop != null)
             GlideApp.with(this.context!!)
                 .load(BASE_IMG_URL + data.value?.backdropPath)
                 .placeholder(R.drawable.ic_placeholder)
                 .into(serie_detail_backdrop)
-        if (seasons_info != null)
             seasons_info.setOnClickListener {
                 val uri = Uri.parse(data.value?.homepage)
                 val intents = Intent(Intent.ACTION_VIEW, uri)
@@ -160,8 +160,9 @@ class Series : ScopedFragment(), KodeinAware {
                 intents.putExtras(b)
                 context?.startActivity(intents)
 
-
             }
+        })
+
 
     }
 
@@ -186,5 +187,9 @@ class Series : ScopedFragment(), KodeinAware {
         }
     }
 
+    private fun toSerieDetailScreen(id: Int, view: View) {
+        val action = SeriesDirections.serieDetailAction(id)
+        Navigation.findNavController(view).navigate(action)
+    }
 
 }

@@ -13,10 +13,20 @@ class NotificationRecevier : BroadcastReceiver() {
         Toast.makeText(context, receivedOpenAt, Toast.LENGTH_SHORT).show()
 
         if (receivedAlarm != null) {
+            val pref =
+                context?.getSharedPreferences("local_notification_data", Context.MODE_PRIVATE)
+            val notificationTitle = pref?.getString("title", "No data")
+            val notificationContent = pref?.getString("content", "No Data")
             val alarmNotificationHelper = AlarmNotificationHelper(context!!)
-            val notificationCompat =
-                alarmNotificationHelper.buildNotification("Hello", "Alarm is working fine")
-            alarmNotificationHelper.getNotificationManager().notify(1, notificationCompat.build())
+            if (notificationContent != null && notificationTitle != null) {
+                val notificationCompat =
+                    alarmNotificationHelper.buildNotification(
+                        notificationTitle,
+                        notificationContent
+                    )
+                alarmNotificationHelper.getNotificationManager()
+                    .notify(1, notificationCompat.build())
+            }
         }
     }
 }

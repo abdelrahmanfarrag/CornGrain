@@ -33,6 +33,7 @@ class AlarmNotificationHelper(private val contextBase: Context) : ContextWrapper
             .setContentTitle(title)
             .setContentIntent(pendingActionReceiver)
             .setContentText(content)
+            .setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_fire)
     }
 }

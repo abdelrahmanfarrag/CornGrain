@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
@@ -67,8 +68,13 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
                 context!!,
                 result.results.toAdapterItems(),
                 trending_series_list,
-                RecyclerView.HORIZONTAL
-            )
+                RecyclerView.VERTICAL, true
+                , 2
+            ).setOnItemClickListener { item, view ->
+                (item as TrendingSeriesAdapter).let {
+                    toDetailsScreen(it.entries.id, view)
+                }
+            }
 
         })
 
@@ -83,6 +89,11 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
     private fun bindSuperStarsUI() = launch {
 
 
+    }
+
+    private fun toDetailsScreen(id: Int, viewClicked: View) {
+        val action = TrendingFragmentDirections.trendingSeriesAction(id)
+        Navigation.findNavController(viewClicked).navigate(action)
     }
 
 }

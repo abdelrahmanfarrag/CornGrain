@@ -8,7 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.rated_season_item.*
 
-class RatedSeriesAdapter(private val entry: TopRatedSeries.Result) : Item() {
+class RatedSeriesAdapter( val entry: TopRatedSeries.Result) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
             rating.rating = entry.voteAverage.toFloat()/2.0f

@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDailyNotification() {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 14)
-        calendar.set(Calendar.MINUTE, 55)
+        calendar.set(Calendar.HOUR_OF_DAY, 21)
+        calendar.set(Calendar.MINUTE, 30)
         calendar.set(Calendar.SECOND, 0)
         setupAlarmManager(calendar)
     }

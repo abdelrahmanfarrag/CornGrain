@@ -9,7 +9,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_popular_serie.*
 
-class PopularSerieAdapter(private val entry: PopularSeriesEntity) : Item() {
+class PopularSerieAdapter( val entry: PopularSeriesEntity) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
             setPopularSerieImage()

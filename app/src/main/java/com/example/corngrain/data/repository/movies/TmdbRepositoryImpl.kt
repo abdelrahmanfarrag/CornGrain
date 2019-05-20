@@ -125,12 +125,5 @@ class TmdbRepositoryImpl(
         networkSource.loadUpcomingMovies(page)
     }
 
-    private suspend fun getTopRatedMoviesFromNetworkCall() {
-   //     networkSource.loadTopRatedMovies()
-    }
-
-    private suspend fun getNowPlayingMoviesFromNetworkCall() {
-        //networkSource.loadPlayingMovies()
-    }
 
 }

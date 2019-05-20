@@ -1,6 +1,7 @@
 package com.example.corngrain.ui.main.movies
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -182,36 +183,33 @@ class Movies : ScopedFragment(), KodeinAware {
     @SuppressLint("SetTextI18n")
     private fun buildingTopRatedMoviesUI(topRatedData: LiveData<TopRatedMovies>) {
         topRatedData.observe(this, Observer { data ->
-
-            if (rated_movies_first_item != null)
-                GlideApp.with(this.context!!)
-                    .load(BASE_IMG_URL + data.results[0].backdropPath)
-                    .into(rated_movies_first_item)
+            val generatedNumber = generateRandomizedNumber()
+            GlideApp.with(this.context!!)
+                .load(BASE_IMG_URL + data.results[generatedNumber].backdropPath)
+                .into(rated_movies_first_item)
             rated_movies_first_item.setOnClickListener {
-                toDetailScreen(data.results[0].id, it)
+                toDetailScreen(data.results[generatedNumber].id, it)
             }
-            if (rated_movies_first_item_title != null)
-                rated_movies_first_item_title.text = data.results[0].title
+            rated_movies_first_item_title.text = data.results[generatedNumber].title
             rated_movies_first_item_overview.setOnClickListener {
-                toDetailScreen(data.results[0].id, it)
+                toDetailScreen(data.results[generatedNumber].id, it)
             }
 
 
-            if (rated_first_movie_bar != null)
-                rated_first_movie_bar.rating = data.results[0].voteAverage.toFloat() / 2f
-            if (rated_movies_first_item_overview != null)
-                rated_movies_first_item_overview.text = data.results[0].overview
-            if (movies_rated_list != null)
-                settingNormalRecyclerViewConfigs(
-                    this.context!!,
-                    data.results.toTopRatedMoviesAdapterItems(),
-                    movies_rated_list,
-                    RecyclerView.HORIZONTAL
-                ).setOnItemClickListener { item, view ->
-                    (item as TopRatedAdapter).let { singleItem ->
-                        toDetailScreen(singleItem.entry.id, view)
-                    }
+            rated_first_movie_bar.rating = data.results[generatedNumber].voteAverage.toFloat() / 2f
+            rated_movies_first_item_overview.text = data.results[generatedNumber].overview
+            val mutableList = data.results.toMutableList()
+            mutableList.removeAt(generatedNumber)
+            settingNormalRecyclerViewConfigs(
+                this.context!!,
+                mutableList.toTopRatedMoviesAdapterItems(),
+                movies_rated_list,
+                RecyclerView.HORIZONTAL
+            ).setOnItemClickListener { item, view ->
+                (item as TopRatedAdapter).let { singleItem ->
+                    toDetailScreen(singleItem.entry.id, view)
                 }
+            }
             var currentPage = data.page
             if (currentPage < data.totalPages) {
                 currentPage += 1
@@ -221,9 +219,23 @@ class Movies : ScopedFragment(), KodeinAware {
                     }
                 }
             }
-
+            val position = generateRandomizedNumber()
+            val title = data.results[position].title
+            val content = data.results[position].overview
+            settingSharedData(title, content)
         })
 
+    }
+
+    private fun settingSharedData(title: String, content: String) {
+        val preferences = context?.getSharedPreferences(
+            "local_notification_data",
+            Context.MODE_PRIVATE
+        )
+        val editor = preferences?.edit()
+        editor?.putString("title", title)
+        editor?.putString("content", content)
+        editor?.apply()
     }
 
     private fun toDetailScreen(id: Int, viewClicked: View) {

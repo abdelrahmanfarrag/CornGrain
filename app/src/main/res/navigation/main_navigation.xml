@@ -61,6 +61,9 @@
         <action
             android:id="@+id/trending_to_movie_detail"
             app:destination="@id/movieDetail" />
+        <action
+            android:id="@+id/trending_series_action"
+            app:destination="@id/serieDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/serieDetailFragment"
