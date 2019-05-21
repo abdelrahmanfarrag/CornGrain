@@ -80,6 +80,9 @@ interface TmdbNetworkLayer {
     val serieCredits:LiveData<Credits>
     suspend fun loadSerieCredits(id:Int)
 
+    val serieReviews:LiveData<Videos>
+    suspend fun loadSerieReviews(id:Int)
+
 
     //PERSONS
     val popularPersons: LiveData<PopularPersons>

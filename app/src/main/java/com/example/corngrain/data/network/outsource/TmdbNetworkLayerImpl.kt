@@ -39,6 +39,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     private val _mutableTrendingMovies = MutableLiveData<Trending>()
     private val _mutableTrendingShows = MutableLiveData<SeriesAndTvShows>()
     private val _mutableSerieCrdit = MutableLiveData<Credits>()
+    private val _mutableSerieReviews = MutableLiveData<Videos>()
+
+
     override val popularMovies: LiveData<PopularMovies>
         get() = _mutablePopularMovies
 
@@ -314,7 +317,7 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
     override suspend fun loadSerieCredits(id: Int) {
         try {
-            val loadSerieCast = api.getSerieCast(id).await()
+            val loadSerieCast = api.getSerieCastAsync(id).await()
             _mutableSerieCrdit.postValue(loadSerieCast)
 
         } catch (e: Throwable) {
@@ -322,6 +325,20 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
         }
     }
+    override val serieReviews: LiveData<Videos>
+        get() =_mutableSerieReviews
+
+    override suspend fun loadSerieReviews(id: Int) {
+        try {
+            val loadSerieCast = api.getSerieReviewsAsync(id).await()
+            _mutableSerieReviews.postValue(loadSerieCast)
+
+        } catch (e: Throwable) {
+            Log.d("noConnection", "No network")
+
+        }
+    }
+
 
 
 }

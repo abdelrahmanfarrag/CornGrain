@@ -7,6 +7,8 @@ import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.response.Credits
+import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.series.OnAirToday
 import com.example.corngrain.data.network.response.series.SerieCurrentlyShowing
 import com.example.corngrain.data.network.response.series.SerieDetail
@@ -21,11 +23,19 @@ class SeriesRepositoryImpl(
     private val onAirDao: OnAirDao,
     private val popularSerieDao: PopularSerieDao
 ) : SeriesRepository {
+    override suspend fun getSerieReviews(id: Int): LiveData<Videos> {
+        return withContext(Dispatchers.IO) {
+            networkOutSource.loadSerieReviews(id)
+            return@withContext networkOutSource.serieReviews
+        }
+    }
+
     override suspend fun getSerieCast(id: Int): LiveData<Credits> {
         return withContext(Dispatchers.IO) {
             networkOutSource.loadSerieCredits(id)
             return@withContext networkOutSource.serieCredits
-        }    }
+        }
+    }
 
     init {
 /*

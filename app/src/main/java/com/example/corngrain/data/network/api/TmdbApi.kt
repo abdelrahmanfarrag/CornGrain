@@ -47,7 +47,7 @@ const val POPULAR_SERIES = "tv/popular"
 const val TOP_RATED_SERIES = "tv/top_rated"
 const val CURRENTLY_SHOWING = "tv/on_the_air"
 const val SERIE_CAST = "tv/{id}/credits"
-
+const val TV_REVIEWS = "tv/{id}/videos"
 const val SERIE_DETAIL = "tv/{id}"
 
 //ENDPOINTS => For Persons
@@ -61,8 +61,8 @@ const val MOVIE_SEARCH = "search/movie"
 
 //TRENDING API
 const val TRENDING_MOVIE = "trending/movie/day"
-const val TRENDING_SERIES_TV_SHOWS ="trending/tv/day"
-const val TRENDING_SUPER_STARS="trending/tv/day"
+const val TRENDING_SERIES_TV_SHOWS = "trending/tv/day"
+const val TRENDING_SUPER_STARS = "trending/tv/day"
 
 //LatestMovies =>https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
 
@@ -171,9 +171,16 @@ interface TmdbApi {
 
     @GET(TRENDING_SERIES_TV_SHOWS)
     fun trendingTvShowsAsync()
-    :Deferred<SeriesAndTvShows>
+            : Deferred<SeriesAndTvShows>
+
     @GET(SERIE_CAST)
-    fun getSerieCast(@Path("id") id:Int):Deferred<Credits>
+    fun getSerieCastAsync(@Path("id") id: Int)
+            : Deferred<Credits>
+
+    @GET(TV_REVIEWS)
+    fun getSerieReviewsAsync(@Path("id") id: Int)
+            : Deferred<Videos>
+
 
     companion object {
 

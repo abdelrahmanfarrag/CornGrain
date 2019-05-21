@@ -1,25 +1,32 @@
 package com.example.corngrain.ui.main.series.detail
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Credits
+import com.example.corngrain.data.network.response.Reviews
+import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
+import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
 import com.example.corngrain.ui.main.series.SeriesViewModel
 import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
 import com.example.corngrain.ui.main.series.adapter.SerieCastAdapter
 import com.example.corngrain.ui.main.series.adapter.SerieSeasonsAdapter
+import com.example.corngrain.ui.main.youtube.YoutubeActivity
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.serie_detail_fragment.*
 import kotlinx.coroutines.launch
@@ -61,8 +68,28 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
                 viewModel.fetchCredits(id).observe(this@SerieDetailFragment, Observer { credit ->
                     buildCastUi(credit)
                 })
+                viewModel.fetchReviews(id).observe(this@SerieDetailFragment, Observer { reviews ->
+                    buildReviewsUI(reviews)
+                })
 
             }
+    }
+
+    private fun buildReviewsUI(videos: Videos) {
+        settingNormalRecyclerViewConfigs(
+            this.context!!,
+            videos.results.toTrailerAdapter(),
+            serie_detail_videos_list,
+            RecyclerView.VERTICAL,
+            true
+        ).setOnItemClickListener { item, view ->
+            (item as TrailersAdapter).let { singleItem ->
+                val intent = Intent(context!!, YoutubeActivity::class.java)
+                intent.putExtra("key", singleItem.entry.key)
+                startActivity(intent)
+            }
+
+        }
     }
 
     private fun buildDetailUI(detail: SerieDetail) {
@@ -113,5 +140,9 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
         }
     }
 
-
+    private fun List<Videos.Result>.toTrailerAdapter(): List<TrailersAdapter> {
+        return this.map { item ->
+            TrailersAdapter(item)
+        }
+    }
 }
