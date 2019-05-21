@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
 import kotlinx.android.synthetic.main.rated_seasons.*
 import kotlinx.android.synthetic.main.serie_detail_card.*
+import kotlinx.android.synthetic.main.series_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -59,6 +60,9 @@ class Series : ScopedFragment(), KodeinAware {
     private fun bindUI() = launch {
         val job = viewModel.fetchSeries.await()
         job.observe(this@Series, Observer { onAirJob ->
+            if (onAirJob == null) return@Observer
+            serie_group_loading.visibility = View.INVISIBLE
+            serie_view_items.visibility = View.VISIBLE
             val pagerAdapter = OnAirTodayAdapter(onAirJob)
             today_series_pager.adapter = pagerAdapter
             movieId = onAirJob.results[generateRandomizedNumber()].id
