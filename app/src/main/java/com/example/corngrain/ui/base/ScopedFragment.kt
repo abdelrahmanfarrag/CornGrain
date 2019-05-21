@@ -31,6 +31,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
 
     private lateinit var job: Job
     private var isHandleStarted: Boolean = false
+    var currentPage = 0
     private val handler = CoroutineExceptionHandler { _, exception ->
         Log.d("coroutineException", "$exception handled !")
     }
@@ -50,7 +51,6 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
         items: Int,
         duration: Long = 3000
     ) {
-        var currentPage = 0
         if (viewPager != null && dots_layout != null) {
             viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {

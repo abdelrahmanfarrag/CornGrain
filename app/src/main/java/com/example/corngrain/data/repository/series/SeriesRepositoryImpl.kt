@@ -9,10 +9,7 @@ import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.response.Credits
 import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.Videos
-import com.example.corngrain.data.network.response.series.OnAirToday
-import com.example.corngrain.data.network.response.series.SerieCurrentlyShowing
-import com.example.corngrain.data.network.response.series.SerieDetail
-import com.example.corngrain.data.network.response.series.TopRatedSeries
+import com.example.corngrain.data.network.response.series.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,16 +47,16 @@ class SeriesRepositoryImpl(
                */
     }
 
-    override suspend fun getInshowSeries(): LiveData<SerieCurrentlyShowing> {
+    override suspend fun getInshowSeries(page: Int): LiveData<SerieCurrentlyShowing> {
         return withContext(Dispatchers.IO) {
-            networkOutSource.loadInshowSeries()
+            networkOutSource.loadInshowSeries(page)
             return@withContext networkOutSource.currentlyViewingSeries
         }
     }
 
     override suspend fun getRatedSeries(page: Int): LiveData<TopRatedSeries> {
         return withContext(Dispatchers.IO) {
-            networkOutSource.loadTopRatedSeries()
+            networkOutSource.loadTopRatedSeries(page)
             return@withContext networkOutSource.topRatedSeries
         }
     }
@@ -72,17 +69,17 @@ class SeriesRepositoryImpl(
 
     }
 
-    override suspend fun getOnAirTodaySeries(): LiveData<OnAirToday> {
+    override suspend fun getOnAirTodaySeries(page: Int): LiveData<OnAirToday> {
         return withContext(Dispatchers.IO) {
-            loadOnAirTodayFromNetworkCall()
+            loadOnAirTodayFromNetworkCall(page)
             return@withContext networkOutSource.onAirToday
         }
     }
 
-    override suspend fun getPopularSeries(): MutableList<PopularSeriesEntity> {
+    override suspend fun getPopularSeries(page: Int): LiveData<PopularSeries> {
         return withContext(Dispatchers.IO) {
-            networkOutSource.loadPopularSeries()
-            return@withContext popularSerieDao.getTvPopularSeries()
+            networkOutSource.loadPopularSeries(page)
+            return@withContext networkOutSource.popularSeries
         }
     }
 
@@ -99,12 +96,12 @@ class SeriesRepositoryImpl(
         }
     }
 
-    private suspend fun loadOnAirTodayFromNetworkCall() {
-        networkOutSource.loadOnAirToday()
+    private suspend fun loadOnAirTodayFromNetworkCall(page: Int) {
+        networkOutSource.loadOnAirToday(page)
     }
 
-    private suspend fun loadPopularSeriesFromNetworkCall() {
-        networkOutSource.loadPopularSeries()
+    private suspend fun loadPopularSeriesFromNetworkCall(page: Int) {
+        networkOutSource.loadPopularSeries(page)
     }
 
 }

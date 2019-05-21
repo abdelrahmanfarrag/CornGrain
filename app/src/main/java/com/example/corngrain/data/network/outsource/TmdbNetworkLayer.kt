@@ -61,21 +61,21 @@ interface TmdbNetworkLayer {
     //SERIES => ON AIR TODAY
     val onAirToday: LiveData<OnAirToday>
 
-    suspend fun loadOnAirToday()
+    suspend fun loadOnAirToday(page: Int)
 
     //SERIES => POPULAR
     val popularSeries: LiveData<PopularSeries>
 
-    suspend fun loadPopularSeries()
+    suspend fun loadPopularSeries(page: Int)
 
     val serieDetail: LiveData<SerieDetail>
     suspend fun loadSerieDetail(id: Int)
 
     val topRatedSeries: LiveData<TopRatedSeries>
-    suspend fun loadTopRatedSeries()
+    suspend fun loadTopRatedSeries(page: Int)
 
     val currentlyViewingSeries: LiveData<SerieCurrentlyShowing>
-    suspend fun loadInshowSeries()
+    suspend fun loadInshowSeries(page: Int)
 
     val serieCredits:LiveData<Credits>
     suspend fun loadSerieCredits(id:Int)

@@ -15,13 +15,13 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
-import com.example.corngrain.data.network.response.series.SerieDetail
-import com.example.corngrain.data.network.response.series.TopRatedSeries
+import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.*
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.item_on_air.*
+import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
 import kotlinx.android.synthetic.main.rated_seasons.*
@@ -57,9 +57,71 @@ class Series : ScopedFragment(), KodeinAware {
         bindUI2()
     }
 
+    private fun moreOnAirClick(data: LiveData<OnAirToday>) {
+        data.observe(this, Observer { onAirJob ->
+            var page = onAirJob.page
+            if (page < onAirJob.totalPages) {
+                page += 1
+                series_on_air_more.setOnClickListener {
+                    launch {
+                        viewModel.loadOnAirToday(currentPage)
+                        currentPage = 0
+                    }
+                }
+
+            }
+        })
+    }
+
+    private fun morePopularClick(data: LiveData<PopularSeries>) {
+        data.observe(this, Observer { popular ->
+            var currentPage = popular.page
+            if (currentPage < popular.totalPages) {
+                currentPage += 1
+                popular_series_more.setOnClickListener {
+                    launch {
+                        viewModel.loadPopularSeries(currentPage)
+                    }
+                }
+
+            }
+        })
+
+    }
+
+    private fun moreRatedClick(data: LiveData<TopRatedSeries>) {
+        data.observe(this, Observer { rated ->
+            var currentPage = rated.page
+            if (currentPage < rated.totalPages) {
+                currentPage += 1
+                top_rated_more.setOnClickListener {
+                    launch {
+                        viewModel.loadTopRatedSeries(currentPage)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun moreInshowClick(data: LiveData<SerieCurrentlyShowing>) {
+        data.observe(this, Observer { rated ->
+            var currentPage = rated.page
+            if (currentPage < rated.totalPages) {
+                currentPage += 1
+                inshow_more.setOnClickListener {
+                    launch {
+                        viewModel.loadInViewSeries(currentPage)
+                    }
+                }
+
+            }
+        })
+    }
+
     private fun bindUI() = launch {
-        val job = viewModel.fetchSeries.await()
+        val job = viewModel.loadOnAirToday(1)
         job.observe(this@Series, Observer { onAirJob ->
+            moreOnAirClick(job)
             if (onAirJob == null) return@Observer
             serie_group_loading.visibility = View.INVISIBLE
             serie_view_items.visibility = View.VISIBLE
@@ -67,36 +129,41 @@ class Series : ScopedFragment(), KodeinAware {
             today_series_pager.adapter = pagerAdapter
             movieId = onAirJob.results[generateRandomizedNumber()].id
             autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
-
         })
 
-        val popularSeries = viewModel.fetchPopularSeries.await()
-        GlideApp.with(context!!)
-            .load(BASE_IMG_URL + popularSeries[0].posterPath)
-            .into(first_item_img)
-        first_item_img.setOnClickListener {
-            toSerieDetailScreen(popularSeries[0].id, it)
-        }
-        popularSeries.removeAt(0)
-        settingNormalRecyclerViewConfigs(
-            this@Series.context,
-            popularSeries.toAdapterItems(),
-            popular_serie_list,
-            RecyclerView.HORIZONTAL,
-            true
-        ).setOnItemClickListener { item, view ->
-            (item as PopularSerieAdapter).let {
-                toSerieDetailScreen(it.entry.id, view)
+        val serieJob = viewModel.loadPopularSeries(1)
+        serieJob.observe(this@Series, Observer { seriesData ->
+            morePopularClick(serieJob)
+            val popularSeriesList = seriesData.results.toMutableList()
+            GlideApp.with(context!!)
+                .load(BASE_IMG_URL + popularSeriesList[0].posterPath)
+                .into(first_item_img)
+            first_item_img.setOnClickListener {
+                toSerieDetailScreen(popularSeriesList[0].id, it)
             }
-        }
+            popularSeriesList.removeAt(0)
+            settingNormalRecyclerViewConfigs(
+                this@Series.context,
+                popularSeriesList.toAdapterItems(),
+                popular_serie_list,
+                RecyclerView.HORIZONTAL,
+                true
+            ).setOnItemClickListener { item, view ->
+                (item as PopularSerieAdapter).let {
+                    toSerieDetailScreen(it.entry.id, view)
+                }
+            }
+
+        })
 
 
         val randomSerieDetail = viewModel.fetchDetails(movieId)
         detailCardUI(randomSerieDetail)
 
-        val topRatedSeries = viewModel.fetchTopRatedSeries.await()
+        val topRatedSeries = viewModel.loadTopRatedSeries(1)
 
         topRatedSeries.observe(this@Series, Observer {
+            moreRatedClick(topRatedSeries)
             settingNormalRecyclerViewConfigs(
                 this@Series.context!!,
                 it.results.toRatedSeriesItems(),
@@ -112,8 +179,9 @@ class Series : ScopedFragment(), KodeinAware {
     }
 
     private fun bindUI2() = launch(Dispatchers.Main) {
-        val inshowSeries = viewModel.fetchInViewSeries.await()
+        val inshowSeries = viewModel.loadInViewSeries(1)
         inshowSeries.observe(this@Series, Observer { data ->
+            moreInshowClick(inshowSeries)
             val onAirPagerAdapter = OnAirAdapter(data.results)
             on_air_series_pager.adapter = onAirPagerAdapter
             autoPagerSlide(on_air_series_pager, dots_layout, data.results.size, 7000)

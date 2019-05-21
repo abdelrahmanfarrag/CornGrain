@@ -93,9 +93,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val onAirToday: LiveData<OnAirToday>
         get() = _mutableOnAirSeriesData
 
-    override suspend fun loadOnAirToday() {
+    override suspend fun loadOnAirToday(page: Int) {
         try {
-            val onAirData = api.getTvOnAirTodayAsync().await()
+            val onAirData = api.getTvOnAirTodayAsync(page).await()
             _mutableOnAirSeriesData.postValue(onAirData)
         } catch (e: Throwable) {
             Log.d("noConnection", "No network")
@@ -106,9 +106,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val popularSeries: LiveData<PopularSeries>
         get() = _mutablePopularSeriesData
 
-    override suspend fun loadPopularSeries() {
+    override suspend fun loadPopularSeries(page: Int) {
         try {
-            val popularSeriesData = api.getTvPopularSeriesAsync().await()
+            val popularSeriesData = api.getTvPopularSeriesAsync(page).await()
             _mutablePopularSeriesData.postValue(popularSeriesData)
         } catch (e: Throwable) {
             Log.d("noConnection", "No network")
@@ -132,9 +132,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val topRatedSeries: LiveData<TopRatedSeries>
         get() = _mutableTopRatedSeries
 
-    override suspend fun loadTopRatedSeries() {
+    override suspend fun loadTopRatedSeries(page: Int) {
         try {
-            val topRatedSeries = api.getTopRatedSeriesAsync().await()
+            val topRatedSeries = api.getTopRatedSeriesAsync(page).await()
             _mutableTopRatedSeries.postValue(topRatedSeries)
         } catch (e: Throwable) {
             Log.d("noConnection", "No network")
@@ -146,9 +146,9 @@ class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
     override val currentlyViewingSeries: LiveData<SerieCurrentlyShowing>
         get() = _mutableInshowSeries
 
-    override suspend fun loadInshowSeries() {
+    override suspend fun loadInshowSeries(page: Int) {
         try {
-            val inshowSeries = api.getCurrentlyShowingSeriesAsync().await()
+            val inshowSeries = api.getCurrentlyShowingSeriesAsync(page).await()
             _mutableInshowSeries.postValue(inshowSeries)
 
         } catch (e: Throwable) {

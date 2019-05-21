@@ -90,14 +90,12 @@ interface TmdbApi {
 
     @GET(ONAIR_TODAY)
     fun getTvOnAirTodayAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<OnAirToday>
 
     @GET(POPULAR_SERIES)
     fun getTvPopularSeriesAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<PopularSeries>
 
     @GET(SERIE_DETAIL)
@@ -112,8 +110,7 @@ interface TmdbApi {
 
     @GET(CURRENTLY_SHOWING)
     fun getCurrentlyShowingSeriesAsync(
-        @Query(LANGUAGE) language: String = "en-US"
-        , @Query(PAGE) page: Int = 1
+        @Query(PAGE) page: Int = 1
     ): Deferred<SerieCurrentlyShowing>
 
 
