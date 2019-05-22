@@ -1,5 +1,7 @@
 package com.example.corngrain.data.network.api
 
+import android.content.Context
+import android.net.ConnectivityManager
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.*
@@ -13,6 +15,7 @@ import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
 import com.example.corngrain.data.network.response.trending.Trending
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -180,10 +183,19 @@ interface TmdbApi {
 
 
     companion object {
+        private fun isOnline(appContext: Context): Boolean {
+            val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE)
+                    as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+            return networkInfo != null && networkInfo.isConnected
+
+        }
+
 
         operator fun invoke(
             noConnectionInterceptor: NoConnectionInterceptor,
-            loggingInterceptor: LoggingInterceptor
+            loggingInterceptor: LoggingInterceptor,
+            context: Context
         ): TmdbApi {
             val interceptedUrl = Interceptor { chain ->
                 val interceptedUrl = chain
@@ -205,10 +217,27 @@ interface TmdbApi {
                 return@Interceptor chain.proceed(request)
             }
 
+            val cacheSize = (5 * 1024 * 1024).toLong()
+            val caching = Cache(context.cacheDir, cacheSize)
             val httpClient = OkHttpClient.Builder()
                 .addInterceptor(interceptedUrl)
                 .addInterceptor(loggingInterceptor.loggingInterceptor())
                 .addInterceptor(noConnectionInterceptor)
+                .cache(caching)
+                .addInterceptor { chain ->
+                    var requested = chain.request()
+                    requested = if (isOnline(context))
+                        requested.newBuilder().header(
+                            "Cache-Control",
+                            "public, max-age=" + 5
+                        ).build()
+                    else
+                        requested.newBuilder().header(
+                            "Cache-Control",
+                            "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
+                        ).build()
+                    chain.proceed(requested)
+                }
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)

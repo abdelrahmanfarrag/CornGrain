@@ -34,19 +34,6 @@ class SeriesRepositoryImpl(
         }
     }
 
-    init {
-/*
-       networkOutSource.apply {
-                   onAirToday.observeForever { todaySeries ->
-                       persistingTodaySeries(todaySeries.results)
-                   }
-                   popularSeries.observeForever { popularSeries ->
-                       persistingPopularSeries(popularSeries.results)
-                   }
-               }
-               */
-    }
-
     override suspend fun getInshowSeries(page: Int): LiveData<SerieCurrentlyShowing> {
         return withContext(Dispatchers.IO) {
             networkOutSource.loadInshowSeries(page)

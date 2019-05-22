@@ -64,8 +64,8 @@ class CornGrain : Application(), KodeinAware {
         bind() from singleton {
             TmdbApi(
                 instance<NoConnectionInterceptor>(),
-                instance<LoggingInterceptor>()
-            )
+                instance<LoggingInterceptor>(),
+                instance<Context>())
         }
 
 
