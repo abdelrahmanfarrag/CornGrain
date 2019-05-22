@@ -127,7 +127,6 @@ class Series : ScopedFragment(), KodeinAware {
             serie_view_items.visibility = View.VISIBLE
             val pagerAdapter = OnAirTodayAdapter(onAirJob)
             today_series_pager.adapter = pagerAdapter
-            movieId = onAirJob.results[generateRandomizedNumber()].id
             autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
         })
 
@@ -142,6 +141,8 @@ class Series : ScopedFragment(), KodeinAware {
                 toSerieDetailScreen(popularSeriesList[0].id, it)
             }
             popularSeriesList.removeAt(0)
+            movieId = seriesData.results[generateRandomizedNumber()].id
+
             settingNormalRecyclerViewConfigs(
                 this@Series.context,
                 popularSeriesList.toAdapterItems(),
@@ -149,9 +150,7 @@ class Series : ScopedFragment(), KodeinAware {
                 RecyclerView.HORIZONTAL,
                 true
             ).setOnItemClickListener { item, view ->
-                (item as PopularSerieAdapter).let {
-                    toSerieDetailScreen(it.entry.id, view)
-                }
+                toSerieDetailScreen((item as PopularSerieAdapter).entry.id, view)
             }
 
         })

@@ -183,15 +183,6 @@ interface TmdbApi {
 
 
     companion object {
-        private fun isOnline(appContext: Context): Boolean {
-            val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE)
-                    as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            return networkInfo != null && networkInfo.isConnected
-
-        }
-
-
         operator fun invoke(
             noConnectionInterceptor: NoConnectionInterceptor,
             loggingInterceptor: LoggingInterceptor,
@@ -207,37 +198,21 @@ interface TmdbApi {
                         API_KEY
                     )
                     .build()
-
                 val request = chain
                     .request()
                     .newBuilder()
                     .url(interceptedUrl)
                     .build()
-
                 return@Interceptor chain.proceed(request)
             }
 
             val cacheSize = (5 * 1024 * 1024).toLong()
             val caching = Cache(context.cacheDir, cacheSize)
             val httpClient = OkHttpClient.Builder()
+                .cache(caching)
                 .addInterceptor(interceptedUrl)
                 .addInterceptor(loggingInterceptor.loggingInterceptor())
                 .addInterceptor(noConnectionInterceptor)
-                .cache(caching)
-                .addInterceptor { chain ->
-                    var requested = chain.request()
-                    requested = if (isOnline(context))
-                        requested.newBuilder().header(
-                            "Cache-Control",
-                            "public, max-age=" + 5
-                        ).build()
-                    else
-                        requested.newBuilder().header(
-                            "Cache-Control",
-                            "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
-                        ).build()
-                    chain.proceed(requested)
-                }
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)

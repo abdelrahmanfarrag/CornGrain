@@ -10,8 +10,21 @@ class NoConnectionInterceptorImpl(context: Context) :
     NoConnectionInterceptor {
     private val appContext = context.applicationContext
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (!isOnline()) throw NoNetworkException()
-        return chain.proceed(chain.request())
+        val requested = chain.request()
+        if (isOnline()) {
+            requested.newBuilder().header(
+                "Cache-Control",
+                "public, max-age=" + 20
+            ).build()
+        } else {
+            requested.newBuilder().header(
+                "Cache-Control",
+                "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
+            ).build()
+            throw NoNetworkException()
+
+        }
+        return chain.proceed(requested)
     }
 
     private fun isOnline(): Boolean {
