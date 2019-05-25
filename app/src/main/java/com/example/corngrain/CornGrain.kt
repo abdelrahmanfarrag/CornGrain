@@ -31,6 +31,7 @@ import com.example.corngrain.ui.main.movies.details.MovieDetailViewModelFactory
 import com.example.corngrain.ui.main.people.PeopleViewmodelFactory
 import com.example.corngrain.ui.main.search.SearchViewmodelFactory
 import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
+import com.example.corngrain.ui.main.series.episodes.EpisodesViewmodelFactory
 import com.example.corngrain.ui.main.trending.TrendingFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -65,7 +66,8 @@ class CornGrain : Application(), KodeinAware {
             TmdbApi(
                 instance<NoConnectionInterceptor>(),
                 instance<LoggingInterceptor>(),
-                instance<Context>())
+                instance<Context>()
+            )
         }
 
 
@@ -106,6 +108,11 @@ class CornGrain : Application(), KodeinAware {
                 instance<TmdbRepository>()
             )
         }
+        bind() from factory { id: Int, seasonNumber: Int ->
+            EpisodesViewmodelFactory(
+                id, seasonNumber, instance<SeriesRepository>()
+                )
+        }
     }
 
 
@@ -128,6 +135,7 @@ class CornGrain : Application(), KodeinAware {
             manager.createNotificationChannel(channel)
         }
     }
+
     private fun createLocalNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(

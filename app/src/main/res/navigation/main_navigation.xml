@@ -73,5 +73,23 @@
         <argument
             android:name="serieId"
             app:argType="integer" />
+        <action
+            android:id="@+id/to_season_fragment"
+            app:destination="@id/episodesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodesFragment"
+        android:name="com.example.corngrain.ui.main.series.episodes.EpisodesFragment"
+        android:label="episodes_fragment"
+        tools:layout="@layout/episodes_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="season_number"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
 </navigation>

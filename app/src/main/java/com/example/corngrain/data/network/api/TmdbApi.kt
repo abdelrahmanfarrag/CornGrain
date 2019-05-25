@@ -52,7 +52,7 @@ const val CURRENTLY_SHOWING = "tv/on_the_air"
 const val SERIE_CAST = "tv/{id}/credits"
 const val TV_REVIEWS = "tv/{id}/videos"
 const val SERIE_DETAIL = "tv/{id}"
-
+const val SERIE_SEASON = "tv/{id}/season/{season_number}"
 //ENDPOINTS => For Persons
 const val POPULAR_PERSONS = "person/popular"
 const val POPULAR_DETAIL = "person/{id}"
@@ -180,6 +180,13 @@ interface TmdbApi {
     @GET(TV_REVIEWS)
     fun getSerieReviewsAsync(@Path("id") id: Int)
             : Deferred<Videos>
+
+    @GET(SERIE_SEASON)
+    fun getSeriesSeasonsAsync(
+        @Path("id") id: Int,
+        @Path("season_number") number: Int,
+        @Query("append_to_response") videos: String = "videos"
+    ) :Deferred<Season>
 
 
     companion object {

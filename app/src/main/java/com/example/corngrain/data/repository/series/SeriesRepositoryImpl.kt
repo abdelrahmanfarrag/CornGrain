@@ -20,6 +20,13 @@ class SeriesRepositoryImpl(
     private val onAirDao: OnAirDao,
     private val popularSerieDao: PopularSerieDao
 ) : SeriesRepository {
+    override suspend fun getSerieSeason(id: Int, seasonNumber: Int): LiveData<Season> {
+        return withContext(Dispatchers.IO) {
+            networkOutSource.laodSerieSeasons(id, seasonNumber)
+            return@withContext networkOutSource.serieSeason
+        }
+    }
+
     override suspend fun getSerieReviews(id: Int): LiveData<Videos> {
         return withContext(Dispatchers.IO) {
             networkOutSource.loadSerieReviews(id)

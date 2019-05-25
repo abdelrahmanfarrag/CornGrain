@@ -135,10 +135,10 @@ class Series : ScopedFragment(), KodeinAware {
             morePopularClick(serieJob)
             val popularSeriesList = seriesData.results.toMutableList()
             GlideApp.with(context!!)
-                .load(BASE_IMG_URL + popularSeriesList[0].posterPath)
+                .load(BASE_IMG_URL +seriesData.results[0].posterPath)
                 .into(first_item_img)
             first_item_img.setOnClickListener {
-                toSerieDetailScreen(popularSeriesList[0].id, it)
+                toSerieDetailScreen(seriesData.results[0].id, it)
             }
             popularSeriesList.removeAt(0)
             movieId = seriesData.results[generateRandomizedNumber()].id

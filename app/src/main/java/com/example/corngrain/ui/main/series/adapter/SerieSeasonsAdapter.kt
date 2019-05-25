@@ -7,12 +7,11 @@ import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.seasons_item.*
-import kotlinx.android.synthetic.main.trending_serie_item.*
 
 class SerieSeasonsAdapter(val entries: SerieDetail.Season) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
-            season_serie_title.text=entries.name
+            serie_title.text=entries.name
             bindImage()
         }
     }

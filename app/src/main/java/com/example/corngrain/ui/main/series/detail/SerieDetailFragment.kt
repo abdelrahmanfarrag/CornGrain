@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
@@ -113,7 +114,16 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
             detail.seasons.toSeasonsAdapter(),
             serie_detail_seasons_list,
             RecyclerView.HORIZONTAL
-        )
+        ).setOnItemClickListener { item, view ->
+            (item as SerieSeasonsAdapter).let { itemClicked ->
+                toSeasonScreen(
+                    itemClicked.entries.id,
+                    itemClicked.entries.seasonNumber,
+                    detail.originalName,
+                    view
+                )
+            }
+        }
 
 
     }
@@ -133,6 +143,12 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
         }
 
     }
+
+    private fun toSeasonScreen(id: Int, seasonNumber: Int, name: String, viewClicked: View) {
+        val action = SerieDetailFragmentDirections.toSeasonFragment(id, seasonNumber, name)
+        Navigation.findNavController(viewClicked).navigate(action)
+    }
+
 
     private fun List<SerieDetail.Season>.toSeasonsAdapter(): List<SerieSeasonsAdapter> {
         return this.map { item ->

@@ -77,11 +77,14 @@ interface TmdbNetworkLayer {
     val currentlyViewingSeries: LiveData<SerieCurrentlyShowing>
     suspend fun loadInshowSeries(page: Int)
 
-    val serieCredits:LiveData<Credits>
-    suspend fun loadSerieCredits(id:Int)
+    val serieCredits: LiveData<Credits>
+    suspend fun loadSerieCredits(id: Int)
 
-    val serieReviews:LiveData<Videos>
-    suspend fun loadSerieReviews(id:Int)
+    val serieReviews: LiveData<Videos>
+    suspend fun loadSerieReviews(id: Int)
+
+    val serieSeason: LiveData<Season>
+    suspend fun laodSerieSeasons(id: Int, seasonNumber: Int)
 
 
     //PERSONS

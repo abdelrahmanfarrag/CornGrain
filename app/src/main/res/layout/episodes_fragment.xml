@@ -1,13 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#041B2B"
     tools:context=".ui.main.series.episodes.EpisodesFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        app:constraint_referenced_ids="progressBar_loading, textView_loading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <com.pnikosis.materialishprogress.ProgressWheel
+        android:id="@+id/progressBar_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:matProg_barColor="@android:color/white"
+        app:matProg_barWidth="4dp"
+        app:matProg_progressIndeterminate="true" />
+
+    <TextView
+        android:id="@+id/textView_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="Loading"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar_loading"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/season_img"
+                android:layout_width="140dp"
+                android:layout_height="220dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/serie_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="4dp"
+                android:textColor="#E0CCCC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/season_img"
+                app:layout_constraintTop_toTopOf="@+id/season_img" />
+
+            <TextView
+                android:id="@+id/season_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_semibold"
+                android:padding="4dp"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@+id/serie_title"
+                app:layout_constraintTop_toBottomOf="@+id/serie_title" />
+
+            <TextView
+                android:id="@+id/season_air_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_semibold"
+                android:padding="4dp"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@+id/season_number"
+                app:layout_constraintTop_toBottomOf="@+id/season_number" />
+
+            <TextView
+                android:id="@+id/season_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/cairo_semibold"
+                android:padding="4dp"
+                android:textAlignment="viewStart"
+                android:textColor="#E0CCCC"
+                app:layout_constraintStart_toStartOf="@+id/season_img"
+                app:layout_constraintTop_toBottomOf="@+id/season_img" />
+
+            <View
+                android:id="@+id/seasons_dividor_1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#253C53"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/season_overview" />
+
+            <TextView
+                android:id="@+id/episodes_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="4dp"
+                android:text="EPISODES"
+                android:textColor="#E0CCCC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seasons_dividor_1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/episodes_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/episodes_word" />
+
+            <View
+                android:id="@+id/seasons_dividor_2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#253C53"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/episodes_list" />
+
+            <TextView
+                android:id="@+id/videos_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="4dp"
+                android:text="VIDEOS"
+                android:textColor="#E0CCCC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seasons_dividor_2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/videos_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/videos_word" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

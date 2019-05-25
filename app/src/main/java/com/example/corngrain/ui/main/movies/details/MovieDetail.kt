@@ -34,6 +34,7 @@ import java.lang.StringBuilder
 import java.text.DecimalFormat
 
 class MovieDetail : ScopedFragment(), KodeinAware {
+
     override val kodein: Kodein by closestKodein()
     private val movieDetailViewModelInstanceFactory: ((Int) -> MovieDetailViewModelFactory) by factory()
 

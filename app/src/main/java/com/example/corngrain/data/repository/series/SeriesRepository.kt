@@ -16,5 +16,6 @@ interface SeriesRepository {
     suspend fun getSerieCast(id: Int): LiveData<Credits>
     suspend fun getSerieDetail(id: Int): LiveData<SerieDetail>
     suspend fun getSerieReviews(id: Int): LiveData<Videos>
+    suspend fun getSerieSeason(id:Int,seasonNumber:Int):LiveData<Season>
 
 }
