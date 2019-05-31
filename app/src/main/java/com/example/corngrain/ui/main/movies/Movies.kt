@@ -32,6 +32,8 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Movies : ScopedFragment(), KodeinAware {
 
@@ -233,8 +235,11 @@ class Movies : ScopedFragment(), KodeinAware {
             Context.MODE_PRIVATE
         )
         val editor = preferences?.edit()
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
         editor?.putString("title", title)
         editor?.putString("content", content)
+        editor?.putInt("time", hour)
         editor?.apply()
     }
 
@@ -273,6 +278,4 @@ class Movies : ScopedFragment(), KodeinAware {
             TopRatedAdapter(item)
         }
     }
-
-
 }

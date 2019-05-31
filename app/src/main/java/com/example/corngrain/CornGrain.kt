@@ -10,10 +10,7 @@ import com.example.corngrain.data.db.TmdbLocalDb
 import com.example.corngrain.data.db.dao.series.OnAirDao
 import com.example.corngrain.data.db.dao.series.PopularSerieDao
 import com.example.corngrain.data.network.api.TmdbApi
-import com.example.corngrain.data.network.di.LoggingInterceptor
-import com.example.corngrain.data.network.di.LoggingInterceptorImpl
-import com.example.corngrain.data.network.di.NoConnectionInterceptor
-import com.example.corngrain.data.network.di.NoConnectionInterceptorImpl
+import com.example.corngrain.data.network.di.*
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayer
 import com.example.corngrain.data.network.outsource.TmdbNetworkLayerImpl
 import com.example.corngrain.data.repository.movies.TmdbRepository
@@ -61,11 +58,13 @@ class CornGrain : Application(), KodeinAware {
                 instance<Context>()
             )
         }
+        bind<LanguageQuery>() with singleton { LanguageQueryImpl(instance<Context>()) }
         bind<LoggingInterceptor>() with singleton { LoggingInterceptorImpl() }
         bind() from singleton {
             TmdbApi(
                 instance<NoConnectionInterceptor>(),
                 instance<LoggingInterceptor>(),
+                instance<LanguageQuery>(),
                 instance<Context>()
             )
         }
@@ -111,7 +110,7 @@ class CornGrain : Application(), KodeinAware {
         bind() from factory { id: Int, seasonNumber: Int ->
             EpisodesViewmodelFactory(
                 id, seasonNumber, instance<SeriesRepository>()
-                )
+            )
         }
     }
 

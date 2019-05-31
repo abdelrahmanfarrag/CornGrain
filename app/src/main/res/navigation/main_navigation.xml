@@ -12,14 +12,18 @@
         tools:layout="@layout/movies_fragment" >
         <action
             android:id="@+id/action_movies_tab_to_movieDetail"
-            app:destination="@id/movieDetail" />
+            app:destination="@id/movieDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_search_movies"
             app:destination="@id/searchFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim" />
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/series_tab"
@@ -28,7 +32,11 @@
         tools:layout="@layout/series_fragment" >
         <action
             android:id="@+id/serie_detail_action"
-            app:destination="@id/serieDetailFragment" />
+            app:destination="@id/serieDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/people_tab"
@@ -51,7 +59,11 @@
         tools:layout="@layout/search_fragment" >
         <action
             android:id="@+id/search_to_detail"
-            app:destination="@id/movieDetail" />
+            app:destination="@id/movieDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/trending_tab"
@@ -60,10 +72,18 @@
         tools:layout="@layout/trending_fragment" >
         <action
             android:id="@+id/trending_to_movie_detail"
-            app:destination="@id/movieDetail" />
+            app:destination="@id/movieDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/trending_series_action"
-            app:destination="@id/serieDetailFragment" />
+            app:destination="@id/serieDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/serieDetailFragment"
@@ -75,7 +95,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/to_season_fragment"
-            app:destination="@id/episodesFragment" />
+            app:destination="@id/episodesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/episodesFragment"

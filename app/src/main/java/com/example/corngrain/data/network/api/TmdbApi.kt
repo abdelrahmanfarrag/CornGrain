@@ -2,6 +2,7 @@ package com.example.corngrain.data.network.api
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.example.corngrain.data.network.di.LanguageQuery
 import com.example.corngrain.data.network.di.LoggingInterceptor
 import com.example.corngrain.data.network.di.NoConnectionInterceptor
 import com.example.corngrain.data.network.response.*
@@ -186,13 +187,14 @@ interface TmdbApi {
         @Path("id") id: Int,
         @Path("season_number") number: Int,
         @Query("append_to_response") videos: String = "videos"
-    ) :Deferred<Season>
+    ): Deferred<Season>
 
 
     companion object {
         operator fun invoke(
             noConnectionInterceptor: NoConnectionInterceptor,
             loggingInterceptor: LoggingInterceptor,
+            languageQuery: LanguageQuery,
             context: Context
         ): TmdbApi {
             val interceptedUrl = Interceptor { chain ->
@@ -203,6 +205,10 @@ interface TmdbApi {
                     .addQueryParameter(
                         KEY,
                         API_KEY
+                    )
+                    .addQueryParameter(
+                        LANGUAGE,
+                        languageQuery.getAppLocale()
                     )
                     .build()
                 val request = chain

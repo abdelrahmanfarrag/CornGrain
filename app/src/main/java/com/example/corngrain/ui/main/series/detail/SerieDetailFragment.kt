@@ -41,7 +41,7 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
     private val factory by instance<SeriesViewmodelFactory>()
 
     private lateinit var viewModel: SeriesViewModel
-
+    private var serieId: Int? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,26 +54,33 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
         val receiveId = arguments?.let { bundle ->
             SerieDetailFragmentArgs.fromBundle(bundle)
         }
-        val id = receiveId?.serieId
+        serieId = receiveId?.serieId
+
+        Log.d("seasonId", serieId.toString())
+
 
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
-        if (id != null)
             launch {
-                viewModel.fetchDetails(id)
-                    .observe(this@SerieDetailFragment, Observer { detail ->
-                        if (detail == null) return@Observer
-                        group_serie_detail_loading.visibility = View.INVISIBLE
-                        detail_series_view.visibility = View.VISIBLE
-                        buildDetailUI(detail)
-                    })
-                viewModel.fetchCredits(id).observe(this@SerieDetailFragment, Observer { credit ->
-                    buildCastUi(credit)
-                })
-                viewModel.fetchReviews(id).observe(this@SerieDetailFragment, Observer { reviews ->
-                    buildReviewsUI(reviews)
-                })
+                if (serieId != null) {
+                    viewModel.fetchDetails(serieId!!)
+                        .observe(this@SerieDetailFragment, Observer { detail ->
+                            if (detail == null) return@Observer
+                            group_serie_detail_loading.visibility = View.INVISIBLE
+                            detail_series_view.visibility = View.VISIBLE
+                            buildDetailUI(detail)
+                        })
+                    viewModel.fetchCredits(serieId!!)
+                        .observe(this@SerieDetailFragment, Observer { credit ->
+                            buildCastUi(credit)
+                        })
+                    viewModel.fetchReviews(serieId!!)
+                        .observe(this@SerieDetailFragment, Observer { reviews ->
+                            buildReviewsUI(reviews)
+                        })
+                }
 
             }
+
     }
 
     private fun buildReviewsUI(videos: Videos) {
@@ -116,12 +123,13 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
             RecyclerView.HORIZONTAL
         ).setOnItemClickListener { item, view ->
             (item as SerieSeasonsAdapter).let { itemClicked ->
-                toSeasonScreen(
-                    itemClicked.entries.id,
-                    itemClicked.entries.seasonNumber,
-                    detail.originalName,
-                    view
-                )
+                if (serieId != null)
+                    toSeasonScreen(
+                        serieId!!,
+                        itemClicked.entries.seasonNumber,
+                        detail.originalName,
+                        view
+                    )
             }
         }
 

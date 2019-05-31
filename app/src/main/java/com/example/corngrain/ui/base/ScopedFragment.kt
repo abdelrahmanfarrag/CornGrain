@@ -4,12 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import com.example.corngrain.data.bus.NoNetworkBus
+import com.example.corngrain.utilities.EventBus
 import com.rd.PageIndicatorView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -33,10 +34,10 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
     private var isHandleStarted: Boolean = false
     var currentPage = 0
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.d("coroutineException", "$exception handled !")
+        EventBus.post(NoNetworkBus())
     }
     override val coroutineContext: CoroutineContext
-        get() = job + handler+Dispatchers.Main
+        get() = job + handler + Dispatchers.Main
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +64,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
                     positionOffsetPixels: Int
                 ) {
                 }
+
 
                 override fun onPageSelected(position: Int) {
                     currentPage = position
@@ -93,6 +95,11 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
         }
     }
 
+    fun <T> List<T>.toAdptItems(layout: Int): List<BaseAdapter<T>> {
+        return this.map { transformedItem ->
+            BaseAdapter(transformedItem, layout)
+        }
+    }
 
     fun settingNormalRecyclerViewConfigs(
         context: Context?,

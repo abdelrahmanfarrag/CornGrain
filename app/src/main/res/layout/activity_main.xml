@@ -4,29 +4,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#041B2B"
     tools:context=".ui.main.MainActivity">
 
-    <fragment
-        android:id="@+id/navigation_host_container"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_views_group"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/main_navigation" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="?actionBarSize"
-        android:background="#1C2033"
-        app:itemIconTint="@drawable/bottom_nav_textcolor"
-        app:itemTextColor="@drawable/bottom_nav_textcolor"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <fragment
+            android:id="@+id/navigation_host_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/main_navigation" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:background="#1C2033"
+            android:visibility="visible"
+            app:itemIconTint="@drawable/bottom_nav_textcolor"
+            app:itemTextColor="@drawable/bottom_nav_textcolor"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/no_networkView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/no_network_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_no_network"
+            android:drawablePadding="4dp"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:text="Sorry,try again later"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/try_again_btn"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/colorAccent"
+            android:fontFamily="@font/cairo_semibold"
+            android:text="Try again"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/no_network_tv"
+            app:layout_constraintStart_toStartOf="@+id/no_network_tv"
+            app:layout_constraintTop_toBottomOf="@+id/no_network_tv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,9 +71,8 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
                 RecyclerView.VERTICAL, true
                 , 2
             ).setOnItemClickListener { item, view ->
-                (item as TrendingSeriesAdapter).let {
-                    toDetailsScreen(it.entries.id, view)
-                }
+                toDetailsScreen((item as TrendingSeriesAdapter).entries.id, view)
+                Log.d("serieIdTest", "${item.entries.id} \n ${item.entries.name}")
             }
 
         })
@@ -84,11 +83,6 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
         return this.map { item ->
             TrendingSeriesAdapter(item)
         }
-    }
-
-    private fun bindSuperStarsUI() = launch {
-
-
     }
 
     private fun toDetailsScreen(id: Int, viewClicked: View) {

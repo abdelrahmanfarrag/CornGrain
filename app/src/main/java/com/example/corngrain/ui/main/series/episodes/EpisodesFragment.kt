@@ -2,6 +2,7 @@ package com.example.corngrain.ui.main.series.episodes
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +59,11 @@ class EpisodesFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun buildUI(data: LiveData<Season>) {
+
         data.observe(this@EpisodesFragment, Observer { seasonData ->
+            if (seasonData == null) return@Observer
+            group_loading.visibility = View.INVISIBLE
+            views_container.visibility = View.VISIBLE
             GlideApp.with(this@EpisodesFragment)
                 .load(BASE_IMG_URL + seasonData.posterPath)
                 .into(season_img)
