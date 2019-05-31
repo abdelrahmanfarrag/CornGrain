@@ -43,8 +43,29 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         settingNavigationWithButtonNavigationView()
+        if (languageQuery.getAppLocale() == "ar-EG"){
+            arabic_lang.visibility=View.INVISIBLE
+            english_lang.visibility=View.VISIBLE
+        }else{
+            arabic_lang.visibility=View.VISIBLE
+            english_lang.visibility=View.INVISIBLE
+
+        }
+
+        arabic_lang.setOnClickListener {
+            languageQuery.setAppLocale("ar-EG")
+            arabic_lang.visibility=View.INVISIBLE
+            english_lang.visibility=View.VISIBLE
+            bottom_navigation.findViewById<View>(R.id.movies_tab).performClick()
+        }
+        english_lang.setOnClickListener {
+            languageQuery.setAppLocale("en")
+            arabic_lang.visibility=View.VISIBLE
+            english_lang.visibility=View.INVISIBLE
+
+            bottom_navigation.findViewById<View>(R.id.movies_tab).performClick()
+        }
         setDailyNotification()
-        languageQuery.setAppLocale("en")
         addingToken()
         try_again_btn.setOnClickListener {
             EventBus.post(NoNetworkBus())
