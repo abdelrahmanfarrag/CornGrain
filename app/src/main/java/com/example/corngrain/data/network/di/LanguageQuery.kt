@@ -1,6 +1,9 @@
 package com.example.corngrain.data.network.di
 
+import android.content.Context
+
 interface LanguageQuery {
-    public fun setAppLocale(locale:String)
-   public fun getAppLocale():String
+     fun setAppLocale(locale:String)
+    fun getAppLocale(context: Context):String
+
 }

@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/cairo_semibold"
             android:gravity="center"
-            android:text="MOVIES"
+            android:text="@string/movies"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,8 @@
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/picked_star_img"
             app:layout_constraintEnd_toEndOf="@+id/picked_star_img"
-            app:layout_constraintStart_toStartOf="@+id/picked_star_img" />
+            app:layout_constraintStart_toStartOf="@+id/picked_star_img"
+            tools:ignore="SmallSp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/picked_guideline_dividor"
@@ -90,7 +91,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/cairo_semibold"
             android:gravity="center"
-            android:text="BIOGRAPHY"
+            android:text="@string/biography"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/picked_guideline_dividor"

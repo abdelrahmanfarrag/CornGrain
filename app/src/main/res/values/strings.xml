@@ -1,6 +1,41 @@
 <resources>
     <string name="app_name">CornGrain</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_network_msg">Sorry,try again later</string>
+    <string name="try_again">Try again</string>
+    <string name="language_str">اللغة العربية</string>
+    <string name="loading">Loading</string>
+    <string name="episodes">EPISODES</string>
+    <string name="videos">VIDEOS</string>
+    <string name="divide_value">/10</string>
+    <string name="year">YEAR</string>
+    <string name="language_word">LANGUAGE</string>r
+    <string name="runtime">Runtime</string>
+    <string name="profit">PROFIT</string>
+    <string name="story">Storyline</string>
+    <string name="cast">CAST</string>
+    <string name="reviews">REVIEWS</string>
+    <string name="no_reviews">NO REVIEWS FOUND FOR THIS MOVIES</string>
+    <string name="no_videos">NO VIDEOS FOUND FOR THIS MOVIE</string>
+    <string name="similar">SIMILAR MOVIE</string>
+    <string name="no_similar">NO SIMILAR MOVIES FOUND FOR THIS MOVIE</string>
+    <string name="search_placeholder">Type movie name you looking for</string>
+    <string name="now_playing">NOW PLAYING</string>
+    <string name="more">MORE</string>
+    <string name="upcoming">UPCOMING MOVIES</string>
+    <string name="popular">POPULAR MOVIES</string>
+    <string name="rated">RATED MOVIES</string>
+    <string name="movies">Movies</string>
+    <string name="biography">BIOGRAPHY</string>
+    <string name="waiting_type">Waiting for your type</string>
+    <string name="no_search_result">Sorry no movie found matching your written text !</string>
+    <string name="seasons">Seasons</string>
+    <string name="find_info">Find more information</string>
+    <string name="trailers">TRAILERS</string>
+    <string name="live_today">LIVE TODAY</string>
+    <string name="popular_ones">POPULAR ONES</string>
+    <string name="picked_popular">PICKED FROM POPULAR</string>
+    <string name="rated_series">TOP RATED !</string>
+    <string name="in_show">CURRENTLY IN SHOW</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="trending_series">Trending TV shows &amp; Series</string>
 </resources>

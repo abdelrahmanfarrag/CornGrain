@@ -14,7 +14,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".ui.main.trending.TrendingFragment">
 
             <TextView
@@ -27,7 +27,7 @@
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/cairo_bold"
                 android:padding="4dp"
-                android:text="Trending Movies"
+                android:text="@string/trending_movies"
                 android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +59,7 @@
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/cairo_bold"
                 android:padding="4dp"
-                android:text="Trending TV shows &amp; Series"
+                android:text="@string/trending_series"
                 android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="@+id/trending_movies_txt"
                 app:layout_constraintTop_toBottomOf="@+id/trending_dividor"
@@ -122,7 +122,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="Loading"
+            android:text="@string/loading"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             android:textColor="@android:color/white"
             android:textSize="20sp"

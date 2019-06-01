@@ -40,7 +40,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/cairo_bold"
-        android:text="Loading"
+        android:text="@string/loading"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textColor="@android:color/white"
         android:textSize="20sp"
@@ -58,7 +58,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/season_img"
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
                 android:padding="4dp"
-                android:text="EPISODES"
+                android:text="@string/episodes"
                 android:textColor="#E0CCCC"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
                 android:padding="4dp"
-                android:text="VIDEOS"
+                android:text="@string/videos"
                 android:textColor="#E0CCCC"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

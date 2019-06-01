@@ -208,7 +208,7 @@ interface TmdbApi {
                     )
                     .addQueryParameter(
                         LANGUAGE,
-                        languageQuery.getAppLocale()
+                        languageQuery.getAppLocale(context)
                     )
                     .build()
                 val request = chain
