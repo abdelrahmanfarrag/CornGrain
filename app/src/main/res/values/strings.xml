@@ -38,4 +38,9 @@
     <string name="in_show">CURRENTLY IN SHOW</string>
     <string name="trending_movies">Trending Movies</string>
     <string name="trending_series">Trending TV shows &amp; Series</string>
+    <string name="bnv_movies">Movies</string>
+    <string name="bnv_tv">Tv shows &amp; series</string>
+    <string name="bnv_trending">Trending</string>
+    <string name="reviewers">Reviewers</string>
+    <string name="no_connection_msg">Sorry,But your connection to network is broken,try again when network is available</string>
 </resources>

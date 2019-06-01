@@ -4,16 +4,16 @@
     <item
         android:id="@+id/movies_tab"
         android:icon="@drawable/ic_movies"
-        android:title="Movies" />
+        android:title="@string/bnv_movies" />
 
 
     <item
         android:id="@+id/series_tab"
         android:icon="@drawable/ic_series"
-        android:title="TV shows &amp; Series" />
+        android:title="@string/bnv_tv" />
 
     <item
         android:id="@+id/trending_tab"
         android:icon="@drawable/ic_fire"
-        android:title="Trending" />
+        android:title="@string/bnv_trending" />
 </menu>

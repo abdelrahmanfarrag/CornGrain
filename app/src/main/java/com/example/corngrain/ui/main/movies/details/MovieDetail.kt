@@ -82,8 +82,9 @@ class MovieDetail : ScopedFragment(), KodeinAware {
                     detail_screen_rating.rating = data.voteAverage.toFloat() / 2f
                     val reviewersInDecimal = DecimalFormat("#,###")
                     val profitDecimal = DecimalFormat("#,###,###")
+                    val reviewers = resources.getString(R.string.reviewers)
                     detail_screen_rating_reviewers_count.text =
-                        "${reviewersInDecimal.format(data.voteCount)} Reviewers"
+                        "${reviewersInDecimal.format(data.voteCount)} $reviewers"
                     detail_screen_year_value.text = data.releaseDate
                     detail_screen_lang_value.text = data.originalLanguage
                     detail_screen_runtime_value.text = "${data.runtime} MIN"
@@ -165,7 +166,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
                             videos.results.toTrailerAdapter(),
                             videos_list,
                             RecyclerView.HORIZONTAL
-                        ).setOnItemClickListener { item, view ->
+                        ).setOnItemClickListener { item, _ ->
                             (item as TrailersAdapter).let { singleItem ->
                                 val intent = Intent(context!!, YoutubeActivity::class.java)
                                 intent.putExtra("key", singleItem.entry.key)

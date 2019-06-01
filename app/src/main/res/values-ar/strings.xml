@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CornGrain</string>
+    <string name="no_network_msg">معذرةً ، حاول مجدداً</string>
+    <string name="try_again">حاول مجددا</string>
     <string name="language_str">English Language</string>
+    <string name="loading">جاري التحميل</string>
+    <string name="episodes">الحلقات</string>
+    <string name="videos">المقاطع</string>
+    <string name="divide_value">/10</string>
+    <string name="year">سنة الإنتاج</string>
+    <string name="language_word">اللغة</string>
+    <string name="runtime">مدة العرض</string>
+    <string name="profit">الأرباح</string>
+    <string name="story">القصة</string>
+    <string name="cast">الممثلون</string>
+    <string name="reviews">اراء الجمهور</string>
+    <string name="no_reviews">لا توجد اراء للجمهور لهذا الفيلم</string>
+    <string name="no_videos">لا توجد مقاطع فيديو لهذا الفيلم</string>
+    <string name="similar">الآفلام المشابهة</string>
+    <string name="no_similar">لا توجد أفلام مشابهة لهذا الفيلم</string>
+    <string name="search_placeholder">ما الذي تبحث عنه ؟</string>
+    <string name="now_playing">جاري العرض</string>
+    <string name="more">المزيد</string>
+    <string name="upcoming">يعرض لاحقاً</string>
+    <string name="popular">الأكثر انتشاراً</string>
+    <string name="rated">الأعلى تقييماً</string>
+    <string name="movies">الأفلام</string>
+    <string name="biography">السيرة الذاتية</string>
+    <string name="waiting_type">إبدأ الكتابة</string>
+    <string name="no_search_result">عفواً لا توجد افلام مطابقة لكلمة البحث التي ادخلتها</string>
+    <string name="seasons">المواسم</string>
+    <string name="find_info">المزيد من المعلومات</string>
+    <string name="trailers">TRAILERS</string>
+    <string name="live_today">يُعرض اليوم</string>
+    <string name="popular_ones">الاكثر شهرة</string>
+    <string name="picked_popular">أُختير من الاكثر شهرة</string>
+    <string name="rated_series">الأعلى تقييماً</string>
+    <string name="in_show">يُعرض حالياً</string>
+    <string name="trending_movies">الافلام الشائعة</string>
+    <string name="trending_series">البرامج والمسلسلات الشائعة</string>
+    <string name="bnv_movies">الأفلام</string>
+    <string name="bnv_tv">المسلسلات </string>
+    <string name="bnv_trending">الشائع</string>
+    <string name="reviewers">مُراجع</string>
+    <string name="no_connection_msg">عًذرا، يبدو ان هناك مشلكة في الاتصال بشبكة الانترنت الخاصه بك يُرجى المحاولة لاحقاً</string>
+
 </resources>
