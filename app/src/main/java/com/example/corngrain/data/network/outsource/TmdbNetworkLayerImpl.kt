@@ -15,7 +15,6 @@ import com.example.corngrain.data.network.response.trending.Trending
 
 class TmdbNetworkLayerImpl(private val api: TmdbApi) : TmdbNetworkLayer {
 
-
     private val _mutablePopularMovies = MutableLiveData<PopularMovies>()
     private val _mutableUpcomingMoviesData = MutableLiveData<UpcomingMovies>()
     private val _mutableTopRatedMoviesData = MutableLiveData<TopRatedMovies>()
