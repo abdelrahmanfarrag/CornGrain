@@ -58,14 +58,15 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-        val playMovies = viewModel.loadMorePlayingMoviesAsync(1)
-        val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1)
-        val popularMovies = viewModel.loadMorePopularMoviesAsync(1)
-        val topRatedMovies = viewModel.loadMoreRatedMoviesAsync(1)
-        buildingUpcomingMovieUI(upcomingMovies)
-        buildingPlayingMovies(playMovies)
-        buildingTopRatedMoviesUI(topRatedMovies)
-        buildingPopularMoviesUI(popularMovies)
+           // val playMovies = viewModel.loadMorePlayingMoviesAsync(1)
+           // val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1)
+          //  val popularMovies = viewModel.loadMorePopularMoviesAsync(1)
+           // val topRatedMovies = viewModel.loadMoreRatedMoviesAsync(1)
+            buildingUpcomingMovieUI(viewModel.upcomingMovies.await())
+            buildingPlayingMovies(viewModel.playingMovies.await())
+            buildingTopRatedMoviesUI(viewModel.ratedMovies.await())
+            buildingPopularMoviesUI(viewModel.popularMovies.await())
+
         search_card_container.setOnClickListener { card ->
             toSearchScreen(card)
         }

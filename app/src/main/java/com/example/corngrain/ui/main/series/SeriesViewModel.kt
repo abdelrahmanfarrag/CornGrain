@@ -12,20 +12,20 @@ import com.example.corngrain.utilities.lazyDeferred
 
 class SeriesViewModel(private val repository: SeriesRepository) : ViewModel() {
 
-    /*   val fetchSeries by lazyDeferred {
-           repository.getOnAirTodaySeries()
+      val fetchSeries by lazyDeferred {
+           repository.getOnAirTodaySeries(1)
        }
        val fetchPopularSeries by lazyDeferred {
-           repository.getPopularSeries()
+           repository.getPopularSeries(1)
        }
 
        val fetchTopRatedSeries by lazyDeferred {
-           repository.getRatedSeries()
+           repository.getRatedSeries(1)
        }
 
        val fetchInViewSeries by lazyDeferred {
-           repository.getInshowSeries()
-       }*/
+           repository.getInshowSeries(1)
+       }
 
     suspend fun loadOnAirToday(page: Int): LiveData<OnAirToday> {
         val fetchSeries by lazyDeferred {

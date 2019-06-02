@@ -1,5 +1,6 @@
 package com.example.corngrain.ui.main.movies
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.corngrain.data.network.response.movies.PlayingMovies
@@ -12,9 +13,20 @@ import kotlinx.coroutines.Deferred
 
 class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
 
-    init {
+    val ratedMovies by lazyDeferred {
+        repository.getTopRatedMovies(1)
     }
-    suspend fun loadMoreRatedMoviesAsync(page: Int):LiveData<TopRatedMovies>{
+    val playingMovies by lazyDeferred {
+        repository.getPlayingMoviesFromResponse(1)
+    }
+    val upcomingMovies by lazyDeferred {
+        repository.getUpcomingMovies(1)
+    }
+    val popularMovies by lazyDeferred {
+        repository.getPopularMovies(1)
+    }
+
+    suspend fun loadMoreRatedMoviesAsync(page: Int): LiveData<TopRatedMovies> {
         val fetchMoreRatedMovies by lazyDeferred {
             repository.getTopRatedMovies(page)
         }
@@ -41,7 +53,6 @@ class MoviesViewModel(private val repository: TmdbRepository) : ViewModel() {
         }
         return fetchMoreUpcomingMovies.await()
     }
-
 
 
 }

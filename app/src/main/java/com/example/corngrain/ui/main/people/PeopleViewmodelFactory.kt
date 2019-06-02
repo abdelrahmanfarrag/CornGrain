@@ -7,7 +7,7 @@ import com.example.corngrain.data.repository.persons.PersonsRepository
 
 @Suppress("UNCHECKED_CAST")
 class PeopleViewmodelFactory(private val personsRepository: PersonsRepository) :
-    ViewModelProvider.NewInstanceFactory() {
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return PeopleViewModel(personsRepository) as T
     }

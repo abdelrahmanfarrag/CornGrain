@@ -119,7 +119,7 @@ class Series : ScopedFragment(), KodeinAware {
     }
 
     private fun bindUI() = launch {
-        val job = viewModel.loadOnAirToday(1)
+        val job = viewModel.fetchSeries.await()
         job.observe(this@Series, Observer { onAirJob ->
             moreOnAirClick(job)
             if (onAirJob == null) return@Observer
@@ -130,7 +130,7 @@ class Series : ScopedFragment(), KodeinAware {
             autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
         })
 
-        val serieJob = viewModel.loadPopularSeries(1)
+        val serieJob = viewModel.fetchPopularSeries.await()
         serieJob.observe(this@Series, Observer { seriesData ->
             morePopularClick(serieJob)
             val popularSeriesList = seriesData.results.toMutableList()
@@ -159,7 +159,7 @@ class Series : ScopedFragment(), KodeinAware {
         val randomSerieDetail = viewModel.fetchDetails(movieId)
         detailCardUI(randomSerieDetail)
 
-        val topRatedSeries = viewModel.loadTopRatedSeries(1)
+        val topRatedSeries = viewModel.fetchTopRatedSeries.await()
 
         topRatedSeries.observe(this@Series, Observer {
             moreRatedClick(topRatedSeries)
@@ -178,7 +178,7 @@ class Series : ScopedFragment(), KodeinAware {
     }
 
     private fun bindUI2() = launch(Dispatchers.Main) {
-        val inshowSeries = viewModel.loadInViewSeries(1)
+        val inshowSeries = viewModel.fetchInViewSeries.await()
         inshowSeries.observe(this@Series, Observer { data ->
             moreInshowClick(inshowSeries)
             val onAirPagerAdapter = OnAirAdapter(data.results)

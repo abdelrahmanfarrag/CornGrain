@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.corngrain.data.repository.search.SearchRepository
 
 class SearchViewmodelFactory(private val searchRepository: SearchRepository) :
-    ViewModelProvider.NewInstanceFactory() {
+    ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return SearchViewModel(searchRepository) as T

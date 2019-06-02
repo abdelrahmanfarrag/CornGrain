@@ -32,6 +32,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
 
     private lateinit var job: Job
     private var isHandleStarted: Boolean = false
+    private var isHandleStarted2:Boolean = false
     var currentPage = 0
     private val handler = CoroutineExceptionHandler { _, exception ->
         EventBus.post(NoNetworkBus())
@@ -50,8 +51,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
         viewPager: ViewPager?,
         pagerIndicator: PageIndicatorView?,
         items: Int,
-        duration: Long = 3000
-    ) {
+        duration: Long = 3000) {
         if (viewPager != null && dots_layout != null) {
             viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
@@ -72,26 +72,28 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
                 }
 
             })
-            if (!isHandleStarted) {
-                val handler = Handler()
-                handler.post(object : Runnable {
-                    override fun run() {
-                        if (currentPage < items) {
-                            viewPager.setCurrentItem(currentPage, true)
-                            handler.postDelayed(this, duration)
-                            currentPage++
+            if (!isHandleStarted && !isHandleStarted2) {
+                    val handler = Handler()
+                    handler.post(object : Runnable {
+                        override fun run() {
+                            if (currentPage < items) {
+                                viewPager.setCurrentItem(currentPage, true)
+                                handler.postDelayed(this, duration)
+                                currentPage++
 
-                        } else if (currentPage == items) {
-                            currentPage = 0
-                            viewPager.setCurrentItem(currentPage, true)
-                            handler.postDelayed(this, duration)
-                            currentPage++
+                            } else if (currentPage == items) {
+                                currentPage = 0
+                                viewPager.setCurrentItem(currentPage, true)
+                                handler.postDelayed(this, duration)
+                                currentPage++
+                            }
                         }
-                    }
 
-                })
-            }
+                    })
+                }
+
             isHandleStarted = true
+            isHandleStarted2=true
         }
     }
 
