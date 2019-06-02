@@ -22,6 +22,7 @@ import com.example.corngrain.data.network.response.movies.UpcomingMovies
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.*
 import com.example.corngrain.utilities.GlideApp
+import com.example.corngrain.utilities.executeMoreClick
 import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.android.synthetic.main.now_playing_movies.*
 import kotlinx.android.synthetic.main.popular_layout.*
@@ -58,14 +59,10 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-           // val playMovies = viewModel.loadMorePlayingMoviesAsync(1)
-           // val upcomingMovies = viewModel.loadMoreUpcomingMoviesAsync(1)
-          //  val popularMovies = viewModel.loadMorePopularMoviesAsync(1)
-           // val topRatedMovies = viewModel.loadMoreRatedMoviesAsync(1)
-            buildingUpcomingMovieUI(viewModel.upcomingMovies.await())
-            buildingPlayingMovies(viewModel.playingMovies.await())
-            buildingTopRatedMoviesUI(viewModel.ratedMovies.await())
-            buildingPopularMoviesUI(viewModel.popularMovies.await())
+        buildingUpcomingMovieUI(viewModel.upcomingMovies.await())
+        buildingPlayingMovies(viewModel.playingMovies.await())
+        buildingTopRatedMoviesUI(viewModel.ratedMovies.await())
+        buildingPopularMoviesUI(viewModel.popularMovies.await())
 
         search_card_container.setOnClickListener { card ->
             toSearchScreen(card)
@@ -82,13 +79,18 @@ class Movies : ScopedFragment(), KodeinAware {
             loading_container.visibility = View.INVISIBLE
             view_container.visibility = View.VISIBLE
             now_playing_more.setOnClickListener {
-                launch {
-                    var currentPage = playing.page
-                    if (currentPage < playing.totalPages) {
-                        currentPage += 1
-                        viewModel.loadMorePlayingMoviesAsync(currentPage)
-                    }
-                }
+                val nextPage = playing.page + 1
+                executeMoreClick(
+                    nextPage,
+                    playing.totalPages
+                ) { viewModel.loadMorePlayingMoviesAsync(nextPage) }
+                //launch {
+                //  var currentPage = playing.page
+                //  if (currentPage < playing.totalPages) {
+                //      currentPage += 1
+                //     viewModel.loadMorePlayingMoviesAsync(currentPage)
+                // }
+                // }
             }
             settingNormalRecyclerViewConfigs(
                 this@Movies.context,

@@ -9,23 +9,24 @@ import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.data.repository.series.SeriesRepository
 import com.example.corngrain.utilities.lazyDeferred
+import com.example.corngrain.utilities.lazyDeferredWithId
 
 class SeriesViewModel(private val repository: SeriesRepository) : ViewModel() {
 
-      val fetchSeries by lazyDeferred {
-           repository.getOnAirTodaySeries(1)
-       }
-       val fetchPopularSeries by lazyDeferred {
-           repository.getPopularSeries(1)
-       }
+    val fetchSeries by lazyDeferred {
+        repository.getOnAirTodaySeries(1)
+    }
+    val fetchPopularSeries by lazyDeferred {
+        repository.getPopularSeries(1)
+    }
 
-       val fetchTopRatedSeries by lazyDeferred {
-           repository.getRatedSeries(1)
-       }
+    val fetchTopRatedSeries by lazyDeferred {
+        repository.getRatedSeries(1)
+    }
 
-       val fetchInViewSeries by lazyDeferred {
-           repository.getInshowSeries(1)
-       }
+    val fetchInViewSeries by lazyDeferred {
+        repository.getInshowSeries(1)
+    }
 
     suspend fun loadOnAirToday(page: Int): LiveData<OnAirToday> {
         val fetchSeries by lazyDeferred {
