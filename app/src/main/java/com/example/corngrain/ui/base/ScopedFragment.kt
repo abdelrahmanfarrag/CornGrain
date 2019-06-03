@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import java.lang.StringBuilder
 import kotlin.coroutines.CoroutineContext
 
 
@@ -44,7 +45,6 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         job = Job()
-
     }
 
     fun autoPagerSlide(

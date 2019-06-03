@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.movies.PlayingMovies
 import com.example.corngrain.data.network.response.movies.PopularMovies
@@ -33,15 +31,12 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
-import java.text.SimpleDateFormat
 import java.util.*
 
 class Movies : ScopedFragment(), KodeinAware {
 
-
     override val kodein: Kodein by closestKodein()
     private val factory by instance<MovieViewModelFactory>()
-
 
     private lateinit var viewModel: MoviesViewModel
     override fun onCreateView(
@@ -59,38 +54,27 @@ class Movies : ScopedFragment(), KodeinAware {
 
     @Suppress("ReplaceGetOrSet")
     private fun buildUI() = launch {
-        buildingUpcomingMovieUI(viewModel.upcomingMovies.await())
-        buildingPlayingMovies(viewModel.playingMovies.await())
-        buildingTopRatedMoviesUI(viewModel.ratedMovies.await())
-        buildingPopularMoviesUI(viewModel.popularMovies.await())
+        upcomingMoviesSection(viewModel.upcomingMovies.await())
+        playingMoviesSection(viewModel.playingMovies.await())
+        ratedMoviesSection(viewModel.ratedMovies.await())
+        popularMoviesSection(viewModel.popularMovies.await())
 
         search_card_container.setOnClickListener { card ->
             toSearchScreen(card)
         }
-
     }
 
-
-    private fun buildingPlayingMovies(playingMovies: LiveData<PlayingMovies>) {
-
-
+    private fun playingMoviesSection(playingMovies: LiveData<PlayingMovies>) {
         playingMovies.observe(this, Observer { playing ->
             if (playing == null) return@Observer
             loading_container.visibility = View.INVISIBLE
             view_container.visibility = View.VISIBLE
+            val nextPage = playing.page + 1
             now_playing_more.setOnClickListener {
-                val nextPage = playing.page + 1
                 executeMoreClick(
                     nextPage,
                     playing.totalPages
                 ) { viewModel.loadMorePlayingMoviesAsync(nextPage) }
-                //launch {
-                //  var currentPage = playing.page
-                //  if (currentPage < playing.totalPages) {
-                //      currentPage += 1
-                //     viewModel.loadMorePlayingMoviesAsync(currentPage)
-                // }
-                // }
             }
             settingNormalRecyclerViewConfigs(
                 this@Movies.context,
@@ -98,29 +82,19 @@ class Movies : ScopedFragment(), KodeinAware {
                 now_playing_movies_list,
                 LinearLayoutManager.HORIZONTAL
             ).setOnItemClickListener { item, view ->
-                (item as PlayingAdapter).let { playing ->
-                    toDetailScreen(playing.entry.id, view)
-                }
+                toDetailScreen((item as PlayingAdapter).entry.id, view)
             }
-
-
         })
-
-
     }
 
-
-    private fun buildingUpcomingMovieUI(upcomingMovies: LiveData<UpcomingMovies>) {
+    private fun upcomingMoviesSection(upcomingMovies: LiveData<UpcomingMovies>) {
         upcomingMovies.observe(this, Observer { upcomingData ->
 
             upcoming_more.setOnClickListener {
-                launch {
-                    var currentPage = upcomingData.page
-                    if (currentPage < upcomingData.totalPages) {
-                        currentPage += 1
-                        viewModel.loadMoreUpcomingMoviesAsync(currentPage)
-                    }
-                }
+                val nextPage = upcomingData.page + 1
+                executeMoreClick(
+                    nextPage, upcomingData.totalPages
+                ) { viewModel.loadMoreUpcomingMoviesAsync(nextPage) }
             }
             GlideApp.with(this@Movies.context!!)
                 .load(BASE_IMG_URL + upcomingData.results[0].posterPath)
@@ -144,28 +118,20 @@ class Movies : ScopedFragment(), KodeinAware {
                 upcoming_list,
                 LinearLayoutManager.HORIZONTAL
             ).setOnItemClickListener { item, view ->
-                (item as UpcomingAdapter).let { upcoming ->
-                    toDetailScreen(upcoming.upcomingMovies.id, view)
-                }
+                toDetailScreen((item as UpcomingAdapter).upcomingMovies.id, view)
             }
-
-
         })
-
-
     }
 
-    private fun buildingPopularMoviesUI(popularMovies: LiveData<PopularMovies>) {
+    private fun popularMoviesSection(popularMovies: LiveData<PopularMovies>) {
         popularMovies.observe(this, Observer { data ->
 
-
-            var currentPage = data.page
-            if (currentPage < data.totalPages) {
-                currentPage += 1
-                popular_more.setOnClickListener {
-                    launch {
-                        viewModel.loadMorePopularMoviesAsync(currentPage)
-                    }
+            popular_more.setOnClickListener {
+                val nextPage = data.page + 1
+                executeMoreClick(nextPage, data.totalPages) {
+                    viewModel.loadMorePopularMoviesAsync(
+                        nextPage
+                    )
                 }
             }
             if (popular_list != null)
@@ -175,10 +141,7 @@ class Movies : ScopedFragment(), KodeinAware {
                     popular_list,
                     RecyclerView.VERTICAL
                 ).setOnItemClickListener { item, view ->
-                    (item as PopularAdapter).let { popular ->
-                        toDetailScreen(popular.entry.id, view)
-
-                    }
+                    toDetailScreen((item as PopularAdapter).entry.id, view)
                 }
 
         })
@@ -186,7 +149,7 @@ class Movies : ScopedFragment(), KodeinAware {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun buildingTopRatedMoviesUI(topRatedData: LiveData<TopRatedMovies>) {
+    private fun ratedMoviesSection(topRatedData: LiveData<TopRatedMovies>) {
         topRatedData.observe(this, Observer { data ->
             val generatedNumber = generateRandomizedNumber()
             GlideApp.with(this.context!!)
@@ -211,19 +174,17 @@ class Movies : ScopedFragment(), KodeinAware {
                 movies_rated_list,
                 RecyclerView.HORIZONTAL
             ).setOnItemClickListener { item, view ->
-                (item as TopRatedAdapter).let { singleItem ->
-                    toDetailScreen(singleItem.entry.id, view)
+                toDetailScreen((item as TopRatedAdapter).entry.id, view)
+            }
+            rated_more.setOnClickListener {
+                val nextPage = data.page + 1
+                executeMoreClick(nextPage, data.totalPages) {
+                    viewModel.loadMoreRatedMoviesAsync(
+                        nextPage
+                    )
                 }
             }
-            var currentPage = data.page
-            if (currentPage < data.totalPages) {
-                currentPage += 1
-                rated_more.setOnClickListener {
-                    launch {
-                        viewModel.loadMoreRatedMoviesAsync(currentPage)
-                    }
-                }
-            }
+
             val position = generateRandomizedNumber()
             val title = data.results[position].title
             val content = data.results[position].overview
@@ -272,10 +233,8 @@ class Movies : ScopedFragment(), KodeinAware {
     private fun List<PopularMovies.Result>.toPopularAdapterItems(): List<PopularAdapter> {
         return this.map { item ->
             PopularAdapter(item)
-
         }
     }
-
     private fun List<TopRatedMovies.Result>.toTopRatedMoviesAdapterItems(): List<TopRatedAdapter> {
         return this.map { item ->
             TopRatedAdapter(item)

@@ -13,7 +13,7 @@ import com.example.corngrain.utilities.lazyDeferredWithId
 
 class SeriesViewModel(private val repository: SeriesRepository) : ViewModel() {
 
-    val fetchSeries by lazyDeferred {
+    val fetchOnAirToday by lazyDeferred {
         repository.getOnAirTodaySeries(1)
     }
     val fetchPopularSeries by lazyDeferred {

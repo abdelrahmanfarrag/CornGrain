@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,14 +19,13 @@ import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.*
 import com.example.corngrain.utilities.GlideApp
+import com.example.corngrain.utilities.executeMoreClick
 import kotlinx.android.synthetic.main.item_on_air.*
-import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
 import kotlinx.android.synthetic.main.rated_seasons.*
 import kotlinx.android.synthetic.main.serie_detail_card.*
 import kotlinx.android.synthetic.main.series_fragment.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -54,88 +52,46 @@ class Series : ScopedFragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(SeriesViewModel::class.java)
         bindUI()
-        bindUI2()
-    }
-
-    private fun moreOnAirClick(data: LiveData<OnAirToday>) {
-        data.observe(this, Observer { onAirJob ->
-            var page = onAirJob.page
-            if (page < onAirJob.totalPages) {
-                page += 1
-                series_on_air_more.setOnClickListener {
-                    launch {
-                        viewModel.loadOnAirToday(currentPage)
-                        currentPage = 0
-                    }
-                }
-
-            }
-        })
-    }
-
-    private fun morePopularClick(data: LiveData<PopularSeries>) {
-        data.observe(this, Observer { popular ->
-            var currentPage = popular.page
-            if (currentPage < popular.totalPages) {
-                currentPage += 1
-                popular_series_more.setOnClickListener {
-                    launch {
-                        viewModel.loadPopularSeries(currentPage)
-                    }
-                }
-
-            }
-        })
-
-    }
-
-    private fun moreRatedClick(data: LiveData<TopRatedSeries>) {
-        data.observe(this, Observer { rated ->
-            var currentPage = rated.page
-            if (currentPage < rated.totalPages) {
-                currentPage += 1
-                top_rated_more.setOnClickListener {
-                    launch {
-                        viewModel.loadTopRatedSeries(currentPage)
-                    }
-                }
-            }
-        })
-    }
-
-    private fun moreInshowClick(data: LiveData<SerieCurrentlyShowing>) {
-        data.observe(this, Observer { rated ->
-            var currentPage = rated.page
-            if (currentPage < rated.totalPages) {
-                currentPage += 1
-                inshow_more.setOnClickListener {
-                    launch {
-                        viewModel.loadInViewSeries(currentPage)
-                    }
-                }
-
-            }
-        })
     }
 
     private fun bindUI() = launch {
-        val job = viewModel.fetchSeries.await()
-        job.observe(this@Series, Observer { onAirJob ->
-            moreOnAirClick(job)
+        val onAir = viewModel.fetchOnAirToday.await()
+        val popular = viewModel.fetchPopularSeries.await()
+        val rated = viewModel.fetchTopRatedSeries.await()
+        val inShow = viewModel.fetchInViewSeries.await()
+        onAirTodaySection(onAir)
+        popularSeriesSection(popular)
+        val randomSerieDetail = viewModel.fetchDetails(movieId)
+        detailCardUI(randomSerieDetail)
+        topRatedSection(rated)
+        inShowSection(inShow)
+    }
+
+    private fun onAirTodaySection(onAirData: LiveData<OnAirToday>) {
+        onAirData.observe(this@Series, Observer { onAirJob ->
+            // moreOnAirClick(job)
             if (onAirJob == null) return@Observer
             serie_group_loading.visibility = View.INVISIBLE
             serie_view_items.visibility = View.VISIBLE
             val pagerAdapter = OnAirTodayAdapter(onAirJob)
             today_series_pager.adapter = pagerAdapter
             autoPagerSlide(today_series_pager, dots_layout, pagerAdapter.count)
+            series_on_air_more.setOnClickListener {
+                val nextPage = onAirJob.page + 1
+                currentPage = 0
+                executeMoreClick(
+                    nextPage,
+                    onAirJob.totalPages
+                ) { viewModel.loadOnAirToday(nextPage) }
+            }
         })
+    }
 
-        val serieJob = viewModel.fetchPopularSeries.await()
-        serieJob.observe(this@Series, Observer { seriesData ->
-            morePopularClick(serieJob)
+    private fun popularSeriesSection(popularSeries: LiveData<PopularSeries>) {
+        popularSeries.observe(this@Series, Observer { seriesData ->
             val popularSeriesList = seriesData.results.toMutableList()
             GlideApp.with(context!!)
-                .load(BASE_IMG_URL +seriesData.results[0].posterPath)
+                .load(BASE_IMG_URL + seriesData.results[0].posterPath)
                 .into(first_item_img)
             first_item_img.setOnClickListener {
                 toSerieDetailScreen(seriesData.results[0].id, it)
@@ -152,43 +108,51 @@ class Series : ScopedFragment(), KodeinAware {
             ).setOnItemClickListener { item, view ->
                 toSerieDetailScreen((item as PopularSerieAdapter).entry.id, view)
             }
-
-        })
-
-
-        val randomSerieDetail = viewModel.fetchDetails(movieId)
-        detailCardUI(randomSerieDetail)
-
-        val topRatedSeries = viewModel.fetchTopRatedSeries.await()
-
-        topRatedSeries.observe(this@Series, Observer {
-            moreRatedClick(topRatedSeries)
-            settingNormalRecyclerViewConfigs(
-                this@Series.context!!,
-                it.results.toRatedSeriesItems(),
-                rated_seasons_list,
-                RecyclerView.HORIZONTAL
-            ).setOnItemClickListener { item, view ->
-                (item as RatedSeriesAdapter).let {
-                    toSerieDetailScreen(it.entry.id, view)
+            popular_series_more.setOnClickListener {
+                val nextPage = seriesData.page + 1
+                executeMoreClick(nextPage, seriesData.totalPages) {
+                    viewModel.loadPopularSeries(
+                        nextPage
+                    )
                 }
             }
         })
 
     }
 
-    private fun bindUI2() = launch(Dispatchers.Main) {
-        val inshowSeries = viewModel.fetchInViewSeries.await()
-        inshowSeries.observe(this@Series, Observer { data ->
-            moreInshowClick(inshowSeries)
-            val onAirPagerAdapter = OnAirAdapter(data.results)
-            on_air_series_pager.adapter = onAirPagerAdapter
-            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size, 7000)
-
-
+    private fun topRatedSection(topRated: LiveData<TopRatedSeries>) {
+        topRated.observe(this@Series, Observer { data ->
+            //moreRatedClick(topRatedSeries)
+            settingNormalRecyclerViewConfigs(
+                this@Series.context!!,
+                data.results.toRatedSeriesItems(),
+                rated_seasons_list,
+                RecyclerView.HORIZONTAL
+            ).setOnItemClickListener { item, view ->
+                toSerieDetailScreen((item as RatedSeriesAdapter).entry.id, view)
+            }
+            top_rated_more.setOnClickListener {
+                val nextPage = data.page + 1
+                executeMoreClick(
+                    nextPage,
+                    data.totalPages
+                ) { viewModel.loadTopRatedSeries(nextPage) }
+            }
         })
     }
 
+    private fun inShowSection(inShow: LiveData<SerieCurrentlyShowing>) {
+        inShow.observe(this@Series, Observer { data ->
+            //moreInshowClick(inshowSeries)
+            val onAirPagerAdapter = OnAirAdapter(data.results)
+            on_air_series_pager.adapter = onAirPagerAdapter
+            autoPagerSlide(on_air_series_pager, dots_layout, data.results.size, 7000)
+            inshow_more.setOnClickListener {
+                val nextPage = data.page + 1
+                executeMoreClick(nextPage, data.totalPages) { viewModel.loadOnAirToday(nextPage) }
+            }
+        })
+    }
 
     private fun setGenres(genresList: List<SerieDetail.Genre>): StringBuilder {
         val stringBuilder = StringBuilder()
@@ -233,10 +197,7 @@ class Series : ScopedFragment(), KodeinAware {
 
             }
         })
-
-
     }
-
 
     private fun List<PopularSeriesEntity>.toAdapterItems(): List<PopularSerieAdapter> {
         return this.map { item ->

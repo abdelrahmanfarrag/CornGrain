@@ -25,7 +25,7 @@ fun <T> executeMoreClick(
     suspendBlock: suspend CoroutineScope.(Int) -> LiveData<T>
 ) {
     if (currentPage < totalPages) {
-        GlobalScope.launch {
+        GlobalScope.launch{
             suspendBlock(currentPage)
         }
     }
