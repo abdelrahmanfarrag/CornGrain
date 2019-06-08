@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#041B2B">
+    android:background="@drawable/ic_endless_constellation">
 
     <ScrollView
         android:id="@+id/views_container"

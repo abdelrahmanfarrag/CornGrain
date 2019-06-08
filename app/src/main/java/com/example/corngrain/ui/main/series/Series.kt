@@ -16,10 +16,12 @@ import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.*
 import com.example.corngrain.utilities.GlideApp
 import com.example.corngrain.utilities.executeMoreClick
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_on_air.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.popular_series.*
@@ -39,7 +41,7 @@ class Series : ScopedFragment(), KodeinAware {
     private val factory by instance<SeriesViewmodelFactory>()
     private lateinit var viewModel: SeriesViewModel
 
-    private var movieId: Int = 0
+    private var serieId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +56,10 @@ class Series : ScopedFragment(), KodeinAware {
         bindUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+    }
     private fun bindUI() = launch {
         val onAir = viewModel.fetchOnAirToday.await()
         val popular = viewModel.fetchPopularSeries.await()
@@ -61,7 +67,7 @@ class Series : ScopedFragment(), KodeinAware {
         val inShow = viewModel.fetchInViewSeries.await()
         onAirTodaySection(onAir)
         popularSeriesSection(popular)
-        val randomSerieDetail = viewModel.fetchDetails(movieId)
+        val randomSerieDetail = viewModel.fetchDetails(serieId)
         detailCardUI(randomSerieDetail)
         topRatedSection(rated)
         inShowSection(inShow)
@@ -97,7 +103,7 @@ class Series : ScopedFragment(), KodeinAware {
                 toSerieDetailScreen(seriesData.results[0].id, it)
             }
             popularSeriesList.removeAt(0)
-            movieId = seriesData.results[generateRandomizedNumber()].id
+            serieId = seriesData.results[generateRandomizedNumber()].id
 
             settingNormalRecyclerViewConfigs(
                 this@Series.context,
@@ -110,6 +116,11 @@ class Series : ScopedFragment(), KodeinAware {
             }
             popular_series_more.setOnClickListener {
                 val nextPage = seriesData.page + 1
+                launch {
+                    serieId = seriesData.results[generateRandomizedNumber()].id
+                    val randomSerieDetail = viewModel.fetchDetails(serieId)
+                    detailCardUI(randomSerieDetail)
+                }
                 executeMoreClick(nextPage, seriesData.totalPages) {
                     viewModel.loadPopularSeries(
                         nextPage
@@ -149,7 +160,7 @@ class Series : ScopedFragment(), KodeinAware {
             autoPagerSlide(on_air_series_pager, dots_layout, data.results.size, 7000)
             inshow_more.setOnClickListener {
                 val nextPage = data.page + 1
-                executeMoreClick(nextPage, data.totalPages) { viewModel.loadOnAirToday(nextPage) }
+                executeMoreClick(nextPage, data.totalPages) { viewModel.loadInViewSeries(nextPage) }
             }
         })
     }

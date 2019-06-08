@@ -16,8 +16,10 @@ import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
 import com.example.corngrain.data.network.response.trending.Trending
 import com.example.corngrain.data.repository.trending.TrendingRepository
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.trending.adapter.TrendingPagerAdapter
 import com.example.corngrain.ui.main.trending.adapter.TrendingSeriesAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.trending_fragment.*
 import kotlinx.coroutines.launch
@@ -44,7 +46,14 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(TrendingViewModel::class.java)
         bindMovieUI()
+        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         bindTvShowsAndSeriesUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).setToolbarTitle(resources.getString(R.string.bnv_trending))
+
     }
 
     private fun bindMovieUI() = launch {

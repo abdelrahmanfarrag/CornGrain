@@ -4,57 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#041B2B"
+    android:background="@drawable/ic_endless_constellation"
     tools:context=".ui.main.MainActivity">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/language_card"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        style="@style/toolbarTheme"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/transparent"
-        android:padding="4dp"
+        android:layout_height="?actionBarSize"
+        android:background="#140D39"
+        android:layoutDirection="ltr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeWidth="0dp">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title"
+            android:fontFamily="@font/cairo_bold"
+            android:padding="2dp"
+            android:textColor="@android:color/white" />
+    </androidx.appcompat.widget.Toolbar>
 
-            <TextView
-                android:id="@+id/lang_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:drawableTop="@drawable/ic_language_en"
-                android:fontFamily="@font/cairo_semibold"
-                android:text="@string/language_str"
-                android:textColor="@android:color/white"
-                android:textSize="8sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias=".5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SmallSp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_views_group"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/language_card">
-
+        app:layout_constraintTop_toBottomOf="@+id/main_toolbar">
 
         <fragment
             android:id="@+id/navigation_host_container"
@@ -73,8 +57,9 @@
             android:id="@+id/bottom_navigation"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
-            android:background="#1C2033"
+            android:background="#140D39"
             android:visibility="visible"
+            android:layoutDirection="ltr"
             app:itemIconTint="@drawable/bottom_nav_textcolor"
             app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
             app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"

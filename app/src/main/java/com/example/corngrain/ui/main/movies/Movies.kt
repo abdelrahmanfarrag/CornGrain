@@ -18,9 +18,11 @@ import com.example.corngrain.data.network.response.movies.PopularMovies
 import com.example.corngrain.data.network.response.movies.TopRatedMovies
 import com.example.corngrain.data.network.response.movies.UpcomingMovies
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.movies.adapters.*
 import com.example.corngrain.utilities.GlideApp
 import com.example.corngrain.utilities.executeMoreClick
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.movies_fragment.*
 import kotlinx.android.synthetic.main.now_playing_movies.*
 import kotlinx.android.synthetic.main.popular_layout.*
@@ -49,7 +51,14 @@ class Movies : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(MoviesViewModel::class.java)
+
+//        toolbar_title.text = resources.getString(R.string.bnv_movies)
         buildUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).setToolbarTitle(resources.getString(R.string.bnv_movies))
     }
 
     @Suppress("ReplaceGetOrSet")
@@ -58,7 +67,6 @@ class Movies : ScopedFragment(), KodeinAware {
         playingMoviesSection(viewModel.playingMovies.await())
         ratedMoviesSection(viewModel.ratedMovies.await())
         popularMoviesSection(viewModel.popularMovies.await())
-
         search_card_container.setOnClickListener { card ->
             toSearchScreen(card)
         }

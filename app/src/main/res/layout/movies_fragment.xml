@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#041B2B">
+    android:background="@drawable/ic_endless_constellation"
+    >
 <com.google.android.material.card.MaterialCardView
     android:layout_width="0dp"
     android:layout_height="?actionBarSize"

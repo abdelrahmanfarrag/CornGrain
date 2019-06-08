@@ -8,7 +8,10 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -34,8 +37,10 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
     private val languageQuery by instance<LanguageQuery>()
+
     private lateinit var navController: NavController
     private lateinit var disposable: Disposable
+    lateinit var toolbarTitle: TextView
 
     private var localeLanguage: String = "en"
 
@@ -43,26 +48,47 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(main_toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        toolbarTitle = findViewById(R.id.toolbar_title)
         settingNavigationWithButtonNavigationView()
+        NavigationUI.setupActionBarWithNavController(this, navController)
 
-        lang_txt.setOnClickListener {
-            localeLanguage = if (languageQuery.getAppLocale(this) == "ar") {
-                languageQuery.setAppLocale("en")
-                "en"
-            } else {
-                languageQuery.setAppLocale("ar")
-                "ar"
-            }
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
         setDailyNotification()
         addingToken()
         try_again_btn.setOnClickListener {
             EventBus.post(NoNetworkBus())
         }
 
+    }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.app_menu, menu)
+        return true
+    }
+
+    fun setToolbarTitle(title: String) {
+        toolbarTitle.text = title
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.language_item -> {
+                localeLanguage = if (languageQuery.getAppLocale(this) == "ar") {
+                    languageQuery.setAppLocale("en")
+                    "en"
+                } else {
+                    languageQuery.setAppLocale("ar")
+                    "ar"
+                }
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun attachBaseContext(newBase: Context?) {
@@ -118,6 +144,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     override fun onResume() {
         super.onResume()
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         disposable =
             EventBus.subscribe<NoNetworkBus>()
                 // if you want to receive the event on main thread
