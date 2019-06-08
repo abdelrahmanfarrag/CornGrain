@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     private lateinit var navController: NavController
     private lateinit var disposable: Disposable
-    lateinit var toolbarTitle: TextView
+    private lateinit var toolbarTitle: TextView
 
     private var localeLanguage: String = "en"
 
