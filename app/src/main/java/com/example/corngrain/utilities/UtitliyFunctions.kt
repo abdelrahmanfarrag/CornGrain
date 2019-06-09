@@ -1,6 +1,8 @@
 package com.example.corngrain.utilities
 
 import androidx.lifecycle.LiveData
+import com.example.corngrain.ui.base.BaseGroupeAdapter
+import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.coroutines.*
 
 fun <T> lazyDeferred(block: suspend CoroutineScope.() -> T): Lazy<Deferred<T>> {
@@ -20,13 +22,19 @@ fun <T> lazyDeferredWithId(id: Int, block: suspend CoroutineScope.(Int) -> T): L
 }
 
 fun <T> executeMoreClick(
-   currentPage: Int,
+    currentPage: Int,
     totalPages: Int,
     suspendBlock: suspend CoroutineScope.(Int) -> LiveData<T>
 ) {
     if (currentPage < totalPages) {
-        GlobalScope.launch{
+        GlobalScope.launch {
             suspendBlock(currentPage)
         }
+    }
+}
+
+fun <T> List<T>.toAdapterItems(): List<Item> {
+    return this.map { t ->
+        t as Item
     }
 }

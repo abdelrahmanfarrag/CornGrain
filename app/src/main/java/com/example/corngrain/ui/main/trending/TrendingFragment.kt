@@ -3,23 +3,18 @@ package com.example.corngrain.ui.main.trending
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
-import com.example.corngrain.data.network.response.trending.Trending
-import com.example.corngrain.data.repository.trending.TrendingRepository
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.trending.adapter.TrendingPagerAdapter
 import com.example.corngrain.ui.main.trending.adapter.TrendingSeriesAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.trending_fragment.*
 import kotlinx.coroutines.launch

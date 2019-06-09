@@ -17,6 +17,7 @@ import com.example.corngrain.data.network.response.Similar
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.Credits
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
@@ -24,11 +25,13 @@ import com.example.corngrain.ui.main.movies.details.adapter.SimilarAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
 import com.example.corngrain.ui.main.youtube.YoutubeActivity
 import com.example.corngrain.utilities.GlideApp
+import com.example.corngrain.utilities.toAdapterItems
 import kotlinx.android.synthetic.main.movie_detail_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
+import org.kodein.di.bindings.Factory
 import org.kodein.di.generic.factory
 import java.lang.StringBuilder
 import java.text.DecimalFormat
@@ -53,6 +56,8 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         val safedMovieId = arguments?.let { bundle ->
             MovieDetailArgs.fromBundle(bundle)
         }
+        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+
         val id = safedMovieId?.id
         viewModel = ViewModelProviders.of(this, movieDetailViewModelInstanceFactory(id!!))
             .get(MovieDetailViewModel::class.java)

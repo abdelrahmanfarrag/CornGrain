@@ -20,6 +20,7 @@ import com.example.corngrain.data.network.response.Reviews
 import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
@@ -55,7 +56,7 @@ class SerieDetailFragment : ScopedFragment(), KodeinAware {
             SerieDetailFragmentArgs.fromBundle(bundle)
         }
         serieId = receiveId?.serieId
-
+        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         Log.d("seasonId", serieId.toString())
 
 
