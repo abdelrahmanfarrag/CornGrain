@@ -77,7 +77,6 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
                 , 2
             ).setOnItemClickListener { item, view ->
                 toDetailsScreen((item as TrendingSeriesAdapter).entries.id, view)
-                Log.d("serieIdTest", "${item.entries.id} \n ${item.entries.name}")
             }
 
         })

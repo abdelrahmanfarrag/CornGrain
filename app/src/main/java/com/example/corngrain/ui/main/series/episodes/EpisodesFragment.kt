@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.series.Season
 import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.main.series.episodes.adapter.EpisodesAdapter
 import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
+import com.example.corngrain.utilities.normalRecyclerView
 import kotlinx.android.synthetic.main.episodes_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -71,6 +74,12 @@ class EpisodesFragment : ScopedFragment(), KodeinAware {
             season_number.text = seasonData.name
             season_air_date.text = seasonData.airDate
             season_overview.text = seasonData.overview
+
+            val episodesAdapter = EpisodesAdapter(seasonData.episodes[0])
+            normalRecyclerView(
+                context!!, episodesAdapter.toGroupeAdapterItems(seasonData.episodes)
+                , RecyclerView.HORIZONTAL, episodes_list
+            )
 
         })
     }

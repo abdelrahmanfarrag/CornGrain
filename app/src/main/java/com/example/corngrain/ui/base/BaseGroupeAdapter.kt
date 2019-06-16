@@ -2,6 +2,7 @@ package com.example.corngrain.ui.base
 
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
+import com.example.corngrain.R
 import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -28,6 +29,7 @@ abstract class BaseGroupeAdapter<T> : Item() {
     protected fun ViewHolder.setAdapterDisplayImage(imageUrl: String, loadIn: ImageView) {
         GlideApp.with(this.containerView)
             .load(BASE_IMG_URL + imageUrl)
+            .placeholder(R.drawable.ic_placeholder)
             .into(loadIn)
     }
 

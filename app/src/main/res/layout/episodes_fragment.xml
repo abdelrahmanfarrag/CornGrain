@@ -66,8 +66,10 @@
                 android:layout_height="220dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,21 +78,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/cairo_bold"
-                android:padding="4dp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:textColor="#E0CCCC"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/season_img"
-                app:layout_constraintTop_toTopOf="@+id/season_img" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/season_img" />
 
             <TextView
                 android:id="@+id/season_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_semibold"
+                android:gravity="center"
                 android:padding="4dp"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="@+id/serie_title"
+                app:layout_constraintEnd_toEndOf="@+id/season_img"
+                app:layout_constraintStart_toStartOf="@+id/season_img"
                 app:layout_constraintTop_toBottomOf="@+id/serie_title" />
 
             <TextView
@@ -98,22 +105,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_semibold"
-                android:padding="4dp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="@+id/season_number"
+                app:layout_constraintEnd_toEndOf="@+id/season_img"
+                app:layout_constraintStart_toStartOf="@+id/season_img"
                 app:layout_constraintTop_toBottomOf="@+id/season_number" />
 
             <TextView
                 android:id="@+id/season_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:fontFamily="@font/cairo_semibold"
                 android:padding="4dp"
                 android:textAlignment="viewStart"
                 android:textColor="#E0CCCC"
+                app:layout_constraintEnd_toEndOf="@+id/season_img"
                 app:layout_constraintStart_toStartOf="@+id/season_img"
-                app:layout_constraintTop_toBottomOf="@+id/season_img" />
+                app:layout_constraintTop_toBottomOf="@+id/season_air_date" />
 
             <View
                 android:id="@+id/seasons_dividor_1"
