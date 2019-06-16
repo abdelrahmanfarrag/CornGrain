@@ -24,13 +24,15 @@ abstract class BaseGroupeAdapter<T> : Item() {
 
     abstract fun buildAdapterItemsUI(viewHolder: ViewHolder)
 
-    abstract fun toGroupeAdapterItems(entries:List<T>): List<BaseGroupeAdapter<T>>
+    abstract fun toGroupeAdapterItems(entries: List<T>): List<BaseGroupeAdapter<T>>
 
-    protected fun ViewHolder.setAdapterDisplayImage(imageUrl: String, loadIn: ImageView) {
-        GlideApp.with(this.containerView)
-            .load(BASE_IMG_URL + imageUrl)
-            .placeholder(R.drawable.ic_placeholder)
-            .into(loadIn)
+    protected fun ViewHolder.setAdapterDisplayImage(imageUrl: String?, loadIn: ImageView) {
+        if (imageUrl!=null) {
+            GlideApp.with(this.containerView)
+                .load(BASE_IMG_URL + imageUrl)
+                .placeholder(R.drawable.ic_placeholder)
+                .into(loadIn)
+        }
     }
 
 

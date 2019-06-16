@@ -2,26 +2,18 @@ package com.example.corngrain.ui.main.search
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.search.MovieSearch
-import com.example.corngrain.ui.base.ScopedFragment
+import com.example.corngrain.ui.base.BaseFragment
 import com.example.corngrain.ui.main.search.adapter.SearchAdapter
+import com.example.corngrain.utilities.navigationDirectionAction
+import com.example.corngrain.utilities.normalRecyclerView
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.android.plugins.RxAndroidPlugins
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -30,24 +22,16 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 import java.util.concurrent.TimeUnit
 
-class SearchFragment : ScopedFragment(), KodeinAware {
+class SearchFragment : BaseFragment(), KodeinAware {
+
     override val kodein: Kodein by closestKodein()
-
     private val factory by instance<SearchViewmodelFactory>()
-
     private lateinit var viewModel: SearchViewModel
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.search_fragment, container, false)
-    }
+    override fun setFragmentLayout(): Int = R.layout.search_fragment
 
     @SuppressLint("CheckResult")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun bindFragmentUI() {
         viewModel = ViewModelProviders.of(this, factory).get(SearchViewModel::class.java)
         RxTextView.textChanges(search_text_et)
             .debounce(500, TimeUnit.MILLISECONDS)
@@ -59,14 +43,14 @@ class SearchFragment : ScopedFragment(), KodeinAware {
 
             })
 
-
     }
 
+    @SuppressLint("SetTextI18n")
     private fun bindSearchListUI(query: String, page: Int) = launch {
         if (query.isEmpty()) {
             more_search_movies.visibility = View.INVISIBLE
             group_loading.visibility = View.VISIBLE
-            no_result.visibility=View.INVISIBLE
+            no_result.visibility = View.INVISIBLE
             textView_loading.text = "Waiting for your type"
             search_list.adapter = null
         } else {
@@ -93,42 +77,30 @@ class SearchFragment : ScopedFragment(), KodeinAware {
                 }
             }
             if (result.results.isEmpty()) {
-                Log.d("empty","Result isempty")
                 no_result.visibility = View.VISIBLE
-                group_loading.visibility=View.INVISIBLE
+                group_loading.visibility = View.INVISIBLE
                 more_search_movies.visibility = View.INVISIBLE
                 search_list.visibility = View.INVISIBLE
             } else {
                 no_result.visibility = View.INVISIBLE
                 more_search_movies.visibility = View.VISIBLE
                 search_list.visibility = View.VISIBLE
-                settingNormalRecyclerViewConfigs(
+                val searchAdapter = SearchAdapter(result.results[0])
+                normalRecyclerView(
                     context!!,
-                    result.results.toAdapterItems(),
-                    search_list,
+                    searchAdapter.toGroupeAdapterItems(result.results),
                     RecyclerView.VERTICAL
+                    , search_list
                 ).setOnItemClickListener { item, view ->
                     (item as SearchAdapter).let { adapter ->
-                        toDetailScreen(adapter.entries.id, view)
+                        val actionToDetail =
+                            SearchFragmentDirections.searchToDetail(adapter.entries.id)
+                        navigationDirectionAction(actionToDetail, view)
                     }
                 }
             }
 
-            })
+        })
 
     }
-
-
-    private fun List<MovieSearch.Result>.toAdapterItems(): List<SearchAdapter> {
-        return this.map { item ->
-            SearchAdapter(item)
-        }
-    }
-
-    private fun toDetailScreen(id: Int, viewClicked: View) {
-        val actionToDetail = SearchFragmentDirections.searchToDetail(id)
-        Navigation.findNavController(viewClicked).navigate(actionToDetail)
-    }
-
-
 }

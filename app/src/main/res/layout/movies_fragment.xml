@@ -8,9 +8,12 @@
     >
 <com.google.android.material.card.MaterialCardView
     android:layout_width="0dp"
-    android:layout_height="?actionBarSize"
-    android:backgroundTint="@android:color/transparent"
-    android:elevation="12dp"
+    android:layout_height="48dp"
+    android:backgroundTint="#F8EDED"
+    app:cardElevation="12dp"
+    app:cardCornerRadius="25dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
-            android:textColor="@android:color/white"/>
+            android:textColor="#E3CFCF"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

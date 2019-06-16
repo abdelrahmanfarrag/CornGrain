@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
 import androidx.transition.TransitionSet
 import androidx.viewpager.widget.ViewPager
-import com.example.corngrain.ui.base.BaseAdapter
-import com.example.corngrain.ui.base.BaseGroupeAdapter
 import com.rd.PageIndicatorView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -168,9 +166,4 @@ fun animateBottomTabsOnClick() {
 
     }
 
-    fun <T> List<T>.toAdapter(): List<BaseAdapter<T>> {
-        return this.map { item ->
-            BaseAdapter(item)
-        }
-    }
 }

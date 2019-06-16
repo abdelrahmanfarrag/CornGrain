@@ -3,21 +3,13 @@ package com.example.corngrain.ui.main.movies.details
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.Detail
-import com.example.corngrain.data.network.response.Reviews
-import com.example.corngrain.data.network.response.Similar
-import com.example.corngrain.data.network.response.Videos
-import com.example.corngrain.data.network.response.Credits
-import com.example.corngrain.ui.base.ScopedFragment
-import com.example.corngrain.ui.main.MainActivity
+import com.example.corngrain.ui.base.BaseFragment
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.SimilarAdapter
@@ -25,38 +17,31 @@ import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
 import com.example.corngrain.ui.main.youtube.YoutubeActivity
 import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
+import com.example.corngrain.utilities.normalRecyclerView
 import kotlinx.android.synthetic.main.movie_detail_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
-import org.kodein.di.bindings.Factory
 import org.kodein.di.generic.factory
 import java.lang.StringBuilder
 import java.text.DecimalFormat
 
-class MovieDetail : ScopedFragment(), KodeinAware {
+class MovieDetail : BaseFragment(), KodeinAware {
+
 
     override val kodein: Kodein by closestKodein()
     private val movieDetailViewModelInstanceFactory: ((Int) -> MovieDetailViewModelFactory) by factory()
-
-
     private lateinit var viewModel: MovieDetailViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.movie_detail_fragment, container, false)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun setFragmentLayout(): Int = R.layout.movie_detail_fragment
+
+    override fun bindFragmentUI() {
         val safedMovieId = arguments?.let { bundle ->
             MovieDetailArgs.fromBundle(bundle)
-        }
-        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
 
+        }
         val id = safedMovieId?.id
         viewModel = ViewModelProviders.of(this, movieDetailViewModelInstanceFactory(id!!))
             .get(MovieDetailViewModel::class.java)
@@ -65,6 +50,7 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         bindReviewUI()
         bindTrailersUI()
         bindSimilarMovieUI()
+
     }
 
 
@@ -123,11 +109,12 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val cast = viewModel.fetchMovieCast.await()
             cast.observe(this@MovieDetail, Observer { castData ->
-                settingNormalRecyclerViewConfigs(
+                val castAdapter = CastAdapter(castData.cast[0])
+                normalRecyclerView(
                     context!!,
-                    castData.cast.toCastAdapter(),
-                    detail_screen_cast_list,
+                    castAdapter.toGroupeAdapterItems(castData.cast),
                     RecyclerView.HORIZONTAL
+                    , detail_screen_cast_list
                 )
 
             })
@@ -138,19 +125,19 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val reviews = viewModel.fetchMovieReviews.await()
             reviews.observe(this@MovieDetail, Observer { reviewsData ->
+                val reviewsAdapter = ReviewsAdapter(reviewsData.results[0])
                 if (reviewsData == null) return@Observer
-                else {
-                    if (reviewsData.results.isNotEmpty()) {
-                        settingNormalRecyclerViewConfigs(
-                            this@MovieDetail.context,
-                            reviewsData.results.toReviewsAdapter(),
-                            reviews_list,
-                            RecyclerView.VERTICAL
-                        )
-                    } else {
-                        no_review_tv.visibility = View.VISIBLE
-                    }
+                if (reviewsData.results.isNotEmpty()) {
+                    normalRecyclerView(
+                        this@MovieDetail.context,
+                        reviewsAdapter.toGroupeAdapterItems(reviewsData.results),
+                        RecyclerView.VERTICAL,
+                        reviews_list
+                    )
+                } else {
+                    no_review_tv.visibility = View.VISIBLE
                 }
+
 
             })
 
@@ -162,26 +149,26 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val trailers = viewModel.fetchMovieTrailers.await()
             trailers.observe(this@MovieDetail, Observer { videos ->
+                val videosAdapter = TrailersAdapter(videos.results[0])
                 if (videos == null) return@Observer
-                else {
-                    if (videos.results.isNotEmpty()) {
-                        settingNormalRecyclerViewConfigs(
-                            context!!,
-                            videos.results.toTrailerAdapter(),
-                            videos_list,
-                            RecyclerView.HORIZONTAL
-                        ).setOnItemClickListener { item, _ ->
-                            (item as TrailersAdapter).let { singleItem ->
-                                val intent = Intent(context!!, YoutubeActivity::class.java)
-                                intent.putExtra("key", singleItem.entry.key)
-                                startActivity(intent)
-                            }
-
+                if (videos.results.isNotEmpty()) {
+                    normalRecyclerView(
+                        context!!,
+                        videosAdapter.toGroupeAdapterItems(videos.results),
+                        RecyclerView.HORIZONTAL,
+                        videos_list
+                    ).setOnItemClickListener { item, _ ->
+                        (item as TrailersAdapter).let { singleItem ->
+                            val intent = Intent(context!!, YoutubeActivity::class.java)
+                            intent.putExtra("key", singleItem.entry.key)
+                            startActivity(intent)
                         }
-                    } else {
-                        no_videos_tv.visibility = View.VISIBLE
+
                     }
+                } else {
+                    no_videos_tv.visibility = View.VISIBLE
                 }
+
             })
         }
     }
@@ -190,16 +177,17 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         launch {
             val similar = viewModel.fetchSimilarMovies.await()
             similar.observe(this@MovieDetail, Observer { similarDetails ->
+                val similarAdapter = SimilarAdapter(similarDetails.results[0])
                 if (similarDetails == null) return@Observer
                 else {
                     loading_container.visibility = View.INVISIBLE
                     views_container.visibility = View.VISIBLE
                     if (similarDetails.results.isNotEmpty()) {
-                        settingNormalRecyclerViewConfigs(
+                        normalRecyclerView(
                             context!!,
-                            similarDetails.results.toSimilarAdapter(),
-                            similar_list,
-                            RecyclerView.HORIZONTAL
+                            similarAdapter.toGroupeAdapterItems(similarDetails.results),
+                            RecyclerView.HORIZONTAL,
+                            similar_list
                         )
                     } else {
                         no_similar_tv.visibility = View.VISIBLE
@@ -208,33 +196,6 @@ class MovieDetail : ScopedFragment(), KodeinAware {
             })
         }
     }
-
-    private fun List<Similar.Result>.toSimilarAdapter(): List<SimilarAdapter> {
-        return this.map { item ->
-            SimilarAdapter(item)
-        }
-
-    }
-
-    private fun List<Videos.Result>.toTrailerAdapter(): List<TrailersAdapter> {
-        return this.map { item ->
-            TrailersAdapter(item)
-        }
-    }
-
-    private fun List<Reviews.Result>.toReviewsAdapter(): List<ReviewsAdapter> {
-        return this.map { item ->
-            ReviewsAdapter(item)
-
-        }
-    }
-
-    private fun List<Credits.Cast>.toCastAdapter(): List<CastAdapter> {
-        return this.map { item ->
-            CastAdapter(item)
-        }
-    }
-
     private fun setGenres(genresList: List<Detail.Genre>): StringBuilder {
         val stringBuilder = StringBuilder()
         genresList.forEachIndexed { index, genre ->
@@ -246,6 +207,4 @@ class MovieDetail : ScopedFragment(), KodeinAware {
         }
         return stringBuilder
     }
-
-
 }
