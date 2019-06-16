@@ -1,6 +1,5 @@
 package com.example.corngrain.ui.main.search
 
-import android.graphics.Movie
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.corngrain.data.network.response.search.MovieSearch

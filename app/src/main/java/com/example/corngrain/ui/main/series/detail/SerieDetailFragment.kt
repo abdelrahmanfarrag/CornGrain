@@ -21,7 +21,6 @@ import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.series.SerieDetail
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.MainActivity
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
 import com.example.corngrain.ui.main.series.SeriesViewModel
@@ -29,6 +28,7 @@ import com.example.corngrain.ui.main.series.SeriesViewmodelFactory
 import com.example.corngrain.ui.main.series.adapter.SerieCastAdapter
 import com.example.corngrain.ui.main.series.adapter.SerieSeasonsAdapter
 import com.example.corngrain.ui.main.youtube.YoutubeActivity
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.serie_detail_fragment.*
 import kotlinx.coroutines.launch

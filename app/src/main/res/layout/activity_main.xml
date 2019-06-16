@@ -58,6 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
             android:background="#140D39"
+            app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
             android:visibility="visible"
             android:layoutDirection="ltr"
             app:itemIconTint="@drawable/bottom_nav_textcolor"

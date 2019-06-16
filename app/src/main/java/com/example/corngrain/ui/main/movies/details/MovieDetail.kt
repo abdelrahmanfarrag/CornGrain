@@ -18,14 +18,13 @@ import com.example.corngrain.data.network.response.Videos
 import com.example.corngrain.data.network.response.Credits
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.MainActivity
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.movies.details.adapter.CastAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.ReviewsAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.SimilarAdapter
 import com.example.corngrain.ui.main.movies.details.adapter.TrailersAdapter
 import com.example.corngrain.ui.main.youtube.YoutubeActivity
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
-import com.example.corngrain.utilities.toAdapterItems
 import kotlinx.android.synthetic.main.movie_detail_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein

@@ -11,8 +11,8 @@ import androidx.viewpager.widget.PagerAdapter
 import com.example.corngrain.R
 import com.example.corngrain.data.db.entity.series.OnAirTodayEntity
 import com.example.corngrain.data.network.response.series.OnAirToday
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.SeriesDirections
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 
 class OnAirTodayAdapter(private val entries: OnAirToday) : PagerAdapter() {

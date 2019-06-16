@@ -10,8 +10,8 @@ import androidx.navigation.Navigation
 import androidx.viewpager.widget.PagerAdapter
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.trending.Trending
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.trending.TrendingFragmentDirections
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 
 class TrendingPagerAdapter(val entries: List<Trending.Result>) : PagerAdapter() {

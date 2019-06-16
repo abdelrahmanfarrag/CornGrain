@@ -17,8 +17,8 @@ import com.example.corngrain.data.db.entity.series.PopularSeriesEntity
 import com.example.corngrain.data.network.response.series.*
 import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.MainActivity
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
 import com.example.corngrain.ui.main.series.adapter.*
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 import com.example.corngrain.utilities.executeMoreClick
 import kotlinx.android.synthetic.main.activity_main.*
@@ -234,5 +234,6 @@ class Series : ScopedFragment(), KodeinAware {
         val action = SeriesDirections.serieDetailAction(id)
         Navigation.findNavController(view).navigate(action)
     }
+
 
 }

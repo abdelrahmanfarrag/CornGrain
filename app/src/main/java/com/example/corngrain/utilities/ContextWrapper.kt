@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.corngrain.utilities
 
 import android.content.Context
@@ -6,6 +8,7 @@ import android.os.LocaleList
 import java.util.*
 
 
+@Suppress("NAME_SHADOWING")
 class ContextWrapper(base: Context) : android.content.ContextWrapper(base) {
     companion object {
 

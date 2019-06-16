@@ -35,7 +35,7 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
     private var isHandleStarted: Boolean = false
     private var isHandleStarted2:Boolean = false
     var currentPage = 0
-    private val handler = CoroutineExceptionHandler { _, exception ->
+    private val handler = CoroutineExceptionHandler { _, _ ->
         EventBus.post(NoNetworkBus())
     }
     override val coroutineContext: CoroutineContext
@@ -94,12 +94,6 @@ abstract class ScopedFragment : Fragment(), CoroutineScope {
 
             isHandleStarted = true
             isHandleStarted2=true
-        }
-    }
-
-    fun <T> List<T>.toAdptItems(layout: Int): List<BaseAdapter<T>> {
-        return this.map { transformedItem ->
-            BaseAdapter(transformedItem, layout)
         }
     }
 

@@ -15,6 +15,7 @@ import com.example.corngrain.ui.base.ScopedFragment
 import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.trending.adapter.TrendingPagerAdapter
 import com.example.corngrain.ui.main.trending.adapter.TrendingSeriesAdapter
+import com.example.corngrain.utilities.autoSlideViewPager
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.trending_fragment.*
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
             loading_container.visibility = View.INVISIBLE
             val trendingMoviesAdapter = TrendingPagerAdapter(result.results)
             today_series_pager.adapter = trendingMoviesAdapter
-            autoPagerSlide(today_series_pager, dots_layout, result.results.size, 5000)
+            autoSlideViewPager(today_series_pager, dots_layout, result.results.size, 5000)
 
         })
     }

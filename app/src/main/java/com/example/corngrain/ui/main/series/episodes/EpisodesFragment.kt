@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.series.Season
 import com.example.corngrain.ui.base.ScopedFragment
-import com.example.corngrain.ui.main.movies.adapters.BASE_IMG_URL
+import com.example.corngrain.utilities.BASE_IMG_URL
 import com.example.corngrain.utilities.GlideApp
 import kotlinx.android.synthetic.main.episodes_fragment.*
 import kotlinx.coroutines.launch
