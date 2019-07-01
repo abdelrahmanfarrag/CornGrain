@@ -2,6 +2,7 @@ package com.example.corngrain.ui.main.trending
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.corngrain.ui.main.MainActivity
 import com.example.corngrain.ui.main.trending.adapter.TrendingPagerAdapter
 import com.example.corngrain.ui.main.trending.adapter.TrendingSeriesAdapter
 import com.example.corngrain.utilities.autoSlideViewPager
+import com.example.corngrain.utilities.settingFragmentToolbar
 import kotlinx.android.synthetic.main.on_airtoday.*
 import kotlinx.android.synthetic.main.trending_fragment.*
 import kotlinx.coroutines.launch
@@ -25,9 +27,10 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
 class TrendingFragment : ScopedFragment(), KodeinAware {
+
+
     override val kodein: Kodein by closestKodein()
     private val factory by instance<TrendingFactory>()
-
 
     private lateinit var viewModel: TrendingViewModel
 
@@ -41,16 +44,11 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(TrendingViewModel::class.java)
+        settingFragmentToolbar(context as MainActivity,R.string.bnv_trending,this)
         bindMovieUI()
-        (context as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         bindTvShowsAndSeriesUI()
     }
 
-    override fun onResume() {
-        super.onResume()
-        (context as MainActivity).setToolbarTitle(resources.getString(R.string.bnv_trending))
-
-    }
 
     private fun bindMovieUI() = launch {
         val trendingMoviesJob = viewModel.fetchTrendingMovies.await()
@@ -60,7 +58,8 @@ class TrendingFragment : ScopedFragment(), KodeinAware {
             loading_container.visibility = View.INVISIBLE
             val trendingMoviesAdapter = TrendingPagerAdapter(result.results)
             today_series_pager.adapter = trendingMoviesAdapter
-            autoSlideViewPager(today_series_pager, dots_layout, result.results.size, 5000)
+            val handler = Handler()
+            autoSlideViewPager(today_series_pager, dots_layout, result.results.size,handler)
 
         })
     }

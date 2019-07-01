@@ -2,26 +2,27 @@ package com.example.corngrain.ui.main.series.adapter
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.series.SerieDetail
-import com.example.corngrain.utilities.BASE_IMG_URL
-import com.example.corngrain.utilities.GlideApp
-import com.xwray.groupie.kotlinandroidextensions.Item
+import com.example.corngrain.ui.base.BaseGroupeAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.single_season_item.*
 
-class SeasonsAdapter(private val entry: SerieDetail.Season) : Item() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+class SeasonsAdapter(private val entry: SerieDetail.Season) :
+    BaseGroupeAdapter<SerieDetail.Season>() {
+
+    override fun setGroupeAdapterLayout(): Int = R.layout.single_season_item
+
+
+    override fun buildAdapterItemsUI(viewHolder: ViewHolder) {
         viewHolder.apply {
-            seasonImage()
+            setAdapterDisplayImage(entry.posterPath, detail_season_img)
         }
     }
 
-    override fun getLayout(): Int = R.layout.single_season_item
-
-
-    fun ViewHolder.seasonImage() {
-        GlideApp.with(this.containerView)
-            .load(BASE_IMG_URL + entry.posterPath)
-            .placeholder(R.drawable.ic_placeholder)
-            .into(detail_season_img)
+    override fun toGroupeAdapterItems(entries: List<SerieDetail.Season>): List<BaseGroupeAdapter<SerieDetail.Season>> {
+        return entries.map { item ->
+            SeasonsAdapter(item)
+        }
     }
+
 }

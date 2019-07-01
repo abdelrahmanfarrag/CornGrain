@@ -2,49 +2,57 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="160dp"
     android:backgroundTint="@android:color/transparent"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/on_air_series_pager"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:overScrollMode="never"
+        <ImageView
+            android:id="@+id/first_inshow_img"
+            android:layout_width="140dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="2dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <com.rd.PageIndicatorView
-            android:id="@+id/on_air_dots_layout"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/first_inshow_list"
+            app:layout_constraintTop_toTopOf="@+id/first_inshow_img"
+            app:layout_constraintStart_toEndOf="@+id/first_inshow_img"
+            android:layout_marginStart="4dp" />
+
+        <ImageView
+            android:id="@+id/second_inshow_img"
+            android:layout_width="140dp"
+            android:layout_height="0dp"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/dots_item"
-            android:padding="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:piv_animationType="fill"
-            app:piv_dynamicCount="true"
-            app:piv_interactiveAnimation="true"
-            app:piv_padding="4dp"
-            app:piv_radius="4dp"
-            app:piv_selectedColor="@android:color/white"
-            app:piv_unselectedColor="@android:color/white"
-            app:piv_viewPager="@+id/on_air_series_pager" />
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/first_inshow_img"
+            app:layout_constraintStart_toEndOf="@+id/first_inshow_list"
+            app:layout_constraintTop_toTopOf="@+id/first_inshow_img" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/second_inshow_list"
+            app:layout_constraintTop_toTopOf="@+id/first_inshow_img"
+            app:layout_constraintStart_toEndOf="@+id/second_inshow_img"
+            android:layout_marginStart="4dp" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </HorizontalScrollView>
 </com.google.android.material.card.MaterialCardView>
