@@ -2,6 +2,10 @@ package com.example.corngrain.ui.main.movies
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import android.view.View
 import android.widget.Toast
@@ -41,6 +45,7 @@ class Movies : BaseFragment(), KodeinAware {
 
     override fun bindFragmentUI() {
         viewModel = ViewModelProviders.of(this, factory).get(MoviesViewModel::class.java)
+        setHasOptionsMenu(true)
         buildUI()
 
     }
@@ -48,6 +53,14 @@ class Movies : BaseFragment(), KodeinAware {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).setToolbarTitle(resources.getString(R.string.bnv_movies))
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+    /*    if (menu==null)return
+        val item = menu.findItem(R.id.language_item) ?: return
+        item.isVisible = false*/
+
     }
 
     @Suppress("ReplaceGetOrSet")
@@ -60,6 +73,24 @@ class Movies : BaseFragment(), KodeinAware {
             val actionToSearchScreen = MoviesDirections.actionSearchMovies()
             navigationDirectionAction(actionToSearchScreen, card)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if (inflater == null) return
+        inflater.inflate(R.menu.movies_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.movie_item -> {
+                Toast.makeText(context!!, "Test special menu item", Toast.LENGTH_LONG).show()
+                return true
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun playingMoviesSection(playingMovies: LiveData<PlayingMovies>) {
@@ -134,11 +165,6 @@ class Movies : BaseFragment(), KodeinAware {
 
     private fun popularMoviesSection(popularMovies: LiveData<PopularMovies>) {
         popularMovies.observe(this, Observer { data ->
-            Toast.makeText(
-                context!!,
-                "EXECUTED AND ITEMS ARE ${data.results.size}",
-                Toast.LENGTH_LONG
-            ).show()
             val popularAdapter = PopularMoviesAdapter(data.results[0])
             popular_more.setOnClickListener {
                 val nextPage = data.page + 1

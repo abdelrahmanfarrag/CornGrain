@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@drawable/ic_endless_constellation"
     tools:context=".ui.main.MainActivity">
 
@@ -14,6 +15,7 @@
         android:layout_height="?actionBarSize"
         android:background="#140D39"
         android:layoutDirection="ltr"
+        android:animateLayoutChanges="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
