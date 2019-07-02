@@ -36,18 +36,10 @@
                 android:id="@+id/trending_movies"
                 layout="@layout/on_airtoday"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/trending_dividor"
+                android:layout_height="320dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/trending_movies_txt"
                 app:layout_constraintTop_toBottomOf="@+id/trending_movies_txt" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/trending_dividor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent=".5" />
 
             <TextView
                 android:id="@+id/trending_series_txt"
@@ -62,7 +54,7 @@
                 android:text="@string/trending_series"
                 android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="@+id/trending_movies_txt"
-                app:layout_constraintTop_toBottomOf="@+id/trending_dividor"
+                app:layout_constraintTop_toBottomOf="@+id/trending_movies"
                 app:layout_goneMarginTop="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView

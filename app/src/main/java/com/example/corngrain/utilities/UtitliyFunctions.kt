@@ -121,6 +121,8 @@ fun gridRecyclerView(
         when (orientation) {
             RecyclerView.HORIZONTAL -> this.layoutManager =
                 GridLayoutManager(context, itemsPerRow, RecyclerView.HORIZONTAL, false)
+            else->this.layoutManager =
+                GridLayoutManager(context, itemsPerRow, RecyclerView.VERTICAL, false)
 
         }
         this.adapter = adapter

@@ -2,25 +2,24 @@ package com.example.corngrain.ui.main.trending.adapter
 
 import com.example.corngrain.R
 import com.example.corngrain.data.network.response.trending.SeriesAndTvShows
-import com.example.corngrain.data.network.response.trending.Trending
-import com.example.corngrain.utilities.BASE_IMG_URL
-import com.example.corngrain.utilities.GlideApp
-import com.xwray.groupie.kotlinandroidextensions.Item
+import com.example.corngrain.ui.base.BaseGroupeAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.trending_serie_item.*
 
-class TrendingSeriesAdapter( val entries:SeriesAndTvShows.Result):Item() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+class TrendingSeriesAdapter(val entries: SeriesAndTvShows.Result) :
+    BaseGroupeAdapter<SeriesAndTvShows.Result>() {
+
+    override fun setGroupeAdapterLayout(): Int = R.layout.trending_serie_item
+
+    override fun buildAdapterItemsUI(viewHolder: ViewHolder) {
         viewHolder.apply {
-            bindImage()
+            setAdapterDisplayImage(entries.posterPath, trending_serie_img)
         }
     }
 
-    override fun getLayout(): Int = R.layout.trending_serie_item
-
-    fun ViewHolder.bindImage(){
-        GlideApp.with(this.containerView)
-            .load(BASE_IMG_URL+entries.posterPath)
-            .into(trending_serie_img)
+    override fun toGroupeAdapterItems(entries: List<SeriesAndTvShows.Result>): List<BaseGroupeAdapter<SeriesAndTvShows.Result>> {
+        return entries.map { item ->
+            TrendingSeriesAdapter(item)
+        }
     }
 }

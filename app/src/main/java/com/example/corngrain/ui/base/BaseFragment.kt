@@ -1,5 +1,6 @@
 package com.example.corngrain.ui.base
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ abstract class BaseFragment : Fragment(), KodeinAware, CoroutineScope {
 
     override val kodein: Kodein by closestKodein()
     private lateinit var job: Job
+    var gridRecyclerViewRowCount: Int = 0
     private val handler = CoroutineExceptionHandler { _, _ ->
         EventBus.post(NoNetworkBus())
     }
@@ -31,6 +33,13 @@ abstract class BaseFragment : Fragment(), KodeinAware, CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            gridRecyclerViewRowCount = 4
+        } else {
+            gridRecyclerViewRowCount = 3
+        }
+
         job = Job()
     }
 
@@ -39,6 +48,7 @@ abstract class BaseFragment : Fragment(), KodeinAware, CoroutineScope {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(setFragmentLayout(), container, false)
     }
 
