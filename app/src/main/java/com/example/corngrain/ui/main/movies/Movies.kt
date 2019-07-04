@@ -2,13 +2,13 @@ package com.example.corngrain.ui.main.movies
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -32,7 +32,15 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 import java.util.*
 
-class Movies : BaseFragment(), KodeinAware {
+class Movies : BaseFragment(), KodeinAware, SearchView.OnQueryTextListener {
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        Toast.makeText(context!!,query!!,Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
+    }
 
     override val kodein: Kodein by closestKodein()
     private val factory by instance<MovieViewModelFactory>()
@@ -57,9 +65,9 @@ class Movies : BaseFragment(), KodeinAware {
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-    /*    if (menu==null)return
-        val item = menu.findItem(R.id.language_item) ?: return
-        item.isVisible = false*/
+        /*    if (menu==null)return
+            val item = menu.findItem(R.id.language_item) ?: return
+            item.isVisible = false*/
 
     }
 
@@ -69,10 +77,10 @@ class Movies : BaseFragment(), KodeinAware {
         playingMoviesSection(viewModel.playingMovies.await())
         ratedMoviesSection(viewModel.ratedMovies.await())
         popularMoviesSection(viewModel.popularMovies.await())
-        search_card_container.setOnClickListener { card ->
+        /*search_card_container.setOnClickListener { card ->
             val actionToSearchScreen = MoviesDirections.actionSearchMovies()
             navigationDirectionAction(actionToSearchScreen, card)
-        }
+        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -84,8 +92,13 @@ class Movies : BaseFragment(), KodeinAware {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.movie_item -> {
-                Toast.makeText(context!!, "Test special menu item", Toast.LENGTH_LONG).show()
+            R.id.search_item -> {
+                val menuItem = item.actionView as SearchView
+                menuItem.setOnQueryTextListener(this)
+                menuItem.queryHint= "Search..."
+                /*   val actionWithValue =
+                       MoviesDirections.actionSearchMovies()
+                   navigationDirectionAction(actionWithValue,menuItem!!)*/
                 return true
             }
 

@@ -9,6 +9,10 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">#f8f8fa</item>
+        <item name="android:fontFamily">@font/cairo_semibold</item>
+
 
     </style>
 
@@ -16,6 +20,7 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:title">""</item>
+
     </style>
 
     <style name="BottomNavigationViewTextStyle">
